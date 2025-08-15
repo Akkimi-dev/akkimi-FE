@@ -1,20 +1,157 @@
 @import "tailwindcss";
 
 @theme {
+  --color-white: #ffffff;
+  --color-gray-10: #f1f1f5;
+  --color-gray-20: #dde2e7;
+  --color-gray-30: #c6ccd1;
+  --color-gray-40: #a6aeb6;
+  --color-gray-50: #8a94a0;
+  --color-gray-60: #6c7682;
+  --color-gray-70: #4f5968;
+  --color-gray-80: #3c434f;
+  --color-gray-90: #2c3139;
+  --color-gray-100: #191919;
+
   --color-chat: #03FFDA;
   --color-chat-b: #5ACBB0;
   --color-nav-b: #DDE2E7;
+
+  --color-login-start: #CAF6EC;
+  --color-login-end: #FFFFFF;
+  --color-login-waring: #E8C70B;
+  --color-login-good: #5ACBB0;
+  --color-login-good-hover: #5ACBB0;
+
+  --color-kakao: #FEE500;
+  --color-kakao-hover: #F0CC00;
+
+  --color-green: #CAF6EC;
+  --color-green-main: #074E42;
+  --color-green-main-dark: #03FFDA;
+  --color-green-main-dark-2: #5ACBB0;
+  --color-background-alt: #65656566; 
+  --color-red: #FF1953;
+  --color-yellow: #E8C70B;
 }
 
 
 @layer utilities {
-  .text-body {
-    color: var(--60, #6C7582);
-    text-align: center;
+  /* === Typography (Pretendard) === */
+  .text-heading-01-regular {
     font-family: Pretendard;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 500;
+    font-weight: 400; /* Regular */
+    font-size: 24px;
     line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-01-semibold {
+    font-family: Pretendard;
+    font-weight: 600; /* Semibold */
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-01-bold {
+    font-family: Pretendard;
+    font-weight: 700; /* Bold */
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+
+  /* Heading 02 (20px, 120%, 0%) */
+  .text-heading-02-regular {
+    font-family: Pretendard;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-02-semibold {
+    font-family: Pretendard;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-02-bold {
+    font-family: Pretendard;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+
+  /* Body 01 (18px, 150%, 0%) */
+  .text-body-01-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+  .text-body-01-semibold {
+    font-family: Pretendard;
+    font-weight: 600; /* Semibold */
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+  .text-body-01-bold {
+    font-family: Pretendard;
+    font-weight: 700; /* Bold */
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  /* Body 02 (16px, 150%, 0%) */
+  .text-body-02-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+  .text-body-02-semibold {
+    font-family: Pretendard;
+    font-weight: 600; /* Semibold */
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+  .text-body-02-bold {
+    font-family: Pretendard;
+    font-weight: 700; /* Bold */
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  /* Detail 01 (14px, 150%, 0%) */
+  .text-detail-01-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  /* Detail 02 (12px, 150%, 0%) */
+  .text-detail-02-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 12px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  .text-detail-02-semibold {
+    font-family: Pretendard;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 150%;
+    letter-spacing: 0;
   }
 }
