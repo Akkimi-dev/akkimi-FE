@@ -15,11 +15,11 @@ export default function Navbar() {
           <div className="flex flex-1 justify-around pt-1 pb-2">
             <button className="h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
               <HomeIcon className="w-6 h-6 " />
-              <span className="text-body">홈</span>
+              <span className="text-detail-02-semibold text-gray-60 ">홈</span>
             </button>
             <button className="h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
               <LedgerIcon className="w-6 h-6 " />
-              <span className="text-body">가계부</span>
+              <span className="text-detail-02-semibold text-gray-60 ">가계부</span>
             </button>
           </div>
 
@@ -38,11 +38,11 @@ export default function Navbar() {
           <div className="flex flex-1 justify-around pt-1 pb-2">
             <button className="h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
               <SavingIcon className="w-6 h-6" />
-              <span className="text-body">아껴바요</span>
+              <span className="text-detail-02-semibold text-gray-60 ">아껴바요</span>
             </button>
            <button className="h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
               <ProfileIcon className="w-6 h-6" />
-              <span className="text-body">프로필</span>
+              <span className="text-detail-02-semibold text-gray-60 ">프로필</span>
             </button>
           </div>
         </div>
