@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import LoginSelect from "../components/login/LoginSelect";
 import Login from '../components/Login/Login';
+import Signup from '../components/login/signup';
 
 export default function AuthPage() {
   const [authFlow, setAuthFlow] = useState("");
@@ -18,13 +19,19 @@ export default function AuthPage() {
       <Login flow={authFlow} onInit={() => setAuthFlow("")}/>
     )
   }
-  if (authFlow === 'kakao') { handleLogin() }
-  if (authFlow === 'signup') { /* 회원가입 화면 */ }
+  if (authFlow === 'phone_signup' || authFlow === 'email_signup') {
+    return(
+      <Signup flow={authFlow} onInit={() => setAuthFlow("")}/>
+    )
+  }
 
   return (
     <LoginSelect
-      onChoose={(type) => setAuthFlow(type)}
-      onSignup={() => setAuthFlow('signup')}
-    />
+    onChoose={(type) =>
+      (type === "kakao" || type === "kakao_signup")
+        ? handleLogin()
+        : setAuthFlow(type)
+    }
+  />
   );
 }
