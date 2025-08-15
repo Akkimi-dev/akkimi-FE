@@ -1,6 +1,5 @@
-import React from 'react';
-import MainLayout from '../components/layouts/MainLayout';
-import Survey from '../components/Survey';
+import MainLayout from "../components/layouts/MainLayout";
+import Survey from "../components/Survey";
 
 export default function SurveyPage() {
   return (

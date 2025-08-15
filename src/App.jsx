@@ -5,6 +5,8 @@ import CalendarPage from './pages/CalendarPage';
 import SurveyPage from './pages/SurveyPage';
 import SettingsPage from './pages/SettingsPage';
 import SupportPage from './pages/SupportPage';
+import AuthPage from './pages/AuthPage';
+import KakaoRedirect from './pages/KakaoRedirect';
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
         <Route path="survey" element={<SurveyPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="support" element={<SupportPage />} />
+        <Route path="auth" element={<AuthPage />} />
+        <Route path="/auth/callback" element={<KakaoRedirect/>} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
