@@ -24,7 +24,10 @@ export default function Login({flow, onInit}) {
     : "이메일 형식이 올바르지 않습니다";
   const borderClass = isInvalid && value.length > 0
     ? "border-login-waring"
-    : "border-gray-60 focus:border-login-good";
+    : "border-gray-60 focus:border-green-main-dark-2";
+  const textClass = showPassword
+    ? "text-body-02-semibold"
+    : "pb-4 text-[50px] text-space tracking-[-0.15em]";
 
   const handleChange = (e) => {
     let val = e.target.value;
@@ -69,7 +72,7 @@ export default function Login({flow, onInit}) {
               type={inputType}
               value={value}
               onChange={handleChange}
-              className={`focus:outline-none focus:shadow-none w-full border p-2 rounded pr-10 ${borderClass}`}
+              className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 text-body-02-semibold ${borderClass}`}
               placeholder=""
               autoComplete={autoCompleteAttr}
               inputMode={isPhone ? "numeric" : undefined}
@@ -77,7 +80,7 @@ export default function Login({flow, onInit}) {
             />
             {isInvalid && value.length > 0 && (
               <>
-                <Waring className="absolute right-3 top-[34px]" />
+                <Waring className="absolute right-3 top-[39px]" />
                 <span className="text-yellow-500 text-sm mt-1">{warningText}</span>
               </>
             )}
@@ -90,20 +93,20 @@ export default function Login({flow, onInit}) {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="focus:outline-none focus:shadow-none w-full border p-2 rounded border-gray-60 focus:border-login-good pr-10"
+              className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded border-gray-60 focus:border-green-main-dark-2 pr-10 ${textClass}`}
               placeholder=""
               autoComplete="current-password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[34px] text-gray-60"
+              className="absolute right-3 top-[38px] text-gray-60"
             >
               <Eye />
             </button>
           </div>
         </div>
-        <button className={`w-full flex items-center justify-center gap-[10px] rounded-[100px] py-[12px] cursor-pointer ${isInvalid ? "bg-gray-20" : "bg-login-good hover:bg-login-good-hover"}`}>
+        <button className={`w-full flex items-center justify-center gap-[10px] rounded-[100px] py-[12px] cursor-pointer ${isInvalid ? "bg-gray-20" : "bg-green-main-dark hover:bg-green-main-dark-2"}`}>
           <span className="">로그인</span>
         </button>
       </div>

@@ -4,6 +4,23 @@
   --color-chat: #03FFDA;
   --color-chat-b: #5ACBB0;
   --color-nav-b: #DDE2E7;
+
+  --color-login-start: #CAF6EC;
+  --color-login-end: #FFFFFF;
+  --color-login-waring: #E8C70B;
+  
+  --color-bg-modal: #65656580;
+
+  --color-kakao: #FEE500;
+  --color-kakao-hover: #F0CC00;
+
+  --color-green: #CAF6EC;
+  --color-green-main: #074E42;
+  --color-green-main-dark: #03FFDA;
+  --color-green-main-dark-2: #5ACBB0;
+  --color-background-alt: #65656566; 
+  --color-red: #FF1953;
+  --color-yellow: #E8C70B;
 }
 
 
