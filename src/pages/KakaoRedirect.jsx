@@ -30,7 +30,7 @@ export default function KakaoRedirect(){
 
     kakaoLogin(); 
 
-    console.log('카카오 인가 코드:', code);
+    // console.log('카카오 인가 코드:', code);
   }, [location.search, navigate, setTokens]);
 
   return <div className='bg-gradient-to-b from-login-start to-login-end  min-h-[100dvh] md:min-h-[800px]'></div>;
