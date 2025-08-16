@@ -33,6 +33,8 @@
   --color-background-alt: #65656566; 
   --color-red: #FF1953;
   --color-yellow: #E8C70B;
+  --color-yellow-2: #BCC900; 
+  --color-bg-blue: #F3F7FB;
 }
 
 
@@ -114,6 +116,7 @@
     line-height: 150%;
     letter-spacing: 0;
   }
+
   .text-body-02-semibold {
     font-family: Pretendard;
     font-weight: 600; /* Semibold */
@@ -121,6 +124,7 @@
     line-height: 150%;
     letter-spacing: 0;
   }
+
   .text-body-02-bold {
     font-family: Pretendard;
     font-weight: 700; /* Bold */
