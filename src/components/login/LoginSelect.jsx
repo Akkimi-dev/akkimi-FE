@@ -9,17 +9,18 @@ export default function LoginSelect({ onChoose }) {
   const [open, setOpen] = useState(false);
   
   return (
-    <div className="relative min-h-[100dvh] md:min-h-[800px] overflow-hidden">
-      <div className="bg-gradient-to-b from-login-start to-login-end min-h-[100dvh] md:min-h-[800px] ">
-        <div className="absolute top-[160px] flex justify-center w-full">
-          <div className="w-13"></div>
-          <span className="text-body-02-semiBold">절약 챌린지 서비스</span>
+    <div className="relative min-h-[100dvh] sm:min-h-[700px] overflow-hidden">
+      <div className="flex flex-col justify-around bg-gradient-to-b from-login-start to-login-end min-h-[100dvh] sm:min-h-[700px] ">
+        <div>
+          <div className="flex justify-center w-full">
+            <div className="w-[54px]"></div>
+            <span className="text-body-02-semiBold">절약 챌린지 서비스</span>
+          </div>
+          <div className="flex justify-center w-full">
+            <Logo/>
+          </div>
         </div>
-        <div className="absolute top-[182px] flex justify-center w-full">
-          <Logo/>
-        </div>
-        
-        <div className="absolute top-100 w-full flex flex-col gap-12 items-center">
+        <div className="w-full flex flex-col gap-12 items-center">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4 items-center">
               <button
