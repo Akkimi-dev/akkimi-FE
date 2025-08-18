@@ -240,6 +240,7 @@ export default function Signup({flow, onInit}) {
             ) : null}
           </div>
         </div>
+        {/* 확인 버튼: 중복 확인 ->  */}
         <button
           type="button"
           onClick={dupChecked ? handleSubmit : handleCheckDuplicate}
