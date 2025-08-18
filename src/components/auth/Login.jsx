@@ -1,15 +1,23 @@
+import { useLogin } from "../../hooks/auth/useLogin";
 import BackArrow from "../../assets/common/backArrow.svg?react";
 import Error from "../../assets/login/error.svg?react";
 import Waring from "../../assets/login/waring.svg?react";
 import Eye from "../../assets/login/eye.svg?react";
 
 import { useState } from "react";
+import { useAuthStore } from "../../stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({flow, onInit}) {
+  const navigate = useNavigate();
+
   const [value, setValue] = useState("");
   const [isInvalid, setIsInvalid] = useState(true);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { setTokens } = useAuthStore();
+
+  const { mutateAsync, isPending, error } = useLogin(flow);
 
   const isPhone = flow === "phone";
   const headingTitle = isPhone ? "휴대폰 번호로 로그인하기" : "이메일로 로그인하기";
@@ -29,6 +37,12 @@ export default function Login({flow, onInit}) {
     ? "text-body-02-semibold"
     : "pb-4 text-[50px] text-space tracking-[-0.15em]";
 
+  const isPasswordInvalid = password.length > 0 && password.length < 8;
+  const passwordWarningText = "비밀번호는 8자 이상이어야 합니다";
+  const passwordBorderClass = isPasswordInvalid
+    ? "border-login-waring"
+    : "border-gray-60 focus:border-green-main-dark-2";
+
   const handleChange = (e) => {
     let val = e.target.value;
     if (flow === "phone") {
@@ -47,6 +61,25 @@ export default function Login({flow, onInit}) {
       setIsInvalid(!emailRegex.test(val));
     }
     setValue(val);
+  };
+
+  const handleSubmit = async () => {
+    if (isInvalid) return;
+    try {
+      if (isPhone) {
+        // 서버에는 숫자만 전달 (하이픈 제거)
+        const phoneNumber = value.replace(/\D/g, "");
+        const { accessToken, refreshToken } = await mutateAsync({ phoneNumber, password });
+        setTokens(accessToken, refreshToken);
+        navigate('/');
+      } else {
+        const { accessToken, refreshToken } = await mutateAsync({ email: value, password });
+        setTokens(accessToken, refreshToken);
+        navigate('/');
+      }
+    } catch {
+     navigate('/auth');
+    }
   };
 
   return (
@@ -80,7 +113,7 @@ export default function Login({flow, onInit}) {
             />
             {isInvalid && value.length > 0 && (
               <>
-                <Waring className="absolute right-3 top-[39px]" />
+                <Waring className="absolute right-3 top-[40px]" />
                 <span className="text-yellow-500 text-sm mt-1">{warningText}</span>
               </>
             )}
@@ -93,22 +126,41 @@ export default function Login({flow, onInit}) {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded border-gray-60 focus:border-green-main-dark-2 pr-10 ${textClass}`}
+              className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 ${passwordBorderClass} ${textClass}`}
               placeholder=""
               autoComplete="current-password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[38px] text-gray-60"
+              className={`absolute ${ password.length > 0 && isPasswordInvalid ? "right-9" : "right-3" } cursor-pointer top-[39px] text-gray-60`}
             >
               <Eye />
             </button>
+            {isPasswordInvalid && (
+              <>
+                <Waring className="absolute right-3 top-[40px]" />
+                <span className="text-yellow-500 text-sm mt-1">{passwordWarningText}</span>
+              </>
+            )
+            }
           </div>
         </div>
-        <button className={`w-full flex items-center justify-center gap-[10px] rounded-[100px] py-[12px] cursor-pointer ${isInvalid ? "bg-gray-20" : "bg-green-main-dark hover:bg-green-main-dark-2"}`}>
-          <span className="">로그인</span>
+        <button
+          type="button"
+          className={`w-full flex items-center justify-center gap-[10px] rounded-[100px] py-[12px] cursor-pointer ${isInvalid || isPending ? "bg-gray-20" : "bg-green-main-dark hover:bg-green-main-dark-2"}`}
+          onClick={handleSubmit}
+          disabled={isInvalid || isPending}
+        >
+          <span className="">
+            {isPending ? "로그인 중..." : "로그인"}
+          </span>
         </button>
+       {error && (
+          <span className="text-red-500 text-detail-01-semibold">
+            {error.response?.data?.message || error.message || String(error)}
+          </span>
+        )}
       </div>
     </div>
   );

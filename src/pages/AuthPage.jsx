@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import LoginSelect from "../components/login/LoginSelect";
-import Login from '../components/Login/Login';
-import Signup from '../components/login/signup';
+import LoginSelect from "../components/auth/LoginSelect";
+import Login from '../components/auth/Login';
+import Signup from '../components/auth/signup';
 
 export default function AuthPage() {
   const [authFlow, setAuthFlow] = useState("");
@@ -10,7 +10,7 @@ export default function AuthPage() {
   const REST_API_KEY    = import.meta.env.VITE_KAKAO_API_KEY;
   const kakaoURL        = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
 
-  const handleLogin = () => {
+  const handleKakaoLogin = () => {
     window.location.href = kakaoURL;
   };
 
@@ -29,7 +29,7 @@ export default function AuthPage() {
     <LoginSelect
     onChoose={(type) =>
       (type === "kakao" || type === "kakao_signup")
-        ? handleLogin()
+        ? handleKakaoLogin()
         : setAuthFlow(type)
     }
   />
