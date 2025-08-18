@@ -1,10 +1,10 @@
-import MainLayout from "../components/layouts/MainLayout";
+import NavLayout from "../components/layouts/NavLayout";
 import UserSettings from "../components/UserSettings";
 
 export default function SettingsPage() {
   return (
-    <MainLayout>
+    <NavLayout>
       <UserSettings />
-    </MainLayout>
+    </NavLayout>
   );
 }

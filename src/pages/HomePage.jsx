@@ -3,13 +3,13 @@ import Consumption from "../components/home/Consumption";
 import Goal from "../components/home/Goal";
 import Grape from "../components/home/Grape";
 import Header from "../components/home/Header";
-import MainLayout from "../components/layouts/MainLayout";
+import NavLayout from "../components/layouts/NavLayout";
 
 export default function HomePage() {
   const { user } = useMe();
-  
+
   return (
-    <MainLayout>
+    <NavLayout>
       <div className="bg-bg-blue flex flex-col gap-8 pb-5">
         <div>
           <Header name={user?.name || ""}/>
@@ -18,6 +18,6 @@ export default function HomePage() {
         </div>
         <Consumption/>
       </div>
-    </MainLayout>
+    </NavLayout>
   );
 }
