@@ -4,8 +4,9 @@ import Waring from "../../assets/login/waring.svg?react";
 import Eye from "../../assets/login/eye.svg?react";
 import Check from "../../assets/login/check.svg?react";
 
-
 import { useState } from "react";
+import { useSignup } from "../../hooks/auth/useSignup";
+import { useValidatePhone, useValidateEmail } from "../../hooks/auth/useValidate";
 
 export default function Signup({flow, onInit}) {
   const [value, setValue] = useState("");
@@ -13,6 +14,15 @@ export default function Signup({flow, onInit}) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const [dupChecked, setDupChecked] = useState(false);        
+  const [dupTaken, setDupTaken] = useState(false);            
+  const [dupMsg, setDupMsg] = useState("");                
+
+  const { mutateAsync: checkPhone, isPending: checkingPhone } = useValidatePhone();
+  const { mutateAsync: checkEmail, isPending: checkingEmail } = useValidateEmail();
+
+  const { mutate, isPending, error } = useSignup(flow);
 
   const isPhone = flow === "phone_signup";
   const headingTitle = isPhone ? "휴대폰 번호로 가입하기" : "이메일로 가입하기";
@@ -25,9 +35,11 @@ export default function Signup({flow, onInit}) {
   const warningText = isPhone
     ? "휴대폰 번호 작성이 완료되지 않았습니다"
     : "이메일 형식이 올바르지 않습니다";
-  const borderClass = isInvalid && value.length > 0
+  const contactBorderClass = dupTaken
     ? "border-login-waring"
-    : "border-gray-60 focus:border-green-main-dark-2";
+    : (isInvalid && value.length > 0
+        ? "border-login-waring"
+        : "border-gray-60 focus:border-green-main-dark-2");
   const textClass = showPassword
     ? "text-body-02-semibold"
     : "pb-4 text-[50px] text-space tracking-[-0.15em]";
@@ -44,7 +56,11 @@ export default function Signup({flow, onInit}) {
   const confirmBorderClass = isConfirmMismatch
     ? "border-login-waring"
     : "border-gray-60 focus:border-green-main-dark-2";
-  const isSubmitDisabled = !(isContactValid && isPasswordValid && (confirmPassword.length > 0 && !isConfirmMismatch));
+  const isSubmitDisabled = !(
+    isContactValid && dupChecked &&
+    isPasswordValid &&
+    (confirmPassword.length > 0 && !isConfirmMismatch)
+  );
 
   const handleChange = (e) => {
     let val = e.target.value;
@@ -64,6 +80,48 @@ export default function Signup({flow, onInit}) {
       setIsInvalid(!emailRegex.test(val));
     }
     setValue(val);
+    setDupChecked(false);
+    setDupTaken(false);
+    setDupMsg("");
+  };
+
+  const handleCheckDuplicate = async () => {
+    if (!isContactValid) return;
+    setDupMsg("");
+    setDupChecked(false);
+    setDupTaken(false);
+    try {
+      if (isPhone) {
+        const phoneNumber = value.replace(/\D/g, "");
+        const res = await checkPhone(phoneNumber);
+        const available = !!(res?.result?.available);
+        setDupChecked(available);
+        setDupTaken(!available);
+        if (!available) setDupMsg("이미 사용 중인 휴대폰 번호입니다.");
+      } else {
+        const res = await checkEmail(value);
+        const available = !!(res?.result?.available);
+        setDupChecked(available);
+        setDupTaken(!available);
+        if (!available) setDupMsg("이미 사용 중인 이메일입니다.");
+      }
+    } catch {
+      setDupChecked(false);
+      setDupTaken(false);
+      setDupMsg("중복 확인에 실패했습니다.");
+    }
+  };
+
+  const handleSubmit = () => {
+    if (isSubmitDisabled) return;
+    if (isPhone) {
+      // 서버에는 숫자만 전달 (하이픈 제거)
+      const phoneNumber = value.replace(/\D/g, "");
+      mutate({ phoneNumber, password });
+    } else {
+      const email = value;
+      mutate({ email, password });
+    }
   };
 
   return (
@@ -81,8 +139,8 @@ export default function Signup({flow, onInit}) {
       </div>
       <div className="w-full flex flex-col gap-14 px-4">
         <div className="w-full flex flex-col gap-[30px]">
-          {/* 최상단: 비밀번호 확인 (조건: 휴대폰/이메일 유효 && 비밀번호 입력 시작) */}
-          {(!isInvalid && value.length > 0 && password.length > 7) && (
+          {/* 최상단: 비밀번호 확인 (조건: 휴대폰/이메일 유효 && 중복체크 통과 && 비밀번호 입력 시작) */}
+          {(!isInvalid && value.length > 0 && dupChecked && password.length > 7) && (
             <div className="w-full flex flex-col gap-1 relative">
               <span className="text-detail-01-regular text-gray-60">
                 비밀번호 확인
@@ -115,8 +173,8 @@ export default function Signup({flow, onInit}) {
             </div>
           )}
 
-          {/* 중간: 비밀번호 (조건: 휴대폰/이메일 유효) */}
-          {(!isInvalid && value.length > 0) && (
+          {/* 중간: 비밀번호 (조건: 휴대폰/이메일 유효 && 중복체크 통과) */}
+          {(!isInvalid && value.length > 0 && dupChecked) && (
             <div className="w-full flex flex-col gap-1 relative">
               <span className="text-detail-01-regular text-gray-60">
                 비밀번호
@@ -138,12 +196,12 @@ export default function Signup({flow, onInit}) {
               </button>
               {isPasswordInvalid ? (
                 <>
-                  <Waring className="absolute right-3 top-[39px]" />
+                  <Waring className="absolute right-3 top-[40px]" />
                   <span className="text-yellow-500 text-sm mt-1">{passwordWarningText}</span>
                 </>
               ) : (
                 password.length > 0 && (
-                  <Check className="absolute right-3 top-[39px]" />
+                  <Check className="absolute right-3 top-[40px]" />
                 )
               )}
             </div>
@@ -158,29 +216,52 @@ export default function Signup({flow, onInit}) {
               type={inputType}
               value={value}
               onChange={handleChange}
-              className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 text-body-02-semibold ${borderClass}`}
+              className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 text-body-02-semibold ${contactBorderClass}`}
               placeholder=""
               autoComplete={autoCompleteAttr}
               inputMode={isPhone ? "numeric" : undefined}
               maxLength={isPhone ? 13 : undefined}
             />
-            {isInvalid && value.length > 0 && 
+            {dupTaken ? (
               <>
-                <Waring className="absolute right-3 top-[39px]" />
+                <Error className="absolute right-3 top-[41px]" />
+                <span className="text-yellow-500 text-sm mt-1">{dupMsg}</span>
+              </>
+            ) : isInvalid && value.length > 0 ? (
+              <>
+                <Waring className="absolute right-3 top-[40px]" />
                 <span className="text-yellow-500 text-sm mt-1">{warningText}</span>
               </>
-            }
-            { !isInvalid && value.length > 0 && 
-             <Check className="absolute right-3 top-[39px]" />
-            }
+            ) : (!isInvalid && value.length > 0 && dupChecked) ? (
+              <Check className="absolute right-3 top-[40px]" />
+            ) : null}
           </div>
         </div>
         <button
-          disabled={isSubmitDisabled}
-          className={`cursor-pointer w-full flex items-center justify-center gap-[10px] rounded-[100px] py-[12px] ${isSubmitDisabled ? "bg-gray-20 cursor-not-allowed" : "bg-green-main-dark hover:bg-green-main-dark-2"}`}
+          type="button"
+          onClick={dupChecked ? handleSubmit : handleCheckDuplicate}
+          disabled={
+            dupChecked
+              ? (isSubmitDisabled || isPending)
+              : (!isContactValid || (isPhone ? checkingPhone : checkingEmail))
+          }
+          className={`cursor-pointer w-full flex items-center justify-center gap-[10px] rounded-[100px] py-[12px] ${
+            dupChecked
+              ? (isSubmitDisabled || isPending ? "bg-gray-20 cursor-not-allowed" : "bg-green-main-dark hover:bg-green-main-dark-2")
+              : (!isContactValid || (isPhone ? checkingPhone : checkingEmail) ? "bg-gray-20 cursor-not-allowed" : "bg-green-main-dark hover:bg-green-main-dark-2")
+          }`}
         >
-          <span className="text-body-01-semibold">회원가입</span>
+          <span className="text-body-01-semibold">
+            {dupChecked
+              ? (isPending ? "회원가입 중..." : "회원가입")
+              : ((isPhone ? checkingPhone : checkingEmail) ? "확인 중..." : "중복 확인")}
+          </span>
         </button>
+        {error && (
+          <span className="text-red-500 text-detail-01-semibold">
+            {error.response?.data?.message || error.message || String(error)}
+          </span>
+        )}
       </div>
     </div>
   );
