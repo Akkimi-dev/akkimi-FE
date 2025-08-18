@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+--color-white: #ffffff;
+  --color-gray-10: #f1f1f5;
+  --color-gray-20: #dde2e7;
+  --color-gray-30: #c6ccd1;
+  --color-gray-40: #a6aeb6;
+  --color-gray-50: #8a94a0;
+  --color-gray-60: #6c7682;
+  --color-gray-70: #4f5968;
+  --color-gray-80: #3c434f;
+  --color-gray-90: #2c3139;
+  --color-gray-100: #191919;
+
   --color-chat: #03FFDA;
   --color-chat-b: #5ACBB0;
   --color-nav-b: #DDE2E7;
