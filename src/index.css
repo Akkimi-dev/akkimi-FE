@@ -267,3 +267,341 @@ font-style: normal;
 font-weight: 400;
 line-height: 150%; /* 24px */
 }
+
+
+.cal-title-font{
+  color: var(--100, #191919);
+
+/* Heading/02_Semibold */
+font-family: Pretendard;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 24px */
+}
+
+.cal-selected-font{
+  color: var(--Green-02, #074E42);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-none-selected-font{
+  color: var(--50, #8A94A0);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-goal-title-font{
+  color: var(--100, #191919);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-goal-price-font{
+  color: var(--Green-02, #074E42);
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.cal-goal-money-font{
+color: var(--100, #191919);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-total-use-font{
+  color: var(--Green-02, #074E42);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.cal-total-use-price-font{
+  color: var(--100, #191919);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.cal-price-result-font{
+  color: var(--Point-Red, #FF1953);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.cal-price-plus-result-font{
+  color: var(--100, #191919);
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.cal-year-month-font{
+  color: #000;
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-sun-font{
+  color: #FF7B9B;
+text-align: center;
+
+/* Detail/03_Regular */
+font-family: Pretendard;
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 15px */
+}
+
+.cal-sat-font{
+  color: #95A3FF;
+text-align: center;
+
+/* Detail/03_Regular */
+font-family: Pretendard;
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 15px */
+}
+
+.cal-week-font{
+  color: var(--60, #6C7582);
+text-align: center;
+
+/* Detail/03_Regular */
+font-family: Pretendard;
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 15px */
+}
+
+.cal-date-font{
+color: var(--100, #191919);
+text-align: center;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.cal-date-price-font{
+  color: var(--Green-04, #5ACBB0);
+text-align: center;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.cal-selected-date-font{
+ color: var(--White, #FFF);
+text-align: center;
+
+/* Detail/02_Semibold */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 18px */
+}
+
+.cal-selected-price-font{
+  color: var(--White, #FFF);
+text-align: center;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+
+.cal-use-money-date-font{
+  color: var(--100, #191919);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.cal-use-money-subtitle-font{
+  color: var(--Green-02, #074E42);
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.cal-use-money-price-font{
+color: #000;
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.cal-write-use-money-font{
+  color: #000;
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+.cal-monthly-total-use-font{
+  color: var(--Green-02, #074E42);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.cal-not-in-date-font{
+  color: var(--40, #A6AEB6);
+text-align: center;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.cal-choose-goal-font{
+  color: var(--80, #3C434F);
+
+/* Body/02_Bold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 150%; /* 24px */
+}
+
+.cal-modal-goal-title-font{
+  color: var(--80, #3C434F);
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.cal-modal-goal-money-font{
+  color: var(--100, #191919);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-modal-goal-name-font{
+  color: var(--100, #191919);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.cal-modal-time-font{
+  color: var(--80, #3C434F);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.cal-goal-wave-font{
+  color: var(--100, #191919);
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
