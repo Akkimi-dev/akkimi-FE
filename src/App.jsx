@@ -7,6 +7,9 @@ import SettingsPage from './pages/SettingsPage';
 import SupportPage from './pages/SupportPage';
 import AuthPage from './pages/AuthPage';
 import KakaoRedirect from './pages/KakaoRedirect';
+import SupportDetail from './pages/SupportDetail';
+import LocationChangePage from "./pages/LocationChangePage.jsx";
+
 
 export default function App() {
   return (
@@ -19,6 +22,8 @@ export default function App() {
         <Route path="support" element={<SupportPage />} />
         <Route path="auth" element={<AuthPage />} />
         <Route path="/auth/callback" element={<KakaoRedirect/>} />
+        <Route path="/support-detail" element={<SupportDetail />} />
+        <Route path="location-change" element={<LocationChangePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
