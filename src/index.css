@@ -21,6 +21,8 @@
   --color-background-alt: #65656566; 
   --color-red: #FF1953;
   --color-yellow: #E8C70B;
+  --color-yellow-2: #BCC900; 
+  --color-bg-blue: #F3F7FB;
 }
 
 
@@ -29,6 +31,110 @@
     color: var(--60, #6C7582);
     text-align: center;
     font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-01-semibold {
+    font-family: Pretendard;
+    font-weight: 600; /* Semibold */
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-01-bold {
+    font-family: Pretendard;
+    font-weight: 700; /* Bold */
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+
+  /* Heading 02 (20px, 120%, 0%) */
+  .text-heading-02-regular {
+    font-family: Pretendard;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-02-semibold {
+    font-family: Pretendard;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+  .text-heading-02-bold {
+    font-family: Pretendard;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
+
+  /* Body 01 (18px, 150%, 0%) */
+  .text-body-01-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+  .text-body-01-semibold {
+    font-family: Pretendard;
+    font-weight: 600; /* Semibold */
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+  .text-body-01-bold {
+    font-family: Pretendard;
+    font-weight: 700; /* Bold */
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  /* Body 02 (16px, 150%, 0%) */
+  .text-body-02-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  .text-body-02-semibold {
+    font-family: Pretendard;
+    font-weight: 600; /* Semibold */
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  .text-body-02-bold {
+    font-family: Pretendard;
+    font-weight: 700; /* Bold */
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  /* Detail 01 (14px, 150%, 0%) */
+  .text-detail-01-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: 0;
+  }
+
+  /* Detail 02 (12px, 150%, 0%) */
+  .text-detail-02-regular {
+    font-family: Pretendard;
+    font-weight: 400; /* Regular */
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
