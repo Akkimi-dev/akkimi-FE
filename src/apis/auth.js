@@ -54,7 +54,6 @@ const refreshAccessToken = async (refreshToken) => {
   return res.data;
 };
 
-
 //
 const getMe = async () => {
   const res = await axiosInstance.get('/api/v1/auth/me');

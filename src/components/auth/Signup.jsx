@@ -7,8 +7,12 @@ import Check from "../../assets/login/check.svg?react";
 import { useState } from "react";
 import { useSignup } from "../../hooks/auth/useSignup";
 import { useValidatePhone, useValidateEmail } from "../../hooks/auth/useValidate";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Signup({flow, onInit}) {
+  const navigate = useNavigate();
+
   const [value, setValue] = useState("");
   const [isInvalid, setIsInvalid] = useState(true);
   const [password, setPassword] = useState("");
@@ -19,8 +23,8 @@ export default function Signup({flow, onInit}) {
   const [dupTaken, setDupTaken] = useState(false);            
   const [dupMsg, setDupMsg] = useState("");                
 
-  const { mutateAsync: checkPhone, isPending: checkingPhone } = useValidatePhone();
-  const { mutateAsync: checkEmail, isPending: checkingEmail } = useValidateEmail();
+  const { checkPhone, isLoading: checkingPhone } = useValidatePhone();
+  const { checkEmail, isLoading: checkingEmail } = useValidateEmail();
 
   const { mutate, isPending, error } = useSignup(flow);
 
@@ -92,15 +96,12 @@ export default function Signup({flow, onInit}) {
     setDupTaken(false);
     try {
       if (isPhone) {
-        const phoneNumber = value.replace(/\D/g, "");
-        const res = await checkPhone(phoneNumber);
-        const available = !!(res?.result?.available);
+        const available = await checkPhone(value);
         setDupChecked(available);
         setDupTaken(!available);
         if (!available) setDupMsg("이미 사용 중인 휴대폰 번호입니다.");
       } else {
-        const res = await checkEmail(value);
-        const available = !!(res?.result?.available);
+        const available = await checkEmail(value);
         setDupChecked(available);
         setDupTaken(!available);
         if (!available) setDupMsg("이미 사용 중인 이메일입니다.");
@@ -118,9 +119,11 @@ export default function Signup({flow, onInit}) {
       // 서버에는 숫자만 전달 (하이픈 제거)
       const phoneNumber = value.replace(/\D/g, "");
       mutate({ phoneNumber, password });
+      navigate('/auth')
     } else {
       const email = value;
       mutate({ email, password });
+      navigate('/auth')
     }
   };
 

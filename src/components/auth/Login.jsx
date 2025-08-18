@@ -5,14 +5,19 @@ import Waring from "../../assets/login/waring.svg?react";
 import Eye from "../../assets/login/eye.svg?react";
 
 import { useState } from "react";
+import { useAuthStore } from "../../stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({flow, onInit}) {
+  const navigate = useNavigate();
+
   const [value, setValue] = useState("");
   const [isInvalid, setIsInvalid] = useState(true);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { setTokens } = useAuthStore();
 
-  const { mutate, isPending, error } = useLogin(flow);
+  const { mutateAsync, isPending, error } = useLogin(flow);
 
   const isPhone = flow === "phone";
   const headingTitle = isPhone ? "휴대폰 번호로 로그인하기" : "이메일로 로그인하기";
@@ -58,14 +63,22 @@ export default function Login({flow, onInit}) {
     setValue(val);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isInvalid) return;
-    if (isPhone) {
-      // 서버에는 숫자만 전달 (하이픈 제거)
-      const phoneNumber = value.replace(/\D/g, "");
-      mutate({ phoneNumber, password });
-    } else {
-      mutate({ email: value, password });
+    try {
+      if (isPhone) {
+        // 서버에는 숫자만 전달 (하이픈 제거)
+        const phoneNumber = value.replace(/\D/g, "");
+        const { accessToken, refreshToken } = await mutateAsync({ phoneNumber, password });
+        setTokens(accessToken, refreshToken);
+        navigate('/');
+      } else {
+        const { accessToken, refreshToken } = await mutateAsync({ email: value, password });
+        setTokens(accessToken, refreshToken);
+        navigate('/');
+      }
+    } catch {
+     navigate('/auth');
     }
   };
 
