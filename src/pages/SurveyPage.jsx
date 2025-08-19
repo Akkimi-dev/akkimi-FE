@@ -1,10 +1,10 @@
-import MainLayout from "../components/layouts/MainLayout";
+import NavLayout from "../components/layouts/NavLayout";
 import Survey from "../components/Survey";
 
 export default function SurveyPage() {
   return (
-    <MainLayout>
+    <NavLayout>
       <Survey />
-    </MainLayout>
+    </NavLayout>
   );
 }

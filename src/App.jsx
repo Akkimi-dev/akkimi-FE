@@ -9,7 +9,7 @@ import AuthPage from './pages/AuthPage';
 import KakaoRedirect from './pages/KakaoRedirect';
 import SupportDetail from './pages/SupportDetail';
 import LocationChangePage from "./pages/LocationChangePage.jsx";
-
+import ChatbotPage from './pages/ChatbotPage.jsx';
 
 export default function App() {
   return (
@@ -24,6 +24,7 @@ export default function App() {
         <Route path="/auth/callback" element={<KakaoRedirect/>} />
         <Route path="/support-detail" element={<SupportDetail />} />
         <Route path="location-change" element={<LocationChangePage />} />
+        <Route path="chatbot" element={<ChatbotPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
