@@ -9,14 +9,10 @@ import AuthPage from './pages/AuthPage';
 import KakaoRedirect from './pages/KakaoRedirect';
 import SupportDetail from './pages/SupportDetail';
 import LocationChangePage from "./pages/LocationChangePage.jsx";
-<<<<<<< HEAD
 import ChatbotPage from "./pages/ChatbotPage.jsx";
 import ChatbotMaltu from "./pages/ChatbotMaltu.jsx";
 import ChatbotColor from "./pages/ChatbotColor.jsx";
 import ToneList from "./components/ToneList.jsx";
-=======
-import ChatbotPage from './pages/ChatbotPage.jsx';
->>>>>>> dev
 
 export default function App() {
   return (
@@ -31,14 +27,11 @@ export default function App() {
         <Route path="/auth/callback" element={<KakaoRedirect/>} />
         <Route path="/support-detail" element={<SupportDetail />} />
         <Route path="location-change" element={<LocationChangePage />} />
-<<<<<<< HEAD
         <Route path="chatbotMaltu" element={<ChatbotMaltu />} />
         <Route path="chatbotColor" element={<ChatbotColor />} />
         <Route path="tone-list" element={<ToneList />} />
 
-=======
         <Route path="chatbot" element={<ChatbotPage />} />
->>>>>>> dev
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

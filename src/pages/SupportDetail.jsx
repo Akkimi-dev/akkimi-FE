@@ -44,7 +44,7 @@ export default function SupportDetail() {
           }}
         />
 
-        {/* 상태바(시간/아이콘) */}
+        {/* 상태바자리였지만 그냥 패딩용으로 쓰기로 함*/}
         <div
           className="absolute inset-x-0 top-0 z-10 flex items-center justify-between text-white"
           style={{

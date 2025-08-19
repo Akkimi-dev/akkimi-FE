@@ -122,8 +122,6 @@ export default function SupportPage() {
 
   return (
     <div className="w-full max-w-[393px] h-screen mx-auto bg-white flex flex-col">
-      {/* 상태바 */}
-      <div className="flex justify-between items-center w-full h-[60px] px-6 py-[19px]"></div>
 
       {/* 헤더 */}
       <header className="flex w-full max-w-[361px] h-12 px-4 flex-row justify-between items-center self-center">

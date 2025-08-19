@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import MainLayout from "../components/layouts/MainLayout";
+import NavLayout from "../components/layouts/NavLayout";
 import { useNavigate } from "react-router-dom";
 import GobackIcon from '../assets/Settings/gobackarrow.svg?react';
 import Goback2Icon from '../assets/Settings/gobackarrow2.svg?react';
 import AgainIcon from '../assets/Settings/againarrow.svg?react';
-import NavLayout from "../components/layouts/NavLayout";
 import UserSettings from "../components/UserSettings";
 
 export default function SettingsPage() {
@@ -29,20 +28,20 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <MainLayout>
-      <div className="max-w-full mx-auto bg-[#F1F1F5] flex flex-col">
+    <NavLayout>
+      <div className="bg-[#F1F1F5]">
         
         {/* 프로필 */}
-        <div className="flex w-full p-4 h-12 flex-col justify-center items-start gap-2 shrink-0 bg-[#F1F1F5] set-title-font pt-12">
+        <div className="flex w-full p-4 h-12 flex-col justify-center items-start gap-2 shrink-0 bg-[#F1F1F5] set-title-font py-10">
           내 프로필
         </div>
-        <div className="flex flex-row items-center set-name-font p-4 gap-2">
+        <div className="flex flex-row items-center set-name-font rounded-t-2xl p-4 gap-2 bg-white">
           <span>고다현님</span>
           <GobackIcon className="w-4 h-4" />
         </div>
 
         {/* 진행중인 목표 + 내 소비 성향 + 내 지역 컨테이너 */}
-        <div className="flex flex-col gap-6 w-full px-4 py-8 rounded-t-2xl bg-white">
+        <div className="flex flex-col gap-6 w-full px-4 py-8 bg-white">
 
           {/* 진행중인 목표 */}
           <div className="w-full rounded-[16px] border border-green-main-dark-2 flex justify-between items-end px-4 pt-2 pb-3">
@@ -108,6 +107,6 @@ export default function SettingsPage() {
         </div>
 
       </div>
-    </MainLayout>
+    </NavLayout>
   );
 }
