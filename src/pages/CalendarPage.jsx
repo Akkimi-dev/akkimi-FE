@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import ListIcon from "../assets/Calendar/list.svg?react";
-import PreviousIcon from "../assets/Calendar/previousmonth.svg?react";
-import NextIcon from "../assets/Calendar/nextmonth.svg?react";
-import Line2Icon from "../assets/Calendar/line2.svg?react";
-import PlusIcon from "../assets/Calendar/plus.svg?react";
+import ListIcon from "../assets/calendar/list.svg?react";
+import PreviousIcon from "../assets/calendar/previousmonth.svg?react";
+import NextIcon from "../assets/calendar/nextmonth.svg?react";
+import Line2Icon from "../assets/calendar/line2.svg?react";
+import PlusIcon from "../assets/calendar/plus.svg?react";
 import Modal from "../components/modal/Modal";
 import NavLayout from "../components/layouts/NavLayout";
 

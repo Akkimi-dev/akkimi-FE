@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import LoginSelect from "../components/auth/LoginSelect";
-import Login from '../components/auth/Login';
-import Signup from '../components/auth/signup';
+import LoginSelect from "../../components/auth/LoginSelect";
+import Login from '../../components/auth/Login';
+import Signup from '../../components/auth/signup';
 
 export default function AuthPage() {
   const [authFlow, setAuthFlow] = useState("");

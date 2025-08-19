@@ -1,4 +1,4 @@
-import NoNavLayout from "../components/layouts/NoNavLayout";
+import NoNavLayout from "../../components/layouts/NoNavLayout";
 
 export default function ChatbotColor() {
   return (

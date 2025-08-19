@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Dropdown2Icon from "../assets/Settings/dropdown2.svg?react";
-import Plus2Icon from "../assets/Settings/plus2.svg?react";
-import Goback2Icon from "../assets/Settings/gobackarrow2.svg?react";
-import Goback3Arrow from "../assets/Settings/gobackarrow3.svg?react";
+import Dropdown2Icon from "../../assets/Settings/dropdown2.svg?react";
+import Plus2Icon from "../../assets/Settings/plus2.svg?react";
+import Goback2Icon from "../../assets/Settings/gobackarrow2.svg?react";
+import Goback3Arrow from "../../assets/Settings/gobackarrow3.svg?react";
 
 export default function ChatbotMaltu() {
   const nav = useNavigate();
