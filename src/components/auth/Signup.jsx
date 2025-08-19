@@ -119,11 +119,11 @@ export default function Signup({flow, onInit}) {
       // 서버에는 숫자만 전달 (하이픈 제거)
       const phoneNumber = value.replace(/\D/g, "");
       mutate({ phoneNumber, password });
-      navigate('/auth')
+      navigate('/auth?init=1')
     } else {
       const email = value;
       mutate({ email, password });
-      navigate('/auth')
+      navigate('/auth?init=1')
     }
   };
 
