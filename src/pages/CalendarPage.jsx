@@ -311,7 +311,7 @@ export default function CalendarPage() {
             </div>
 
             {/*소비 내역*/} 
-            <Consumption/>
+            <Consumption date={selectedDate}/>
             </div> )} 
             </div>
 
