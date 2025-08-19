@@ -54,7 +54,7 @@ export default function LocationChangePage() {
       <div className="h-px bg-[#EDEFF2]" />
       <div className="px-4 pt-3 pb-2 text-[12px] text-[#6B7280]">아껴바요를 위한 정보 수집임</div>
 
-      {/* 브레드크럼 */}
+      {/* 전체지역/시군구 */}
       <div className="px-4">
         <div className="flex items-center gap-2 text-[13px]">
           <span className={step === 'city' ? 'text-[#10B981] font-medium' : ''}>
