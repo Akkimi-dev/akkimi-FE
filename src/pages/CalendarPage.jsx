@@ -6,6 +6,8 @@ import NextIcon from "../assets/Calendar/nextmonth.svg?react";
 import Line2Icon from "../assets/Calendar/line2.svg?react";
 import PlusIcon from "../assets/Calendar/plus.svg?react";
 import Modal from "../components/modal/Modal";
+import NavLayout from "../components/layouts/NavLayout";
+
 
 export default function CalendarPage() {
   const [tab, setTab] = useState("goal"); 
@@ -74,10 +76,8 @@ export default function CalendarPage() {
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
 
   return (
+    <NavLayout>
     <div className="w-full max-w-[420px] h-screen bg-white flex flex-col overflow-hidden">
-      {/* 상태바 */}
-      <div className="w-full h-[60px] bg-white"></div>
-
       {/* Header */}
       <header className="flex items-center px-4 py-3">
         <h1 className="cal-title-font">캘린더</h1>
@@ -352,5 +352,6 @@ export default function CalendarPage() {
         </div>
       </Modal>
     </div>
+    </NavLayout>
   );
 }

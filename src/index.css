@@ -723,3 +723,63 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 }
+
+.set-title-font{
+  color: var(--100, #191919);
+
+/* Heading/02_Semibold */
+font-family: Pretendard;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 24px */
+}
+
+.set-name-font{
+  color: var(--100, #191919);
+
+/* Body/01_Bold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: 150%; /* 27px */
+}
+
+.set-goal-font{
+  color: #000;
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.set-result-font{
+  color: #000;
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.set-again-font{
+  color: #000;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
