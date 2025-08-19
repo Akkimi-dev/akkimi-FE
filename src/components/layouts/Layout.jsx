@@ -7,7 +7,7 @@ export default function Layout() {
       <div
         className="w-full max-w-[420px] bg-white h-[100dvh] xs:h-[700px]"
       >
-        <div id="layout-portal" className="absolute inset-0" />
+        <div id="layout-portal" className="absolute inset-0 pointer-events-none" />
         <Outlet />
       </div>
     </div>

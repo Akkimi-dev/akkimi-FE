@@ -5,7 +5,7 @@ export default function MessageModal({message, onClose}){
   const portalTarget = document.getElementById('layout-portal') || document.body;
 
   return createPortal(
-    <div className="fixed top-0 mx:absolute mx:inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-50" onClick={onClose}>
+    <div className="fixed top-0 mx:absolute mx:inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-50 pointer-events-auto" onClick={onClose}>
       {/* 메세지 모달 */}
       <div className="max-w-[312px] py-4 px-6 flex flex-col gap-6 rounded-2xl bg-white" onClick={(e) => e.stopPropagation()}>
         <div className="flex flex-col">
