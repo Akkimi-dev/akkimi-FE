@@ -13,8 +13,6 @@
   --color-gray-90: #2c3139;
   --color-gray-100: #191919;
 
-  --color-chat: #03FFDA;
-  --color-chat-b: #5ACBB0;
   --color-nav-b: #DDE2E7;
 
   --color-login-start: #CAF6EC;
@@ -35,6 +33,9 @@
   --color-yellow: #E8C70B;
   --color-yellow-2: #BCC900; 
   --color-bg-blue: #F3F7FB;
+
+  --color-chat:#3EB7A2;
+  --color-chat-input:#DDDDDD;
 }
 
 
