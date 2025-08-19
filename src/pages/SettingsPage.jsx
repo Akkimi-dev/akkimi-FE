@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import GobackIcon from '../assets/Settings/gobackarrow.svg?react';
 import Goback2Icon from '../assets/Settings/gobackarrow2.svg?react';
 import AgainIcon from '../assets/Settings/againarrow.svg?react';
+import NavLayout from "../components/layouts/NavLayout";
+import UserSettings from "../components/UserSettings";
 
 export default function SettingsPage() {
   const nav = useNavigate();

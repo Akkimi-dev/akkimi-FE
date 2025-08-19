@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import login from '../apis/auth';
-import {useAuthStore} from '../stores/useAuthStore'
+import { useKakaoLogin } from '../hooks/auth/useLogin';
 
 export default function KakaoRedirect(){
   const navigate = useNavigate();
   const location = useLocation();
-  const { setTokens } = useAuthStore();
+  const { mutateAsync } = useKakaoLogin();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -17,21 +16,17 @@ export default function KakaoRedirect(){
       return;
     }
 
-    const kakaoLogin = async () => {
+    (async () => {
       try {
-        const { accessToken, refreshToken } = await login(code);
-        setTokens(accessToken, refreshToken);
+        await mutateAsync(code);
         navigate('/');
       } catch (err) {
-        console.log(err)
+        console.log(err);
         navigate('/auth');
       }
-    };
-
-    kakaoLogin(); 
-
-    // console.log('카카오 인가 코드:', code);
-  }, [location.search, navigate, setTokens]);
+    })();
+    
+  }, [location.search, navigate, mutateAsync]);
 
   return <div className='bg-gradient-to-b from-login-start to-login-end  min-h-[100dvh] md:min-h-[800px]'></div>;
 };
