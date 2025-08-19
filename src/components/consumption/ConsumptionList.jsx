@@ -2,7 +2,7 @@ import { useState } from "react";
 import DownArrow from "../../assets/consumption/downArrow.svg?react";
 import ConsumptionItem from "./consumptionItem";
 
-export default function ConsumptionList({consumptionList}){
+export default function ConsumptionList({consumptionList, onOpenModal}){
   const [visibleCount, setVisibleCount] = useState(3);
 
   const handleShowMore = () => {
@@ -14,13 +14,15 @@ export default function ConsumptionList({consumptionList}){
   return(
   <div className="flex flex-col gap-1">
     <ul className="flex flex-col rounded-2xl bg-white divide-y divide-gray-20">
-      {visibleList.map((item, index) => (
+      {visibleList.map((item) => (
         <ConsumptionItem
-          key={index}
+          key={item.id}
+          id={item.id}
           category={item.category}
           time={item.time}
           consumptionName={item.consumptionName}
           price={item.price}
+          onClick={() => onOpenModal(item)}
         />
       ))}
     </ul>

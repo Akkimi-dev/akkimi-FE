@@ -20,12 +20,7 @@ export default function Consumption() {
   const [selectedItemId, setSelectedItemId] = useState(null);
 
   return (
-    <div className="p-4 flex flex-col gap-4 ">
-      <span className="text-body-01-semibold text-gray-100">오늘 내 소비</span>
-      <button className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl">
-        <span>소비 내역 작성하기</span>
-        <Plus />
-      </button>
+    <div className="flex flex-col gap-4 ">
       <ConsumptionList
         consumptionList={mockConsumptionList}
         onOpenModal={(item) => setSelectedItemId(item.id)}
@@ -36,6 +31,10 @@ export default function Consumption() {
           onClose={() => setSelectedItemId(null)}
         />
       )}
+      <button className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl">
+        <span>소비 내역 작성하기</span>
+        <Plus />
+      </button>
     </div>
   );
 }

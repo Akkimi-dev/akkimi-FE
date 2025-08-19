@@ -7,6 +7,7 @@ import Line2Icon from "../assets/calendar/line2.svg?react";
 import PlusIcon from "../assets/calendar/plus.svg?react";
 import Modal from "../components/modal/Modal";
 import NavLayout from "../components/layouts/NavLayout";
+import Consumption from "../components/calender/Consumption";
 
 
 export default function CalendarPage() {
@@ -309,8 +310,10 @@ export default function CalendarPage() {
               </div>
             </div>
 
-            {/*소비 내역 카드 (임시) */} 
-            <div className="bg-white shadow rounded-xl p-3 flex justify-between items-center mb-3"> <div> <p className="text-xs text-green-500">식사 | 21:17</p> <p className="text-sm font-medium">성북동 왕 돈까스</p> </div> <p className="text-sm font-bold">20,000원</p> </div> {/* === 소비 내역 작성하기 버튼 === */} <button onClick={() => navigate("/writemoneypage")} className="mt-4 w-full justify-between flex items-center gap-2 py-3 rounded-xl border border-[#D3D3D3] bg-white cal-write-use-money-font px-4" > 소비 내역 작성하기 <PlusIcon className="w-5 h-5" /> </button> </div> )} </div>
+            {/*소비 내역*/} 
+            <Consumption/>
+            </div> )} 
+            </div>
 
       {/* 모달로 목표 변경 선택 */}
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} height={500}>
