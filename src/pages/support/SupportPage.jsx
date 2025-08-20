@@ -124,13 +124,13 @@ export default function SupportPage() {
 
   return (
     <NavLayout>
-    <div className="w-full max-w-[393px] h-screen mx-auto bg-white flex flex-col">
+    <div className="w-full min-h-screen mx-auto bg-white flex flex-col">
 
       {/* 헤더 */}
-      <header className="flex w-full max-w-[361px] h-12 px-4 flex-row justify-between items-center self-center">
+      <header className="flex w-full h-12 px-4 flex-row justify-between items-center self-center">
         <h1 className="support-title-font">아껴바요</h1>
         <div
-          className="flex items-center gap-1 mr-[-30px] cursor-pointer"
+          className="flex items-center gap-1 cursor-pointer"
           onClick={handleLocationClick}
         >
           <span className="support-location-font">{currentLoc}</span>
