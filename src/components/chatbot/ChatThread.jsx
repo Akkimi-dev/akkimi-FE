@@ -1,101 +1,115 @@
 import { useState, useRef, useEffect } from 'react';
 import Chat from './chat';
 import ChatInput from "../../assets/chatbot/chatInput.svg?react";
-import { computeTimeLabels } from '../../utils/chatTime';
-
-const mockData = {
-  messages: [
-    {
-      chatId: 1,
-      speaker: 'user',
-      message: '안녕! 오늘 날씨 어때?',
-      createdAt: '2025-08-18T10:15:00Z',
-      showDate: true,
-      dateLabel: '2025년 8월 18일',
-      showTime: true,
-      timeLabel: '10:15',
-    },
-    {
-      chatId: 2,
-      speaker: 'bot',
-      message: '안녕하세요! 오늘은 맑고 기온은 27도예요.',
-      createdAt: '2025-08-18T10:15:05Z',
-      showDate: false,
-      dateLabel: '',
-      showTime: true,
-      timeLabel: '10:15',
-    },
-    {
-      chatId: 3,
-      speaker: 'user',
-      message: '고마워!',
-      createdAt: '2025-08-18T10:16:00Z',
-      showDate: false,
-      dateLabel: '',
-      showTime: true,
-      timeLabel: '10:16',
-    },
-  ],
-  hasMore: true,
-  nextBeforeId: 100,
-};
+import { useChatHistoryInfiniteQuery, useSendMessageMutation } from '../../hooks/chat/useChat';
+import { getChatApi } from '../../apis/chatApis';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ChatThread() {
-  const [data, setData] = useState(mockData);
+  const DONE_GRACE_MS = 150;   // onDone 이후 잠깐 대기
+  const IDLE_GRACE_MS = 1000;  // 마지막 토큰 이후 유예 유예 시간 이후에는 sse 끊긴 걸로 간주
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(''); // 사용자 입력
 
-  const bottomRef = useRef(null);
+  // 챗봇 관련
+  const esRef = useRef(null);
+  const [isSSE, setIsSSE] = useState(false); // 스트리밍 중인지 여부
+  const [chunks, setChunks] = useState([]);  // 스트리밍 청크
+  const streamedText = (chunks && chunks.map(String).join('')) || '';  // 스트리밍 메세지
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [data.messages]);
+  // done -> 종료 타이머 
+  const doneTimerRef = useRef(null);
+  // 응답 없을 시 -> 종료 타이머
+  const idleTimerRef = useRef(null);
 
-  const appendMessage = (msg) => {
-    setData((prev) => ({
-      ...prev,
-      messages: [...prev.messages, msg],
-    }));
+  // 스트리밍 초기화 -> 청크 초기화
+  const resetStream = () => { setChunks([]); };
+  // 스트리밀 종료
+  const endStream = () => { esRef.current = null; setIsSSE(false); } //resetStream(); };
+
+  const clearTimers = () => {
+    if (doneTimerRef.current) { clearTimeout(doneTimerRef.current); doneTimerRef.current = null; }
+    if (idleTimerRef.current) { clearTimeout(idleTimerRef.current); idleTimerRef.current = null; }
   };
 
-  const nowIso = () => new Date().toISOString();
+  const finalizeStream = () => {
+    clearTimers();
+    endStream();
+    resetStream(); // 청크/streamedText 비우기
+    // 히스토리 캐시 무효화 → 최신 메시지를 히스토리로 편입
+    qc.invalidateQueries({ queryKey: ["chatHistory"] });
+  };
 
+  // 스트리밍 시 제일 아래로
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [streamedText, isSSE]);
+
+  useEffect(() => () => { clearTimers(); }, []);
+
+  // 채팅 히스토리 관련
+  // 무한 쿼리 
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 20 });
+  const messages = data?.items || [];
+  const hasMore = !!data?.hasMore;
+
+  // 채팅 + 챗봇 응답 시 맨 밑으로 가기위한 ref
+  const bottomRef = useRef(null);
+
+  // 캐시 무효화를 위한 qc 선언
+  const qc = useQueryClient();
+
+  // 
+  const didInitialScrollRef = useRef(false);
+
+  // 첫 로딩 시 실행
+  useEffect(() => {
+    if (didInitialScrollRef.current) return;
+    if (!messages || messages.length === 0) return;
+    didInitialScrollRef.current = true;
+    requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'auto' }));
+  }, [messages?.length]);
+
+
+  // 메세지 전송 관련
+  const sendMutation = useSendMessageMutation();
+  const { isPending } = sendMutation;
+
+  // 메세지 보내기
   const sendUserMessage = () => {
     const trimmed = input.trim();
     if (!trimmed) return;
-    
-    const now = new Date();
-    const prev = data.messages[data.messages.length - 1];
-    const { showDate, dateLabel, showTime, timeLabel } = computeTimeLabels(now, prev);
-
-    const userMsg = {
-      chatId: Date.now(),
-      speaker: 'user',
-      message: trimmed,
-      createdAt: now.toISOString(),
-      showDate,
-      dateLabel,
-      showTime,
-      timeLabel,
-    };
-
-    appendMessage(userMsg);
     setInput('');
+    // 서버 전송 (성공 시 히스토리 자동 갱신: invalidateQueries)
+    sendMutation.mutate( trimmed , {
+      onSuccess: (res) => {
+        const messageId = res;
+        if (!messageId) return;
+        try {
+          esRef.current = getChatApi(String(messageId), {
+            onOpen: () => { setIsSSE(true); },
+            onMessage: (data) => {
+              // done 유예 타이머가 잡혀 있으면 취소 (토큰이 더 왔음)
+              if (doneTimerRef.current) { clearTimeout(doneTimerRef.current); doneTimerRef.current = null; }
+              // idle 유예 타이머 갱신 (마지막 토큰 이후 IDLE_GRACE_MS 지나면 종료)
+              if (idleTimerRef.current) { clearTimeout(idleTimerRef.current); }
+              idleTimerRef.current = setTimeout(() => { finalizeStream(); }, IDLE_GRACE_MS);
 
-    // TODO: 실제 API 연동; 임시로 봇 에코 응답
-    setTimeout(() => {
-      const botMsg = {
-        chatId: Date.now() + 1,
-        speaker: 'bot',
-        message: `"${trimmed}"(을)를 받았어요.`,
-        createdAt: nowIso(),
-        showDate: false,
-        dateLabel: null,
-        showTime: false,
-        timeLabel: null,
-      };
-      appendMessage(botMsg);
-    }, 400);
+              const token = typeof data === 'string' ? data : JSON.stringify(data);
+              if (token.length === 0) return;
+              setChunks((prev) => [...prev, token]);
+            },
+            onError: () => { finalizeStream(); },
+            onDone: () => {
+              if (doneTimerRef.current) { clearTimeout(doneTimerRef.current); }
+              doneTimerRef.current = setTimeout(() => { finalizeStream(); }, DONE_GRACE_MS);
+            },
+          });
+        } catch (e) {};
+      },
+      onError: () => {},
+      onSettled: () => {},
+    });
   };
 
   const onKeyDown = (e) => {
@@ -112,13 +126,12 @@ export default function ChatThread() {
   };
 
   const handleLoadMore = () => {
-    // TODO: 실제 API 연동 시, nextBeforeId 기준으로 이전 메시지 로드
-    console.log('load more with beforeId =', data.nextBeforeId);
+    if (hasMore && !isFetchingNextPage) fetchNextPage();
   };
 
   return (
     <div className="w-full flex flex-col gap-4 pb-18 overflow-y-auto">
-      {data.hasMore && (
+      {hasMore && (
         <button
           type="button"
           onClick={handleLoadMore}
@@ -128,7 +141,7 @@ export default function ChatThread() {
         </button>
       )}
 
-      {data.messages.map((m) => (
+      {messages.map((m) => (
         <div key={m.chatId} className='w-full px-4'>
           {(m.showDate || m.showTime) && (
             <div className='w-full flex justify-center items-center pt-2 pb-6'>
@@ -142,6 +155,12 @@ export default function ChatThread() {
         </div>
       ))}
 
+      {(isSSE || streamedText) && (
+        <div className='w-full px-4'>
+          <Chat role='assistant' message={streamedText} />
+        </div>
+      )}
+
       <div ref={bottomRef} />
       
       <div className='fixed sm:absolute sm:inset-x-0 bottom-0 z-50 w-full max-w-[420px] py-3 px-4 flex gap-2'>
@@ -152,8 +171,16 @@ export default function ChatThread() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}
+          disabled={isPending || isSSE}
+          aria-busy={isPending || isSSE}
         />
-        <button type='button' onClick={() => input.trim() && sendUserMessage()} aria-label='전송'>
+        <button
+          type='button'
+          onClick={() => input.trim() && sendUserMessage()}
+          aria-label='전송'
+          disabled={isPending || isSSE}
+          aria-busy={isPending || isSSE}
+        >
           <ChatInput/>
         </button>
       </div>
