@@ -44,9 +44,7 @@ export default function ChatbotMaltu() {
   ];
 
   return (
-    <div className="max-w-[393px] mx-auto min-h-screen bg-white flex flex-col">
-      <div className="h-[40px]" />
-
+    <div className="w-full max-h-full bg-white flex flex-col overflow-auto">
       {/* 헤더 */}
       <header className="flex items-center px-4 py-3">
         <button className="mr-2" onClick={() => nav(-1)}>

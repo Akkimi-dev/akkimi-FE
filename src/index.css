@@ -44,21 +44,18 @@
   .text-body {
     color: var(--60, #6C7582);
     text-align: center;
-    font-family: Pretendard;
     font-weight: 400; /* Regular */
     font-size: 24px;
     line-height: 120%;
     letter-spacing: 0;
   }
   .text-heading-01-semibold {
-    font-family: Pretendard;
     font-weight: 600; /* Semibold */
     font-size: 24px;
     line-height: 120%;
     letter-spacing: 0;
   }
   .text-heading-01-bold {
-    font-family: Pretendard;
     font-weight: 700; /* Bold */
     font-size: 24px;
     line-height: 120%;
@@ -67,21 +64,18 @@
 
   /* Heading 02 (20px, 120%, 0%) */
   .text-heading-02-regular {
-    font-family: Pretendard;
     font-weight: 400;
     font-size: 20px;
     line-height: 120%;
     letter-spacing: 0;
   }
   .text-heading-02-semibold {
-    font-family: Pretendard;
     font-weight: 600;
     font-size: 20px;
     line-height: 120%;
     letter-spacing: 0;
   }
   .text-heading-02-bold {
-    font-family: Pretendard;
     font-weight: 700;
     font-size: 20px;
     line-height: 120%;
@@ -90,21 +84,18 @@
 
   /* Body 01 (18px, 150%, 0%) */
   .text-body-01-regular {
-    font-family: Pretendard;
     font-weight: 400; /* Regular */
     font-size: 18px;
     line-height: 150%;
     letter-spacing: 0;
   }
   .text-body-01-semibold {
-    font-family: Pretendard;
     font-weight: 600; /* Semibold */
     font-size: 18px;
     line-height: 150%;
     letter-spacing: 0;
   }
   .text-body-01-bold {
-    font-family: Pretendard;
     font-weight: 700; /* Bold */
     font-size: 18px;
     line-height: 150%;
@@ -113,7 +104,6 @@
 
   /* Body 02 (16px, 150%, 0%) */
   .text-body-02-regular {
-    font-family: Pretendard;
     font-weight: 400; /* Regular */
     font-size: 16px;
     line-height: 150%;
@@ -121,7 +111,6 @@
   }
 
   .text-body-02-semibold {
-    font-family: Pretendard;
     font-weight: 600; /* Semibold */
     font-size: 16px;
     line-height: 150%;
@@ -129,7 +118,6 @@
   }
 
   .text-body-02-bold {
-    font-family: Pretendard;
     font-weight: 700; /* Bold */
     font-size: 16px;
     line-height: 150%;
@@ -138,7 +126,6 @@
 
   /* Detail 01 (14px, 150%, 0%) */
   .text-detail-01-regular {
-    font-family: Pretendard;
     font-weight: 400; /* Regular */
     font-size: 14px;
     line-height: 150%;
@@ -147,7 +134,6 @@
 
   /* Detail 02 (12px, 150%, 0%) */
   .text-detail-02-regular {
-    font-family: Pretendard;
     font-weight: 400; /* Regular */
     font-size: 12px;
     font-style: normal;
@@ -164,7 +150,6 @@
 .time-font{
   color: var(--Mono-Black, #000);
 text-align: center;
-font-family: "SF Pro Text";
 font-size: 17px;
 font-style: normal;
 font-weight: 600;
@@ -176,7 +161,6 @@ letter-spacing: -0.8px;
   color: #000;
 
 /* Heading_20 */
-font-family: Pretendard;
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
@@ -189,7 +173,6 @@ line-height: 120%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Bold_16_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -207,7 +190,6 @@ text-underline-position: from-font;
   color: var(--80, #3C434F);
 
 /* Body_16_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -218,7 +200,6 @@ line-height: 150%; /* 24px */
   color: var(--100, #191919);
 
 /* Body_18_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -230,7 +211,6 @@ letter-spacing: 0.18px;
   color: var(--100, #191919);
 
 /* Body_14_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -241,7 +221,6 @@ line-height: 150%; /* 21px */
   color: var(--80, #3C434F);
 
 /* Body_14_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -252,7 +231,6 @@ line-height: 150%; /* 21px */
   color: var(--80, #3C434F);
 
 /* Body_16_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -273,7 +251,6 @@ line-height: 150%; /* 24px */
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -285,7 +262,6 @@ line-height: 150%; /* 18px */
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -296,7 +272,6 @@ line-height: 150%; /* 18px */
   color: #000;
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -314,7 +289,6 @@ text-underline-position: from-font;
 text-align: center;
 
 /* Heading/01_Bold */
-font-family: Pretendard;
 font-size: 24px;
 font-style: normal;
 font-weight: 700;
@@ -325,7 +299,6 @@ line-height: 120%; /* 28.8px */
   color: var(--100, #191919);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -336,7 +309,6 @@ line-height: 150%; /* 24px */
 color: var(--100, #191919);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -347,7 +319,6 @@ line-height: 150%; /* 24px */
   color: var(--100, #191919);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -358,7 +329,6 @@ line-height: 150%; /* 24px */
 color: #FF1953;
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -370,7 +340,6 @@ line-height: 150%; /* 24px */
 color: var(--100, #191919);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -381,7 +350,6 @@ line-height: 150%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -393,7 +361,6 @@ line-height: 150%; /* 24px */
   color: var(--100, #191919);
 
 /* Heading/02_Semibold */
-font-family: Pretendard;
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
@@ -404,7 +371,6 @@ line-height: 120%; /* 24px */
   color: var(--Green-02, #074E42);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -415,7 +381,6 @@ line-height: 150%; /* 24px */
   color: var(--50, #8A94A0);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -426,7 +391,6 @@ line-height: 150%; /* 24px */
   color: var(--100, #191919);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -437,7 +401,6 @@ line-height: 150%; /* 24px */
   color: var(--Green-02, #074E42);
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -448,7 +411,6 @@ line-height: 150%; /* 18px */
 color: var(--100, #191919);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -459,7 +421,6 @@ line-height: 150%; /* 24px */
   color: var(--Green-02, #074E42);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -470,7 +431,6 @@ line-height: 150%; /* 21px */
   color: var(--100, #191919);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -482,7 +442,6 @@ letter-spacing: 0.18px;
   color: var(--Point-Red, #FF1953);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -493,7 +452,6 @@ letter-spacing: 0.18px;
 .cal-price-plus-result-font{
   color: var(--100, #191919);
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -505,7 +463,6 @@ letter-spacing: 0.18px;
   color: #000;
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -517,7 +474,6 @@ line-height: 150%; /* 24px */
 text-align: center;
 
 /* Detail/03_Regular */
-font-family: Pretendard;
 font-size: 10px;
 font-style: normal;
 font-weight: 400;
@@ -529,7 +485,6 @@ line-height: 150%; /* 15px */
 text-align: center;
 
 /* Detail/03_Regular */
-font-family: Pretendard;
 font-size: 10px;
 font-style: normal;
 font-weight: 400;
@@ -541,7 +496,6 @@ line-height: 150%; /* 15px */
 text-align: center;
 
 /* Detail/03_Regular */
-font-family: Pretendard;
 font-size: 10px;
 font-style: normal;
 font-weight: 400;
@@ -553,7 +507,6 @@ color: var(--100, #191919);
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -565,7 +518,6 @@ line-height: 150%; /* 18px */
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -577,7 +529,6 @@ line-height: 150%; /* 18px */
 text-align: center;
 
 /* Detail/02_Semibold */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 600;
@@ -589,7 +540,6 @@ line-height: 150%; /* 18px */
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -601,7 +551,6 @@ line-height: 150%; /* 18px */
   color: var(--100, #191919);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -611,7 +560,6 @@ letter-spacing: 0.18px;
 
 .cal-use-money-subtitle-font{
   color: var(--Green-02, #074E42);
-font-family: Inter;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -622,7 +570,6 @@ line-height: normal;
 color: #000;
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -632,7 +579,6 @@ letter-spacing: 0.18px;
 
 .cal-write-use-money-font{
   color: #000;
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -643,7 +589,6 @@ line-height: normal;
   color: var(--Green-02, #074E42);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -655,7 +600,6 @@ line-height: 150%; /* 21px */
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -666,7 +610,6 @@ line-height: 150%; /* 18px */
   color: var(--80, #3C434F);
 
 /* Body/02_Bold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 700;
@@ -677,7 +620,6 @@ line-height: 150%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -688,7 +630,6 @@ line-height: 150%; /* 18px */
   color: var(--100, #191919);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -699,7 +640,6 @@ line-height: 150%; /* 24px */
   color: var(--100, #191919);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -710,7 +650,6 @@ line-height: 150%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -719,7 +658,6 @@ line-height: 150%; /* 21px */
 
 .cal-goal-wave-font{
   color: var(--100, #191919);
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -730,7 +668,6 @@ line-height: normal;
   color: var(--100, #191919);
 
 /* Heading/02_Semibold */
-font-family: Pretendard;
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
@@ -741,7 +678,6 @@ line-height: 120%; /* 24px */
   color: var(--100, #191919);
 
 /* Body/01_Bold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 700;
@@ -752,7 +688,6 @@ line-height: 150%; /* 27px */
   color: #000;
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -764,7 +699,6 @@ letter-spacing: 0.18px;
   color: #000;
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -775,7 +709,6 @@ line-height: 150%; /* 24px */
   color: #000;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -791,7 +724,6 @@ line-height: 150%; /* 18px */
   color: var(--Green-02, #074E42);
 
 /* Heading/01_Bold */
-font-family: Pretendard;
 font-size: 24px;
 font-style: normal;
 font-weight: 700;
@@ -802,7 +734,6 @@ line-height: 120%; /* 28.8px */
   color: var(--Green-02, #074E42);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -813,7 +744,6 @@ line-height: 150%; /* 21px */
   color: var(--Green-02, #074E42);
 
 /* Detail/01_Semibold */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 600;
@@ -825,7 +755,6 @@ line-height: 150%; /* 21px */
 text-align: center;
 
 /* Heading/02_Semibold */
-font-family: Pretendard;
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
@@ -836,7 +765,6 @@ line-height: 120%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -847,7 +775,6 @@ line-height: 150%; /* 24px */
 color: var(--White, #FFF);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -858,7 +785,6 @@ line-height: 150%; /* 24px */
   color: var(--White, #FFF);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -870,7 +796,6 @@ letter-spacing: 0.18px;
   color: var(--80, #3C434F);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -881,7 +806,6 @@ line-height: 150%; /* 24px */
   color: var(--White, #FFF);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -893,7 +817,6 @@ line-height: 150%; /* 24px */
 text-align: center;
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -904,7 +827,6 @@ line-height: 150%; /* 24px */
   color: #000;
 
 /* Heading/02_Semibold */
-font-family: Pretendard;
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
@@ -915,7 +837,6 @@ line-height: 120%; /* 24px */
   color: var(--40, #A6AEB6);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -926,7 +847,6 @@ line-height: 150%; /* 21px */
   color: var(--Green-04, #5ACBB0);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -938,7 +858,6 @@ letter-spacing: 0.18px;
   color: #BABABA;
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -950,7 +869,6 @@ letter-spacing: 0.18px;
   color: var(--100, #191919);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -962,7 +880,6 @@ letter-spacing: 0.18px;
   color: var(--80, #3C434F);
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -972,7 +889,6 @@ letter-spacing: 0.18px;
 
 .loc-next-font{
   color: var(--60, #6C7582);
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -982,7 +898,6 @@ letter-spacing: 0.18px;
 
 .loc-done-font{
   color: var(--60, #6C7582);
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;

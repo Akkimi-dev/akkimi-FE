@@ -194,7 +194,7 @@ export default function CalendarPage() {
               <NextIcon className="w-5 h-5" />
             </button>
           </div>
-
+          
           {/* 요일 */}
           <div className="grid grid-cols-7 text-center mb-2">
             <div className="cal-sun-font">일</div>
@@ -207,78 +207,79 @@ export default function CalendarPage() {
           </div>
 
           <div className="border w-full border-[#DDE2E7] scale-y-50"></div>
-
-          {/* 날짜 */}
-          <div className="grid grid-cols-7 cal-date-font gap-0">
-            {Array.from({ length: firstDay }).map((_, i) => {
-              const prevDay =
-                new Date(currentYear, currentMonth, 0).getDate() -
-                (firstDay - 1) +
-                i;
-              const prevDate = new Date(currentYear, currentMonth - 1, prevDay);
-              return (
-                <div
-                  key={`prev-${i}`}
-                  className="flex flex-col justify-start items-center w-full h-[56px] bg-[#F3F7FB]"
-                >
-                  <span className="cal-not-in-date-font">{prevDay}</span>
-                </div>
-              );
-            })}
-
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1;
-              const dateKey = `${currentYear}-${String(
-                currentMonth + 1
-              ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-              const currentDate = new Date(currentYear, currentMonth, day);
-              const spending =
-                currentDate >= goalStart && currentDate <= goalEnd && mockData[dateKey]
-                  ? mockData[dateKey].reduce((a, b) => a + b, 0)
-                  : 0;
-              const isSelected = selectedDate === day;
-              const isInGoalPeriod =
-                currentDate >= goalStart && currentDate <= goalEnd;
-
-              return (
-                <div
-                  key={i}
-                  className={`flex flex-col justify-start items-center w-full h-[56px]
-                    ${isSelected ? "bg-gradient-to-t from-[#5ACBB0] to-[#03FFDA]" : ""}
-                    ${tab === "goal"
-                        ? !isSelected && (isInGoalPeriod ? "bg-white" : "bg-[#F3F7FB]")
-                        : "bg-white"
-                    }
-                    cursor-pointer`}
-                  onClick={() => setSelectedDate(day)}
-                >
-                  <span
-                    className={
-                      isSelected
-                        ? "cal-selected-date-font"
-                        : tab === "goal"
-                        ? isInGoalPeriod
-                          ? "cal-date-font"
-                          : "cal-not-in-date-font"
-                        : "cal-date-font"
-                    }
+          <div className="w-full bg-bg-blue">
+            {/* 날짜 */}
+            <div className="grid grid-cols-7 cal-date-font gap-0">
+              {Array.from({ length: firstDay }).map((_, i) => {
+                const prevDay =
+                  new Date(currentYear, currentMonth, 0).getDate() -
+                  (firstDay - 1) +
+                  i;
+                const prevDate = new Date(currentYear, currentMonth - 1, prevDay);
+                return (
+                  <div
+                    key={`prev-${i}`}
+                    className="flex flex-col justify-start items-center w-full h-[56px] bg-[#F3F7FB]"
                   >
-                    {day}
-                  </span>
-                  {spending > 0 && (
+                    <span className="cal-not-in-date-font">{prevDay}</span>
+                  </div>
+                );
+              })}
+
+              {Array.from({ length: daysInMonth }).map((_, i) => {
+                const day = i + 1;
+                const dateKey = `${currentYear}-${String(
+                  currentMonth + 1
+                ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const currentDate = new Date(currentYear, currentMonth, day);
+                const spending =
+                  currentDate >= goalStart && currentDate <= goalEnd && mockData[dateKey]
+                    ? mockData[dateKey].reduce((a, b) => a + b, 0)
+                    : 0;
+                const isSelected = selectedDate === day;
+                const isInGoalPeriod =
+                  currentDate >= goalStart && currentDate <= goalEnd;
+
+                return (
+                  <div
+                    key={i}
+                    className={`flex flex-col justify-start items-center w-full h-[56px]
+                      ${isSelected ? "bg-gradient-to-t from-[#5ACBB0] to-[#03FFDA]" : ""}
+                      ${tab === "goal"
+                          ? !isSelected && (isInGoalPeriod ? "bg-white" : "bg-[#F3F7FB]")
+                          : "bg-white"
+                      }
+                      cursor-pointer`}
+                    onClick={() => setSelectedDate(day)}
+                  >
                     <span
                       className={
                         isSelected
-                          ? "cal-selected-price-font"
-                          : "text-[10px] text-[#28BFA1] mt-1"
+                          ? "cal-selected-date-font"
+                          : tab === "goal"
+                          ? isInGoalPeriod
+                            ? "cal-date-font"
+                            : "cal-not-in-date-font"
+                          : "cal-date-font"
                       }
                     >
-                      {spending.toLocaleString()}
+                      {day}
                     </span>
-                  )}
-                </div>
-              );
-            })}
+                    {spending > 0 && (
+                      <span
+                        className={
+                          isSelected
+                            ? "cal-selected-price-font"
+                            : "text-[10px] text-[#28BFA1] mt-1"
+                        }
+                      >
+                        {spending.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
