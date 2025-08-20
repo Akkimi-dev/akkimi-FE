@@ -12,25 +12,17 @@ const mockConsumptionList = [
 ];
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Plus from "../../assets/home/plus.svg?react";
 import ConsumptionList from "../consumption/ConsumptionList";
 import MessageModal from "../consumption/MessageModal";
+import { useNavigate } from "react-router-dom";
 
-export default function Consumption() {
+export default function Consumption({date}) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const navigate = useNavigate();
 
   return (
-    <div className="p-4 flex flex-col gap-4 ">
-      <span className="text-body-01-semibold text-gray-100">오늘 내 소비</span>
-      <button
-        onClick={() => navigate("consumption-create")}
-        className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
-      >
-        <span>소비 내역 작성하기</span>
-        <Plus />
-      </button>
+    <div className="flex flex-col gap-4 ">
       <ConsumptionList
         consumptionList={mockConsumptionList}
         onOpenModal={(item) => setSelectedItemId(item.id)}
@@ -41,6 +33,13 @@ export default function Consumption() {
           onClose={() => setSelectedItemId(null)}
         />
       )}
+      <button
+        onClick={() => navigate(`consumption-create?date=${date}`)}
+        className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
+      >
+        <span>소비 내역 작성하기</span>
+        <Plus />
+      </button>
     </div>
   );
 }

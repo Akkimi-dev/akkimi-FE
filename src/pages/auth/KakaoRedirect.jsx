@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useKakaoLogin } from '../hooks/auth/useLogin';
+import { useKakaoLogin } from '../../hooks/auth/useLogin';
 
 export default function KakaoRedirect(){
   const navigate = useNavigate();

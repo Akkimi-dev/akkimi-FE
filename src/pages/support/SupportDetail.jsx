@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import LocationIcon from '../assets/Support/location.svg?react';
-import GobackIcon from '../assets/Support/goback.svg?react';
-import MovetoIcon from '../assets/Support/moveto.svg?react';
-import PhoneIcon from '../assets/Support/phone.svg?react';
-import CopyIcon from '../assets/Support/copy.svg?react';
-import ClockIcon from '../assets/Support/clock.svg?react';
+import LocationIcon from '../../assets/support/location.svg?react';
+import GobackIcon from '../../assets/support/goback.svg?react';
+import MovetoIcon from '../../assets/support/moveto.svg?react';
+import PhoneIcon from '../../assets/support/phone.svg?react';
+import CopyIcon from '../../assets/support/copy.svg?react';
+import ClockIcon from '../../assets/support/clock.svg?react';
+import NoNavLayout from "../../components/layouts/NoNavLayout";
 
 export default function SupportDetail() {
   const nav = useNavigate();
@@ -29,12 +30,11 @@ export default function SupportDetail() {
   };
 
   return (
-    // 하나의 스크롤 컨테이너 (스크롤바 숨김) — 바깥쪽 좌우 패딩 없음!
+    <NoNavLayout>
     <div className="max-w-full h-[700px] mx-auto bg-white overflow-y-auto no-scrollbar">
       {/* 히어로: 좌우 풀블리드 */}
       <div className="relative w-full h-[260px] overflow-hidden z-0">
         <img src={image} alt={title} className="block w-full h-full object-cover" />
-
         {/* 이미지 위 그라디언트 */}
         <div
           className="absolute inset-0 pointer-events-none z-[1]"
@@ -45,7 +45,7 @@ export default function SupportDetail() {
         />
 
         {/* 상태바자리였지만 그냥 패딩용으로 쓰기로 함*/}
-        <div
+        {/* <div
           className="absolute inset-x-0 top-0 z-10 flex items-center justify-between text-white"
           style={{
             paddingTop: 'calc(max(env(safe-area-inset-top), 19px))',
@@ -54,13 +54,13 @@ export default function SupportDetail() {
             paddingRight: '36px',
           }}
         >
-        </div>
+        </div> */}
 
         {/* 뒤로가기 */}
         <button
           onClick={() => nav(-1)}
           className="absolute left-0 z-10"
-          style={{ top: 'calc(max(env(safe-area-inset-top), 19px) + 60px)', padding: '14px' }}
+          style={{ top: 'calc(max(env(safe-area-inset-top), 19px))', padding: '14px' }}
           aria-label="뒤로가기"
         >
           <GobackIcon className="w-[24px] h-[24px]" />
@@ -156,5 +156,6 @@ export default function SupportDetail() {
         </div>
       </div>
     </div>
+    </NoNavLayout>
   );
 }

@@ -2,17 +2,18 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layouts/Layout';
 import HomePage from './pages/HomePage';
 import CalendarPage from './pages/CalendarPage';
-import SurveyPage from './pages/SurveyPage';
-import SettingsPage from './pages/SettingsPage';
-import SupportPage from './pages/SupportPage';
-import AuthPage from './pages/AuthPage';
-import KakaoRedirect from './pages/KakaoRedirect';
-import SupportDetail from './pages/SupportDetail';
-import LocationChangePage from "./pages/LocationChangePage.jsx";
-import ChatbotPage from "./pages/ChatbotPage.jsx";
-import ChatbotMaltu from "./pages/ChatbotMaltu.jsx";
-import ChatbotColor from "./pages/ChatbotColor.jsx";
+import SurveyPage from './pages/user/SurveyPage';
+import SettingsPage from './pages/user/SettingsPage';
+import SupportPage from './pages/support/SupportPage';
+import AuthPage from './pages/auth/AuthPage';
+import KakaoRedirect from './pages/auth/KakaoRedirect';
+import SupportDetail from './pages/support/SupportDetail';
+import LocationChangePage from "./pages/user/LocationChangePage.jsx";
+import ChatbotPage from "./pages/chatbot/ChatbotPage.jsx";
+import ChatbotMaltu from "./pages/chatbot/ChatbotMaltu.jsx";
+import ChatbotColor from "./pages/chatbot/ChatbotColor.jsx";
 import ToneList from "./components/ToneList.jsx";
+import ConsumptionCreatePage from './pages/Consumption/ConsumptionCreatePage.jsx';
 
 export default function App() {
   return (
@@ -30,8 +31,8 @@ export default function App() {
         <Route path="chatbotMaltu" element={<ChatbotMaltu />} />
         <Route path="chatbotColor" element={<ChatbotColor />} />
         <Route path="tone-list" element={<ToneList />} />
-
         <Route path="chatbot" element={<ChatbotPage />} />
+        <Route path="consumption-create" element={<ConsumptionCreatePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
