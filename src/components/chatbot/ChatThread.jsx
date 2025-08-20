@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export default function ChatThread() {
   const DONE_GRACE_MS = 150;   // onDone 이후 잠깐 대기
-  const IDLE_GRACE_MS = 1000;  // 마지막 토큰 이후 유예 유예 시간 이후에는 sse 끊긴 걸로 간주
+  const IDLE_GRACE_MS = 30000;  // 마지막 토큰 이후 유예 유예 시간 이후에는 sse 끊긴 걸로 간주
 
   const [input, setInput] = useState(''); // 사용자 입력
 
@@ -49,27 +49,82 @@ export default function ChatThread() {
 
   // 채팅 히스토리 관련
   // 무한 쿼리 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 20 });
+  const { data, fetchNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 20 });
   const messages = data?.items || [];
-  const hasMore = !!data?.hasMore;
+
+  // 캐시 무효화를 위한 qc 선언
+  const qc = useQueryClient();
+ 
 
   // 채팅 + 챗봇 응답 시 맨 밑으로 가기위한 ref
   const bottomRef = useRef(null);
 
-  // 캐시 무효화를 위한 qc 선언
-  const qc = useQueryClient();
-
-  // 
   const didInitialScrollRef = useRef(false);
 
-  // 첫 로딩 시 실행
+  // 이전 채팅 로드시 기존 위치로 가기위한 ref
+  const topRef = useRef(null);
+
+  const appendScrollRefId = useRef(0)
+
+  const sentinelRef = useRef(null);      // 상단 감지용 센티넬 (선택한 div)
+  const ioRef = useRef(null);            // IO 인스턴스 저장
+  const lastLoadAtRef = useRef(0);       // 연속 로딩 방지 쿨다운
+  const IO_COOLDOWN_MS = 200;            // IO 트리거 최소 간격
+
+  // 메세지 로드 시 마다 실행
   useEffect(() => {
-    if (didInitialScrollRef.current) return;
+    console.log(appendScrollRefId.current);
+    if (didInitialScrollRef.current) {
+      requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'auto' }));
+      appendScrollRefId.current = data.nextBeforeId
+      return
+    };
     if (!messages || messages.length === 0) return;
     didInitialScrollRef.current = true;
     requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'auto' }));
-  }, [messages?.length]);
+    // 최상위 id
+    appendScrollRefId.current = data.nextBeforeId
 
+    console.log(appendScrollRefId.current);
+  }, [messages.length]);
+
+  // 상단 센티넬이 뷰포트 상단 근처(150px)까지 내려오면 자동으로 이전 페이지 로드
+  useEffect(() => {
+    const target = sentinelRef.current;
+    if (!target) return;
+
+    // 기존 옵저버 제거
+    if (ioRef.current) {
+      ioRef.current.disconnect();
+      ioRef.current = null;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry || !entry.isIntersecting) return;
+        if (!didInitialScrollRef.current) return;              // 첫 렌더링 중에는 무시
+        if (isFetchingNextPage) return;                        // 중복 로딩 방지
+        const now = Date.now();
+        if (now - lastLoadAtRef.current < IO_COOLDOWN_MS) return; // 쿨다운
+
+        // 불러오기 전 실제 최상단 메시지를 앵커로 지정
+        appendScrollRefId.current = messages?.[0]?.chatId ?? 0;
+
+        lastLoadAtRef.current = now;
+        fetchNextPage();
+      },
+      {
+        root: null,                 // 뷰포트 기준 (상위 컨테이너 ref를 못 올릴 때 사용)
+        rootMargin: '0px 0px 0px 0px', // 상단에서 150px 여유
+        threshold: 0,
+      }
+    );
+
+    observer.observe(target);
+    ioRef.current = observer;
+    return () => observer.disconnect();
+  }, [messages, isFetchingNextPage]);
 
   // 메세지 전송 관련
   const sendMutation = useSendMessageMutation();
@@ -105,7 +160,7 @@ export default function ChatThread() {
               doneTimerRef.current = setTimeout(() => { finalizeStream(); }, DONE_GRACE_MS);
             },
           });
-        } catch (e) {};
+        } catch (e) {console.log(e)};
       },
       onError: () => {},
       onSettled: () => {},
@@ -125,24 +180,14 @@ export default function ChatThread() {
     sendUserMessage();
   };
 
-  const handleLoadMore = () => {
-    if (hasMore && !isFetchingNextPage) fetchNextPage();
-  };
-
   return (
-    <div className="w-full flex flex-col gap-4 pb-18 overflow-y-auto">
-      {hasMore && (
-        <button
-          type="button"
-          onClick={handleLoadMore}
-          className="self-center text-detail-01-regular text-gray-60 hover:underline"
-        >
-          이전 대화 더 보기
-        </button>
-      )}
-
+    <div
+      className="w-full flex flex-col gap-4 pb-18 min-h-0 overflow-y-auto"
+    >
+      <div ref={sentinelRef} />
       {messages.map((m) => (
-        <div key={m.chatId} className='w-full px-4'>
+        appendScrollRefId.current == m.chatId ?(
+          <div key={m.chatId} className='w-full px-4' ref={topRef}>
           {(m.showDate || m.showTime) && (
             <div className='w-full flex justify-center items-center pt-2 pb-6'>
               {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
@@ -150,14 +195,26 @@ export default function ChatThread() {
               {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
             </div>
           )}
-
           <Chat role={m.speaker} message={m.message} />
         </div>
+        ):(
+          <div key={m.chatId} className='w-full px-4' >
+          {(m.showDate || m.showTime) && (
+            <div className='w-full flex justify-center items-center pt-2 pb-6'>
+              {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
+              {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
+              {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
+            </div>
+          )}
+          <Chat role={m.speaker} message={m.message} />
+        </div>
+        
+        )
       ))}
 
       {(isSSE || streamedText) && (
         <div className='w-full px-4'>
-          <Chat role='assistant' message={streamedText} />
+          <Chat role='BOT' message={streamedText} />
         </div>
       )}
 
