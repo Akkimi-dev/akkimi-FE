@@ -6,6 +6,7 @@ import mockFood from '/mockFood.png';
 import mockRoom from '/mockRoom.png';
 import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NavLayout from "../components/layouts/NavLayout";
 
 export default function SupportPage() {
   const navigate = useNavigate();
@@ -121,6 +122,7 @@ export default function SupportPage() {
   }, [selected]);
 
   return (
+    <NavLayout>
     <div className="w-full max-w-[393px] h-screen mx-auto bg-white flex flex-col">
 
       {/* 헤더 */}
@@ -203,5 +205,6 @@ export default function SupportPage() {
         </div>
       </div>
     </div>
+    </NavLayout>
   );
 }

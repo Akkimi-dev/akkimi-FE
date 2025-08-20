@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import GobackIcon from "../assets/Settings/goback.svg?react";
 
 export default function LocationChangePage() {
   const nav = useNavigate();
@@ -35,7 +36,7 @@ export default function LocationChangePage() {
       setStep('district');
       return;
     }
-    // ✅ 선택된 지역 저장
+    //  선택된 지역 저장
     localStorage.setItem(
       'selectedLocation',
       JSON.stringify({ city, district, updatedAt: Date.now() })
@@ -46,8 +47,8 @@ export default function LocationChangePage() {
   return (
     <div className="max-w-[393px] h-[700px] mx-auto bg-white flex flex-col">
       <header className="flex items-center justify-between h-12 px-4">
-        <button onClick={onBack} className="text-[18px]" aria-label="뒤로가기">←</button>
-        <h1 className="text-[16px] font-semibold">지역 변경하기</h1>
+        <GobackIcon onClick={onBack} className="w-5 h-5" />
+        <h1 className="loc-name-font mt-5">지역 설정하기</h1>
         <div className="w-5" />
       </header>
 

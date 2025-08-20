@@ -784,3 +784,128 @@ line-height: 150%; /* 18px */
 ::-webkit-scrollbar {
   display: none;
 }
+
+
+.sur-title-font{
+  color: var(--Green-02, #074E42);
+
+/* Heading/01_Bold */
+font-family: Pretendard;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: 120%; /* 28.8px */
+}
+
+.sur-percent-font{
+  color: var(--Green-02, #074E42);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.sur-situation-font{
+  color: var(--Green-02, #074E42);
+
+/* Detail/01_Semibold */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 21px */
+}
+
+.sur-question-font{
+  color: #000;
+text-align: center;
+
+/* Heading/02_Semibold */
+font-family: Pretendard;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 24px */
+}
+
+.sur-notchosen-font{
+  color: var(--80, #3C434F);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.sur-chosen-font{
+color: var(--White, #FFF);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.sur-next-font{
+  color: var(--White, #FFF);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.sur-3-notchosen-font{
+  color: var(--80, #3C434F);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.sur-3-chosen-font{
+  color: var(--White, #FFF);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.sur-loading-font{
+  color: var(--Green-02, #074E42);
+text-align: center;
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.loc-name-font{
+  color: #000;
+
+/* Heading/02_Semibold */
+font-family: Pretendard;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 24px */
+}

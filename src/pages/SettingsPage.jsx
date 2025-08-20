@@ -8,16 +8,13 @@ import UserSettings from "../components/UserSettings";
 
 export default function SettingsPage() {
   const nav = useNavigate();
-  const [location, setLocation] = useState("서울시 마포구"); // 기본값
-
-  // 목업 데이터
-  const goal = "영국에 갈끄야";
-  const startDate = "25.08.01";
-  const endDate = "25.08.31";
-  const goalBudget = "500,000원";
+  const [location, setLocation] = useState("서울시 마포구");
+  const [surveyResult, setSurveyResult] = useState(null);
+  const [tone, setTone] = useState(null);
 
   // localStorage에서 불러오기
   useEffect(() => {
+    // 지역
     const saved = localStorage.getItem("selectedLocation");
     if (saved) {
       const { city, district } = JSON.parse(saved);
@@ -25,12 +22,25 @@ export default function SettingsPage() {
         setLocation(`${city}시 ${district}`);
       }
     }
-  }, []);
+
+    // 소비 성향
+    const surveySaved = localStorage.getItem("surveyResult");
+    if (surveySaved) {
+      const { type, tone } = JSON.parse(surveySaved);
+      setSurveyResult(type);
+      setTone(tone);
+    }
+  }, [nav]); // nav 변경(즉, 페이지 재진입) 시 다시 불러오기
+
+  // 목업 데이터
+  const goal = "영국에 갈끄야";
+  const startDate = "25.08.01";
+  const endDate = "25.08.31";
+  const goalBudget = "500,000원";
 
   return (
     <NavLayout>
       <div className="bg-[#F1F1F5]">
-        
         {/* 프로필 */}
         <div className="flex w-full p-4 h-12 flex-col justify-center items-start gap-2 shrink-0 bg-[#F1F1F5] set-title-font py-10">
           내 프로필
@@ -41,11 +51,14 @@ export default function SettingsPage() {
         </div>
 
         {/* 진행중인 목표 + 내 소비 성향 + 내 지역 컨테이너 */}
-        <div className="flex flex-col gap-6 w-full px-4 py-8 bg-white">
+        <div className="flex flex-col gap-6 w-full px-4 pb-8 bg-white">
 
           {/* 진행중인 목표 */}
+          <div className="set-goal-font -mb-2">진행중인 목표</div>
           <div className="w-full rounded-[16px] border border-green-main-dark-2 flex justify-between items-end px-4 pt-2 pb-3">
+
             <div className="flex flex-col gap-2">
+
               <span className="text-body-02-semibold">{`[${goal}]`}</span>
               <div>
                 <span className="bg-green text-gray-80 text-detail-01-regular rounded-[5px] px-[2px]">{startDate}</span>
@@ -63,7 +76,7 @@ export default function SettingsPage() {
           <div className="flex flex-col gap-2">
             <div className="set-goal-font">내 소비 성향</div>
             <div className="flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)]">
-              <div className="set-result-font">무의식형 미식파</div>
+              <div className="set-result-font">{surveyResult || "무의식형 미식파"}</div>
               <button
                 onClick={() => nav("/survey")}
                 className="flex justify-center items-center gap-1 rounded-[30px] border border-[#DDE2E7] bg-[#CAF6EC] py-1 pl-3 pr-2 set-again-font"
@@ -105,7 +118,6 @@ export default function SettingsPage() {
             <Goback2Icon className="w-4 h-4"/>
           </button>
         </div>
-
       </div>
     </NavLayout>
   );
