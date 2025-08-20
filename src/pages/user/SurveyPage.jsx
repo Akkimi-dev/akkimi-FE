@@ -66,10 +66,10 @@ export default function SurveyPage() {
 
   return (
     <NoNavLayout>
-      <div className="max-w-md mx-auto flex flex-col h-screen bg-[#E3FFF9]">
+      <div className="relative max-w-md mx-auto flex flex-col min-h-full bg-[#E3FFF9]">
         {/* 상단 제목 + 진행도 */}
         <div className="w-full flex flex-col items-center py-6">
-          <h1 className="sur-title-font mt-8 mb-4">
+          <h1 className="sur-title-font py-2">
             소비/성향 테스트
           </h1>
           <div className="w-[85%]">
@@ -157,7 +157,7 @@ export default function SurveyPage() {
        {/* 버튼 */}
         <div className="w-full">
           <button
-            className={`fixed left-1/2 -translate-x-1/2 bottom-10
+            className={`absolute left-1/2 -translate-x-1/2 bottom-10
               sur-next-font flex w-[248px] h-[56px] px-6 py-4 justify-center items-center gap-[10px] rounded-[30px] ${
                 isDisabled() ? "bg-[#A6AEB6]" : "bg-[#5ACBB0]"
               }`}
