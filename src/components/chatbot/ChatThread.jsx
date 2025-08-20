@@ -4,12 +4,17 @@ import ChatInput from "../../assets/chatbot/chatInput.svg?react";
 import { useChatHistoryInfiniteQuery, useSendMessageMutation } from '../../hooks/chat/useChat';
 import { getChatApi } from '../../apis/chatApis';
 import { useQueryClient } from '@tanstack/react-query';
+import { computeTimeLabels } from '../../utils/chatTime'
 
 export default function ChatThread() {
+  // 캐시 무효화를 위한 qc 선언
+  const qc = useQueryClient();
+
   const DONE_GRACE_MS = 150;   // onDone 이후 잠깐 대기
   const IDLE_GRACE_MS = 30000;  // 마지막 토큰 이후 유예 유예 시간 이후에는 sse 끊긴 걸로 간주
 
   const [input, setInput] = useState(''); // 사용자 입력
+  const [pendingUserMsgs, setPendingUserMsgs] = useState([]); // 스트리밍 중 로컬 에코용
 
   // 챗봇 관련
   const esRef = useRef(null);
@@ -24,7 +29,7 @@ export default function ChatThread() {
 
   // 스트리밍 초기화 -> 청크 초기화
   const resetStream = () => { setChunks([]); };
-  // 스트리밀 종료
+  // 스트리밍 종료
   const endStream = () => { esRef.current = null; setIsSSE(false); } //resetStream(); };
 
   const clearTimers = () => {
@@ -36,6 +41,8 @@ export default function ChatThread() {
     clearTimers();
     endStream();
     resetStream(); // 청크/streamedText 비우기
+    // 로컬 에코 제거(서버 히스토리로 대체)
+    setPendingUserMsgs([]);
     // 히스토리 캐시 무효화 → 최신 메시지를 히스토리로 편입
     qc.invalidateQueries({ queryKey: ["chatHistory"] });
   };
@@ -51,10 +58,6 @@ export default function ChatThread() {
   // 무한 쿼리 
   const { data, fetchNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 20 });
   const messages = data?.items || [];
-
-  // 캐시 무효화를 위한 qc 선언
-  const qc = useQueryClient();
- 
 
   // 채팅 + 챗봇 응답 시 맨 밑으로 가기위한 ref
   const bottomRef = useRef(null);
@@ -73,7 +76,6 @@ export default function ChatThread() {
 
   // 메세지 로드 시 마다 실행
   useEffect(() => {
-    console.log(appendScrollRefId.current);
     if (didInitialScrollRef.current) {
       requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'auto' }));
       appendScrollRefId.current = data.nextBeforeId
@@ -84,11 +86,9 @@ export default function ChatThread() {
     requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'auto' }));
     // 최상위 id
     appendScrollRefId.current = data.nextBeforeId
-
-    console.log(appendScrollRefId.current);
   }, [messages.length]);
 
-  // 상단 센티넬이 뷰포트 상단 근처(150px)까지 내려오면 자동으로 이전 페이지 로드
+  // 상단 센티넬이 뷰포트 상단 (0px)까지 내려오면 자동으로 이전 페이지 로드
   useEffect(() => {
     const target = sentinelRef.current;
     if (!target) return;
@@ -103,8 +103,8 @@ export default function ChatThread() {
       (entries) => {
         const entry = entries[0];
         if (!entry || !entry.isIntersecting) return;
-        if (!didInitialScrollRef.current) return;              // 첫 렌더링 중에는 무시
-        if (isFetchingNextPage) return;                        // 중복 로딩 방지
+        if (!didInitialScrollRef.current) return;  // 첫 렌더링 중에는 무시
+        if (isFetchingNextPage) return;  // 중복 로딩 방지
         const now = Date.now();
         if (now - lastLoadAtRef.current < IO_COOLDOWN_MS) return; // 쿨다운
 
@@ -115,8 +115,8 @@ export default function ChatThread() {
         fetchNextPage();
       },
       {
-        root: null,                 // 뷰포트 기준 (상위 컨테이너 ref를 못 올릴 때 사용)
-        rootMargin: '0px 0px 0px 0px', // 상단에서 150px 여유
+        root: null, // 뷰포트 기준 (상위 컨테이너 ref를 못 올릴 때 사용)
+        rootMargin: '0px 0px 0px 0px', // 상단에서 0px
         threshold: 0,
       }
     );
@@ -124,6 +124,7 @@ export default function ChatThread() {
     observer.observe(target);
     ioRef.current = observer;
     return () => observer.disconnect();
+
   }, [messages, isFetchingNextPage]);
 
   // 메세지 전송 관련
@@ -135,6 +136,27 @@ export default function ChatThread() {
     const trimmed = input.trim();
     if (!trimmed) return;
     setInput('');
+    // 로컬로 처리(깜박임 떄문): invalidate는 SSE 종료 시점에만 수행
+    const now = new Date();
+    const tempId = `local-${now.getTime()}`;
+    // 직전 서버 메시지와 비교해 라벨 계산
+    const prevMsg = messages.length > 0 ? messages[messages.length - 1] : null;
+    console.log(prevMsg)
+    const labels = computeTimeLabels(now, prevMsg);
+
+    setPendingUserMsgs((prev) => [
+      ...prev,
+      {
+        chatId: tempId,
+        speaker: 'USER',
+        message: trimmed,
+        createdAt: now.toISOString(),
+        showDate: labels.showDate,
+        dateLabel: labels.dateLabel,
+        showTime: labels.showTime,
+        timeLabel: labels.timeLabel,
+      },
+    ]);
     // 서버 전송 (성공 시 히스토리 자동 갱신: invalidateQueries)
     sendMutation.mutate( trimmed , {
       onSuccess: (res) => {
@@ -208,8 +230,21 @@ export default function ChatThread() {
           )}
           <Chat role={m.speaker} message={m.message} />
         </div>
-        
+
         )
+      ))}
+      
+      {pendingUserMsgs.map((m) => (
+        <div key={m.chatId} className='w-full px-4'>
+          {(m.showDate || m.showTime) && (
+            <div className='w-full flex justify-center items-center pt-2 pb-6'>
+              {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
+              {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
+              {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
+            </div>
+          )}
+          <Chat role={m.speaker} message={m.message} />
+        </div>
       ))}
 
       {(isSSE || streamedText) && (

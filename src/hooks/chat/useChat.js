@@ -3,7 +3,7 @@
 // - useChatHistory: 페이지네이션 기반 히스토리 조회
 
 import { getChatHistoryApi, postChatApi } from "../../apis/chatApis";
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 // 단건 조회형 히스토리 훅 (React Query)
 export function useChatHistoryQuery({ limit = 20, beforeId = null } = {}, options = {}) {
@@ -51,16 +51,13 @@ export function useChatHistoryInfiniteQuery({ pageSize = 20 } = {}) {
 
 /**
  * useSendMessageMutation
- * - 메시지 전송 뮤테이션. 성공 시 히스토리 캐시 무효화
+ * - 메시지 전송 뮤테이션. 성공 시 히스토리 캐시 무효 하지 않고 스트리밍 중에는 invalidate 지연 후 캐시 무효화
  */
 export function useSendMessageMutation(options = {}) {
-  const qc = useQueryClient();
   return useMutation({
     mutationKey: ["chatSend"],
     mutationFn: async (payload) => postChatApi(payload),
     onSuccess: async (...args) => {
-      // 히스토리 갱신
-      await qc.invalidateQueries({ queryKey: ["chatHistory"] });
       options.onSuccess && options.onSuccess(...args);
     },
     onError: options.onError,
