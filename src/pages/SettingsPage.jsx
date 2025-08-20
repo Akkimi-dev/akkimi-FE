@@ -19,7 +19,7 @@ export default function SettingsPage() {
     if (saved) {
       const { city, district } = JSON.parse(saved);
       if (city && district) {
-        setLocation(`${city}시 ${district}`);
+        setLocation(`${city} ${district}`);
       }
     }
 

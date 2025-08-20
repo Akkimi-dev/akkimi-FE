@@ -909,3 +909,82 @@ font-style: normal;
 font-weight: 600;
 line-height: 120%; /* 24px */
 }
+
+.loc-info-font{
+  color: var(--40, #A6AEB6);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.loc-1-font{
+  color: var(--Green-04, #5ACBB0);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.loc-2-font{
+  color: #BABABA;
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.loc-city-font{
+  color: var(--100, #191919);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.loc-city-not-chosen-font{
+  color: var(--80, #3C434F);
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.loc-next-font{
+  color: var(--60, #6C7582);
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 21.6px */
+letter-spacing: 0.18px;
+}
+
+.loc-done-font{
+  color: var(--60, #6C7582);
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 21.6px */
+letter-spacing: 0.18px;
+}
