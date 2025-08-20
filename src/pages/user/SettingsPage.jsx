@@ -8,7 +8,7 @@ import UserSettings from "../../components/UserSettings";
 
 export default function SettingsPage() {
   const nav = useNavigate();
-  const [location, setLocation] = useState("서울시 마포구"); // 기본값
+  const [location, setLocation] = useState("서울 마포구"); // 기본값
 
   // 목업 데이터
   const goal = "영국에 갈끄야";
@@ -22,7 +22,7 @@ export default function SettingsPage() {
     if (saved) {
       const { city, district } = JSON.parse(saved);
       if (city && district) {
-        setLocation(`${city}시 ${district}`);
+        setLocation(`${city} ${district}`);
       }
     }
   }, []);
