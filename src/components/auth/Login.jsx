@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLogin } from "../../hooks/auth/useLogin";
 import BackArrow from "../../assets/common/backArrow.svg?react";
 import Error from "../../assets/login/error.svg?react";
@@ -17,15 +17,9 @@ export default function Login({flow, onInit}) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { setTokens } = useAuthStore(); 
-  const { mutateAsync, isPending, error } = useLogin(flow);
+  const { mutate, isPending, reset } = useLogin(flow);
 
   const { show: showError, Modal: ErrorModalRenderer } = useErrorModal();
-
-  useEffect(() => {
-    if (!error) return;
-    const msg = error?.response?.data?.message || '로그인에 실패했습니다.';
-    showError(msg);
-  }, [error, showError]);
 
   const isPhone = flow === "phone";
   const headingTitle = isPhone ? "휴대폰 번호로 로그인하기" : "이메일로 로그인하기";
@@ -71,24 +65,26 @@ export default function Login({flow, onInit}) {
     setValue(val);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (isInvalid) return;
-    try {
-      if (isPhone) {
-        // 서버에는 숫자만 전달 (하이픈 제거)
-        const phoneNumber = value.replace(/\D/g, "");
-        const { accessToken, refreshToken } = await mutateAsync({ phoneNumber, password });
-        setTokens(accessToken, refreshToken);
-        navigate('/');
-      } else {
-        const { accessToken, refreshToken } = await mutateAsync({ email: value, password });
-        setTokens(accessToken, refreshToken);
-        navigate('/');
-      }
-    } catch (err) {
-      // 원하는 커스텀 메시지 지정 가능
-      const msg = '아이디 비밀번호를 확인해주세요!';
+
+    reset();
+
+    const onSuccess = (data) => {
+      setTokens(data.accessToken, data.refreshToken);
+      navigate('/');
+    };
+
+    const onError = (e) => {
+      const msg = e?.response?.data?.message || '아이디 비밀번호를 확인해주세요!';
       showError(msg);
+    };
+
+    if (isPhone) {
+      const phoneNumber = value.replace(/\D/g, '');
+      mutate({ phoneNumber, password }, { onSuccess, onError });
+    } else {
+      mutate({ email: value, password }, { onSuccess, onError });
     }
   };
 

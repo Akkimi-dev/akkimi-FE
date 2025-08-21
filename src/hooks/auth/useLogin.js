@@ -4,26 +4,18 @@ import { loginEmail, loginPhone, kakaoLogin } from '../../apis/auth';
 import { useAuthStore } from '../../stores/useAuthStore';
 
 export function useLogin(flow) {
-  const { setTokens } = useAuthStore();
-
-  const { mutateAsync, isLoading, error } = useMutation({
+  const { mutate, mutateAsync, isPending, error, reset } = useMutation({
     mutationFn: async (payload) => {
-      if (flow === 'phone') return loginPhone(payload.phoneNumber, payload.password);
-      return loginEmail(payload.email, payload.password);
-    },
-    onSuccess: (response) => {
-      const { accessToken, refreshToken } = response;
-      setTokens({ accessToken, refreshToken });
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        throw error.response?.data;
+      if (flow === 'phone') {
+        return await loginPhone(payload.phoneNumber, payload.password);
       }
+      return await loginEmail(payload.email, payload.password);
     },
+    // 성공/실패 후 처리(토큰 저장, 모달)는 호출부에서
     retry: 0,
   });
 
-  return { mutateAsync, isLoading, error };
+  return { mutate, mutateAsync, isPending, error, reset };
 }
 
 export function useKakaoLogin() {
