@@ -28,7 +28,7 @@ export default function Grape({goal, date, usedBudget, goalBudget}){
   const GrapeBg = grapeBackgrounds[level] || Grape1;
 
   return(
-    <div className="w-full h-[240px] relative p-4 flex flex-col justify-between">
+    <div className="w-full h-[240px] relative p-4 flex flex-col justify-between bg-white">
       <div className="absolute inset-0">
         <img src={GrapeBg} alt={`grape-${level}`} className="w-full h-full object-fill" />
       </div>
