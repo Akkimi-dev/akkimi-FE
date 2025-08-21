@@ -3,9 +3,7 @@ import CalIcon from "../assets/goal/calendar.svg?react";
 import PreviousIcon from "../assets/calendar/previousmonth.svg?react";
 import NextIcon from "../assets/calendar/nextmonth.svg?react";
 
-export default function GoalPeriod({ onSave }) {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
   const [showCalendar, setShowCalendar] = useState(false);
 
   const [currentYear, setCurrentYear] = useState(2025);
@@ -18,10 +16,16 @@ export default function GoalPeriod({ onSave }) {
     const clicked = new Date(currentYear, currentMonth, day);
 
     if (!startDate || (startDate && endDate)) {
-      setStartDate(clicked);
-      setEndDate(null);
-    } else if (!endDate && clicked >= startDate) {
-      setEndDate(clicked);
+      // 시작일이 없거나, 이미 시작/종료가 모두 선택된 상태면 시작일만 다시 설정
+      if (onChange) onChange(clicked, null);
+    } else if (!endDate) {
+      // 종료일이 아직 없고, 클릭한 날짜가 시작일 이후라면 종료일 설정
+      if (clicked >= startDate) {
+        if (onChange) onChange(startDate, clicked);
+      } else {
+        // 시작일보다 이전을 클릭한 경우: 시작일을 다시 선택
+        if (onChange) onChange(clicked, null);
+      }
     }
   };
 
