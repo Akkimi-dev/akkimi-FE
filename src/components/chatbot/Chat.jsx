@@ -14,9 +14,11 @@ export default function Chat({ role, message }) {
   }
 
   return (
-    <div className="max-w-3/4 flex justify-start">
-      <div className="flex">
-        <ChatAvatar/>
+    <div className="w-full flex justify-start">
+      <div className="flex max-w-3/4">
+        <div className="w-10 h-10">
+          <ChatAvatar/>
+        </div>
         <div className="flex flex-col gap-1">
           <span className="text-detail-01-regular leading-[100%] ">아끼미</span>
           <div className="bg-white py-2 px-3 rounded-2xl rounded-bl-[4px] ">
