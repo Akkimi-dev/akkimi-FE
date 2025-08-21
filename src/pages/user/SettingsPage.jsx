@@ -5,9 +5,11 @@ import GobackIcon from '../../assets/settings/gobackarrow.svg?react';
 import Goback2Icon from '../../assets/settings/gobackarrow2.svg?react';
 import AgainIcon from '../../assets/settings/againarrow.svg?react';
 
+
 export default function SettingsPage() {
   const nav = useNavigate();
   const [location, setLocation] = useState("서울시 마포구"); // 기본값
+  const [profile, setProfile] = useState(null);
 
   // 목업 데이터
   const goal = "영국에 갈끄야";
@@ -26,6 +28,21 @@ export default function SettingsPage() {
     }
   }, []);
 
+  //api 연결
+  //프로필 조회
+  useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const data = await getUserProfile();
+      setProfile(data);
+    } catch (error) {
+      console.error("프로필 불러오기 실패:", error);
+    }
+  };
+  fetchProfile();
+}, []);
+
+
   return (
     <NavLayout>
       <div className="bg-[#F1F1F5]">
@@ -35,7 +52,7 @@ export default function SettingsPage() {
           내 프로필
         </div>
         <div className="flex flex-row items-center set-name-font rounded-t-2xl p-4 gap-2 bg-white">
-          <span>고다현님</span>
+          <span>{profile?.name ?? "이름 없음"}님</span>
           <GobackIcon className="w-4 h-4" />
         </div>
 
@@ -62,7 +79,7 @@ export default function SettingsPage() {
           <div className="flex flex-col gap-2">
             <div className="set-goal-font">내 소비 성향</div>
             <div className="flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)]">
-              <div className="set-result-font">무의식형 미식파</div>
+              <div className="set-result-font">{profile?.character ?? "미설정"}</div>
               <button
                 onClick={() => nav("/survey")}
                 className="flex justify-center items-center gap-1 rounded-[30px] border border-[#DDE2E7] bg-[#CAF6EC] py-1 pl-3 pr-2 set-again-font"
@@ -97,12 +114,7 @@ export default function SettingsPage() {
             <span>말투 설정</span>
             <Goback2Icon className="w-4 h-4"/>
           </button>
-          <button 
-          onClick={() => nav("/chatbotcolor")}
-          className="flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)] set-result-font">
-            <span>색상 설정</span>
-            <Goback2Icon className="w-4 h-4"/>
-          </button>
+          
         </div>
 
       </div>
