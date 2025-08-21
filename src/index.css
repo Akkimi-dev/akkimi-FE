@@ -904,3 +904,198 @@ font-weight: 600;
 line-height: 120%; /* 21.6px */
 letter-spacing: 0.18px;
 }
+
+.home-not-yet-font{
+  color: var(--40, #A6AEB6);
+text-align: center;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.home-set-new-goal{
+  color: var(--White, #FFF);
+text-align: center;
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.home-goal-ing-font{
+  color: #000;
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.home-goal-font{
+  color: var(--80, #3C434F);
+text-align: center;
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.goal-title-font{
+  color: #000;
+
+/* Heading/02_Semibold */
+font-family: Pretendard;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 24px */
+}
+
+.goal-subtitle-font{
+  color: var(--Green-04, #5ACBB0);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.goal-input-font{
+color: #000;
+
+/* Body/01_Regular */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 27px */
+}
+
+.goal-delete-font{
+  color: var(--Point-Red, #FF1953);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.goal-done-font{
+  color: var(--100, #191919);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.goal-won-font{
+  color: var(--80, #3C434F);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+.goal-modal-date{
+  color: var(--Green-02, #074E42);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.goal-cal-title{
+  color: #000;
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.goal-start-date{
+  color: var(--White, #FFF);
+text-align: center;
+
+/* Detail/02_Semibold */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 18px */
+}
+
+.goal-cal-date{
+  color: var(--100, #191919);
+text-align: center;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.goal-not-saved-font{
+  color: var(--60, #6C7582);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
+
+.goal-saved-font{
+  color: var(--80, #3C434F);
+
+/* Body/02_Semibold */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+}
