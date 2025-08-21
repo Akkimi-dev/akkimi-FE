@@ -9,8 +9,8 @@ export default function LoginSelect({ onChoose }) {
   const [open, setOpen] = useState(false);
   
   return (
-    <div className="relative min-h-[100dvh] sm:min-h-[700px] overflow-hidden">
-      <div className="flex flex-col justify-around bg-gradient-to-b from-login-start to-login-end min-h-[100dvh] sm:min-h-[700px] ">
+    <div className="relative min-h-[100dvh] sm:min-h-[667px] overflow-hidden">
+      <div className="flex flex-col justify-around bg-gradient-to-b from-login-start to-login-end min-h-[100dvh] sm:min-h-[667px] ">
         <div>
           <div className="flex justify-center w-full">
             <div className="w-[54px]"></div>

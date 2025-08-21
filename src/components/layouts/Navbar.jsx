@@ -40,7 +40,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed xs:absolute xs:inset-x-0 bottom-0 z-50 w-full max-w-[420px] bg-white border-t border-nav-b">
+    <nav className="fixed xs:absolute xs:inset-x-0 bottom-0 z-50 w-full max-w-[768px] bg-white border-t border-nav-b">
       {/* 내용 래퍼: 고정 폭 393px, 중앙 정렬 */}
       <div className="relative mx-auto w-full">
         {/* 좌/우 그룹 + 중앙 버튼 오버레이 */}

@@ -9,7 +9,6 @@ import { useSignup } from "../../hooks/auth/useSignup";
 import { useValidatePhone, useValidateEmail } from "../../hooks/auth/useValidate";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Signup({flow, onInit}) {
   const navigate = useNavigate();
 

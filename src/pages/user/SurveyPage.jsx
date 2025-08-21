@@ -66,7 +66,7 @@ export default function SurveyPage() {
 
   return (
     <NoNavLayout>
-      <div className="relative max-w-md mx-auto flex flex-col min-h-full bg-[#E3FFF9]">
+      <div className="relative w-full mx-auto flex flex-col min-h-full bg-[#E3FFF9]">
         {/* 상단 제목 + 진행도 */}
         <div className="w-full flex flex-col items-center py-6">
           <h1 className="sur-title-font py-2">

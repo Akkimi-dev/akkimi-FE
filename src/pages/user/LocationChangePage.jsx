@@ -78,7 +78,7 @@ export default function LocationChangePage() {
 
   return (
     <NoNavLayout>
-      <div className="max-w-[393px] h-[700px] mx-auto bg-white flex flex-col">
+      <div className="w-full min-h-full mx-auto bg-white flex flex-col">
         <header className="flex items-center justify-between h-12 px-4 mt-6 mb-8">
           <GobackIcon onClick={onBack} className="w-5 h-5" />
           <h1 className="loc-name-font">지역 설정하기</h1>
@@ -140,7 +140,7 @@ export default function LocationChangePage() {
 
 function GridButtons({ items, value, onChange }) {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-3 gap-3 justify-center">
       {items.map((label) => {
         const selected = value === label;
         return (
