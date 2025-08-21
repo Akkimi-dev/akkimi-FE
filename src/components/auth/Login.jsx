@@ -1,12 +1,13 @@
+import { useState, useEffect } from "react";
 import { useLogin } from "../../hooks/auth/useLogin";
 import BackArrow from "../../assets/common/backArrow.svg?react";
 import Error from "../../assets/login/error.svg?react";
 import Waring from "../../assets/login/waring.svg?react";
 import Eye from "../../assets/login/eye.svg?react";
 
-import { useState } from "react";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import useErrorModal from "../../hooks/error/useErrorModal";
 
 export default function Login({flow, onInit}) {
   const navigate = useNavigate();
@@ -15,9 +16,16 @@ export default function Login({flow, onInit}) {
   const [isInvalid, setIsInvalid] = useState(true);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { setTokens } = useAuthStore();
-
+  const { setTokens } = useAuthStore(); 
   const { mutateAsync, isPending, error } = useLogin(flow);
+
+  const { show: showError, Modal: ErrorModalRenderer } = useErrorModal();
+
+  useEffect(() => {
+    if (!error) return;
+    const msg = error?.response?.data?.message || '로그인에 실패했습니다.';
+    showError(msg);
+  }, [error, showError]);
 
   const isPhone = flow === "phone";
   const headingTitle = isPhone ? "휴대폰 번호로 로그인하기" : "이메일로 로그인하기";
@@ -77,8 +85,10 @@ export default function Login({flow, onInit}) {
         setTokens(accessToken, refreshToken);
         navigate('/');
       }
-    } catch {
-     navigate('/auth');
+    } catch (err) {
+      // 원하는 커스텀 메시지 지정 가능
+      const msg = '아이디 비밀번호를 확인해주세요!';
+      showError(msg);
     }
   };
 
@@ -156,11 +166,7 @@ export default function Login({flow, onInit}) {
             {isPending ? "로그인 중..." : "로그인"}
           </span>
         </button>
-       {error && (
-          <span className="text-red-500 text-detail-01-semibold">
-            {error.response?.data?.message || error.message || String(error)}
-          </span>
-        )}
+       <ErrorModalRenderer />
       </div>
     </div>
   );
