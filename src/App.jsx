@@ -18,6 +18,7 @@ import GoalCreatePage from './pages/goal/GoalCreatePage';
 import ConsumptionEditPage from './pages/Consumption/ConsumptionEditPage.jsx';
 import GoalEditPage from './pages/goal/GoalEditPage.jsx';
 
+
 export default function App() {
   return (
     <Routes>
