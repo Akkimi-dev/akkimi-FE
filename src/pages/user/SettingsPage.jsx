@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavLayout from "../../components/layouts/NavLayout";
 import { useNavigate } from "react-router-dom";
 import GobackIcon from '../../assets/settings/gobackarrow.svg?react';
 import Goback2Icon from '../../assets/settings/gobackarrow2.svg?react';
 import AgainIcon from '../../assets/settings/againarrow.svg?react';
-import UserSettings from "../../components/UserSettings";
 
 export default function SettingsPage() {
   const nav = useNavigate();

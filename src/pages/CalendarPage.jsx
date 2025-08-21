@@ -7,7 +7,7 @@ import Line2Icon from "../assets/calendar/line2.svg?react";
 import PlusIcon from "../assets/calendar/plus.svg?react";
 import Modal from "../components/modal/Modal";
 import NavLayout from "../components/layouts/NavLayout";
-import Consumption from "../components/calender/Consumption";
+import Consumption from "../components/calendar/Consumption";
 
 
 export default function CalendarPage() {
@@ -78,7 +78,7 @@ export default function CalendarPage() {
 
   return (
     <NavLayout>
-    <div className="w-full max-w-[420px] h-screen bg-white flex flex-col overflow-hidden">
+    <div className="w-full max-w-[420px] bg-white flex flex-col">
       {/* Header */}
       <header className="flex items-center px-4 py-3">
         <h1 className="cal-title-font">캘린더</h1>
@@ -311,11 +311,13 @@ export default function CalendarPage() {
               </div>
             </div>
 
-            {/*소비 내역*/} 
-            <Consumption date={selectedDate}/>
-            </div> )} 
-            </div>
-
+            {/* 소비 내역 */}
+            <Consumption
+              date={`${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(selectedDate).padStart(2, "0")}`}
+            />
+          </div>
+        )}
+      </div>
       {/* 모달로 목표 변경 선택 */}
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} height={500}>
         <div className="px-4">

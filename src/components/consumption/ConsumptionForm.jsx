@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import DownArrow2 from "../../assets/consumption/downArrow2.svg?react";
 
-export default function ConsumptionForm({ form, setForm, categories: categoriesProp }){
+export default function ConsumptionForm({ form, setForm, categories: categoriesProp, onSave }){
   const [isOpen, setIsOpen] = useState(false);
   const categories = categoriesProp || [
     "식비",
@@ -36,6 +36,11 @@ export default function ConsumptionForm({ form, setForm, categories: categoriesP
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "date") {
+      setForm((prev) => ({ ...prev, date: value }));
+      return;
+    }
+
     if (name === "amount") {
       const onlyNums = value.replace(/\D/g, ""); // 숫자만 유지
       setForm((prev) => ({ ...prev, amount: onlyNums }));
@@ -58,6 +63,18 @@ export default function ConsumptionForm({ form, setForm, categories: categoriesP
   };
   return(
     <div className="w-full flex flex-col gap-10 px-4 pt-22 pb-4">
+      <div className="w-full flex flex-col gap-1">
+        <span className="text-detail-01-regular text-green-main-dark-2">지출 날짜</span>
+        <div className="border-b border-gray-80">
+          <input
+            type="date"
+            name="date"
+            value={form.date || ""}
+            onChange={handleChange}
+            className="outline-none w-full"
+          />
+        </div>
+      </div>
       <div className="w-full flex flex-col gap-1">
         <span className="text-detail-01-regular text-green-main-dark-2">지출 카테고리</span>
         <div ref={dropdownRef} className="relative">
@@ -135,10 +152,19 @@ export default function ConsumptionForm({ form, setForm, categories: categoriesP
             rows={1}
           />
         </div>
-
-      <button className="w-full rounded-[4px] py-2 bg-green">
-        <span className="text-body-02-semibold">작성 완료</span>
-      </button>
+      {(() => {
+        const isValid = Boolean(form?.category && (form?.name ?? "").trim() && form?.amount !== "");
+        return (
+          <button
+            type="button"
+            onClick={() => isValid && onSave && onSave()}
+            disabled={!isValid}
+            className={`w-full rounded-[4px] py-2 ${isValid ? "bg-green" : "bg-gray-30"} disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <span className="text-body-02-semibold">{isValid ? "작성 완료" : "입력을 완료해 주세요"}</span>
+          </button>
+        );
+      })()}
     </div>
 
   )

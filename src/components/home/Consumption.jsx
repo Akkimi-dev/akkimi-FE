@@ -17,7 +17,7 @@ import Plus from "../../assets/home/plus.svg?react";
 import ConsumptionList from "../consumption/ConsumptionList";
 import MessageModal from "../consumption/MessageModal";
 
-export default function Consumption() {
+export default function Consumption({date}) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ export default function Consumption() {
     <div className="p-4 flex flex-col gap-4 ">
       <span className="text-body-01-semibold text-gray-100">오늘 내 소비</span>
       <button
-        onClick={() => navigate("consumption-create")}
+       onClick={() => navigate(`/consumption/create?date=${date}`)}
         className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
       >
         <span>소비 내역 작성하기</span>

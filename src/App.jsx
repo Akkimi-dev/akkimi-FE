@@ -15,6 +15,8 @@ import ChatbotColor from "./pages/chatbot/ChatbotColor.jsx";
 import ToneList from "./components/ToneList.jsx";
 import ConsumptionCreatePage from './pages/Consumption/ConsumptionCreatePage.jsx';
 import GoalCreatePage from './pages/goal/GoalCreatePage';
+import ConsumptionEditPage from './pages/Consumption/ConsumptionEditPage.jsx';
+import GoalEditPage from './pages/goal/GoalEditPage.jsx';
 
 export default function App() {
   return (
@@ -33,8 +35,10 @@ export default function App() {
         <Route path="chatbotColor" element={<ChatbotColor />} />
         <Route path="tone-list" element={<ToneList />} />
         <Route path="chatbot" element={<ChatbotPage />} />
-        <Route path="consumption-create" element={<ConsumptionCreatePage />} />
+        <Route path="consumption/create" element={<ConsumptionCreatePage />} />
+        <Route path="consumption/edit/:id" element={<ConsumptionEditPage />} />
         <Route path="/goal/create" element={<GoalCreatePage />} />
+        <Route path="/goal/edit/:id" element={<GoalEditPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
