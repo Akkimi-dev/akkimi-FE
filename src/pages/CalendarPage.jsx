@@ -78,7 +78,7 @@ export default function CalendarPage() {
 
   return (
     <NavLayout>
-    <div className="w-full max-w-[420px] bg-white flex flex-col">
+    <div className="w-full bg-white flex flex-col">
       {/* Header */}
       <header className="flex items-center px-4 py-3">
         <h1 className="cal-title-font">캘린더</h1>

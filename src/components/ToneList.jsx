@@ -29,7 +29,7 @@ export default function ToneList() {
   };
 
   return (
-    <div className="max-w-[393px] mx-auto min-h-screen bg-white flex flex-col">
+    <div className="max-w-full mx-auto min-h-screen bg-white flex flex-col">
       <div className="h-[40px]" />
 
       {/* 헤더 */}

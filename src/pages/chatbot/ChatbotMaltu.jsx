@@ -113,7 +113,7 @@ export default function ChatbotMaltu() {
                 {chunkedTones.map((page, pageIndex) => (
                   <div
                     key={pageIndex}
-                    className="flex-shrink-0 w-full max-w-[393px] snap-center flex flex-col gap-3"
+                    className="flex-shrink-0 w-full snap-center flex flex-col gap-3"
                   >
                     {page.map((tone) => (
                       <div
