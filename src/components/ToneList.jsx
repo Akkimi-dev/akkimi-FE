@@ -45,33 +45,35 @@ export default function ToneList() {
 
       {/* 메인 */}
       <main className="flex flex-col gap-6 mt-4 px-4">
-        {/* 말투 이름 */}
+        {/* 말투 제목 */}
         <div>
-          <label className="block text-sm mb-1">말투 이름</label>
+          <label className="block maltu-make-subtitle-font mb-1">말투 제목</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full border rounded-lg p-2"
-            placeholder="말투 이름을 입력해주세요"
+            
           />
         </div>
 
-        {/* 말투 설명 */}
+        {/* 프롬프트 */}
         <div>
-          <label className="block text-sm mb-1">말투 설명</label>
+          <label className="block maltu-make-subtitle-font mb-1">프롬프트</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded-lg p-2 min-h-[200px]"
-            placeholder="말투의 특징을 설명해주세요!"
+            className="flex w-full p-4 justify-between items-center self-stretch
+         rounded-[16px] border border-[#DDE2E7] bg-[#F1F1F5]
+         shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)]"
+            
           />
         </div>
 
         {/* 저장 버튼 */}
         <button
           onClick={handleAddTone}
-          className="mt-4 bg-emerald-400 text-white py-2 rounded-lg"
+          className="mt-4 bg-[#5ACBB0] text-white py-2 rounded-lg"
         >
           저장하기
         </button>
@@ -79,25 +81,24 @@ export default function ToneList() {
 
       {/* 에러 모달 */}
       {errorModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
-          <div className="bg-white rounded-xl p-6 w-80 shadow-lg text-center">
+        <div className="fixed top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 
+                bg-white rounded-2xl shadow-lg p-6 w-[300px] text-center">
             <h2 className="text-sm font-medium text-gray-800 mb-4">
               내용을 모두 입력해주세요!
             </h2>
             <button
               onClick={() => setErrorModal(false)}
-              className="mt-2 px-4 py-2 bg-emerald-400 text-white rounded-lg"
+              className="mt-2 px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
             >
               확인
             </button>
           </div>
-        </div>
       )}
 
       {/* 성공 모달 */}
       {successModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
-          <div className="bg-white rounded-xl p-6 w-80 shadow-lg text-center">
+        <div className="fixed top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 
+                bg-white rounded-2xl shadow-lg p-6 w-[300px] text-center">
             <h2 className="text-sm font-medium text-gray-800 mb-4">
               말투가 성공적으로 저장되었습니다!
             </h2>
@@ -106,12 +107,11 @@ export default function ToneList() {
                 setSuccessModal(false);
                 nav(-1); // 뒤로 가서 내 말투 리스트 확인
               }}
-              className="mt-2 px-4 py-2 bg-emerald-400 text-white rounded-lg"
+              className="mt-2 px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
             >
               확인
             </button>
           </div>
-        </div>
       )}
     </div>
   );

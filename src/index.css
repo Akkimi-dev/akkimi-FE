@@ -1110,3 +1110,83 @@ font-style: normal;
 font-weight: 600;
 line-height: 150%; /* 24px */
 }
+
+
+.maltu-detail-font{
+  color: #000;
+
+/* Detail/02_Regular */
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 18px */
+}
+
+.maltu-mine{
+  color: #000;
+
+/* Body/01_Semibold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 27px */
+letter-spacing: 0.18px;
+}
+
+.maltu-make-subtitle-font{
+  color: var(--Green-04, #5ACBB0);
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.maltu-public-name{
+  color: #000;
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.maltu-more-font{
+  color: var(--80, #3C434F);
+
+/* Body/02_Regular */
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
+.survey-fighting-font{
+  color: var(--Green-02, #074E42);
+text-align: center;
+
+/* Detail/01_Regular */
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 21px */
+}
+
+.start-akkimi-font{
+  color: var(--White, #FFF);
+
+/* Body/01_Bold */
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: 150%; /* 27px */
+}

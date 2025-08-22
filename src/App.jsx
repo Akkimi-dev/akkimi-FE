@@ -11,13 +11,12 @@ import SupportDetail from './pages/support/SupportDetail';
 import LocationChangePage from "./pages/user/LocationChangePage.jsx";
 import ChatbotPage from "./pages/chatbot/ChatbotPage.jsx";
 import ChatbotMaltu from "./pages/chatbot/ChatbotMaltu.jsx";
-import ChatbotColor from "./pages/chatbot/ChatbotColor.jsx";
 import ToneList from "./components/ToneList.jsx";
 import ConsumptionCreatePage from './pages/Consumption/ConsumptionCreatePage.jsx';
 import GoalCreatePage from './pages/goal/GoalCreatePage';
 import ConsumptionEditPage from './pages/Consumption/ConsumptionEditPage.jsx';
 import GoalEditPage from './pages/goal/GoalEditPage.jsx';
-
+import ToneDetailPage from "./pages/chatbot/ToneDetailPage";
 
 export default function App() {
   return (
@@ -33,9 +32,8 @@ export default function App() {
         <Route path="/support-detail" element={<SupportDetail />} />
         <Route path="location-change" element={<LocationChangePage />} />
         <Route path="chatbotMaltu" element={<ChatbotMaltu />} />
-        <Route path="chatbotColor" element={<ChatbotColor />} />
         <Route path="tone-list" element={<ToneList />} />
-        <Route path="chatbot" element={<ChatbotPage />} />
+        <Route path="/tone/:toneId" element={<ToneDetailPage />} />        <Route path="chatbot" element={<ChatbotPage />} />
         <Route path="consumption/create" element={<ConsumptionCreatePage />} />
         <Route path="consumption/edit/:id" element={<ConsumptionEditPage />} />
         <Route path="/goal/create" element={<GoalCreatePage />} />
