@@ -1,54 +1,86 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { getUserProfile, changeNickname, setMaltu, changeRegion } from "../../apis/userApis";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getUserProfile,
+  changeNickname,
+  setCharacter,
+  getCurrentMaltu,
+  setMaltu,
+  changeRegion,
+  changePassword,
+  checkSetup,
+} from "../../apis/userApis";
 
-{/*프로필 정보를 가져오는 훅 (GET)
- @returns {object} 프로필 데이터, 로딩 상태, 에러 상태 등*/}
+// 프로필 조회
 export const useUserProfile = () => {
-  return useQuery("userProfile", getUserProfile);
+  return useQuery({
+    queryKey: ["userProfile"],
+    queryFn: getUserProfile,
+  });
 };
 
-{/*닉네임을 변경하는 훅 (PUT)
- @returns {object} 닉네임 변경 함수, 로딩 상태 등*/}
+// 닉네임 변경
 export const useUpdateNickname = () => {
   const queryClient = useQueryClient();
-  return useMutation(changeNickname, {
-    onSuccess: (data) => {
-      console.log("✅ 닉네임 변경 성공:", data);
-      // 'userProfile' 쿼리 캐시를 무효화하여 최신 데이터로 다시 가져옴
-      queryClient.invalidateQueries("userProfile");
-    },
-    onError: (error) => {
-      console.error("❌ 닉네임 변경 실패:", error);
+  return useMutation({
+    mutationFn: changeNickname,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     },
   });
 };
 
-{/*말투를 설정하는 훅 (PUT)
-  @returns {object} 말투 설정 함수, 로딩 상태 등*/}
+// 소비캐릭터 설정
+export const useSetCharacter = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: setCharacter,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+    },
+  });
+};
+
+// 현재 말투 조회
+export const useCurrentMaltu = () => {
+  return useQuery({
+    queryKey: ["currentMaltu"],
+    queryFn: getCurrentMaltu,
+  });
+};
+
+// 말투 설정
 export const useSetMaltu = () => {
   const queryClient = useQueryClient();
-  return useMutation(setMaltu, {
-    onSuccess: (data) => {
-      console.log("✅ 말투 설정 성공:", data);
-      queryClient.invalidateQueries("userProfile");
-    },
-    onError: (error) => {
-      console.error("❌ 말투 설정 실패:", error);
+  return useMutation({
+    mutationFn: setMaltu,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["currentMaltu"] });
     },
   });
 };
 
-{/*지역을 변경하는 훅 (PUT)
- @returns {object} 지역 변경 함수, 로딩 상태 등*/}
+// 지역 변경
 export const useChangeRegion = () => {
   const queryClient = useQueryClient();
-  return useMutation(changeRegion, {
-    onSuccess: (data) => {
-      console.log("✅ 지역 변경 성공:", data);
-      queryClient.invalidateQueries("userProfile");
+  return useMutation({
+    mutationFn: changeRegion,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     },
-    onError: (error) => {
-      console.error("❌ 지역 변경 실패:", error);
-    },
+  });
+};
+
+// 비밀번호 변경
+export const useChangePassword = () => {
+  return useMutation({
+    mutationFn: changePassword,
+  });
+};
+
+// Setup 확인 여부
+export const useCheckSetup = () => {
+  return useQuery({
+    queryKey: ["checkSetup"],
+    queryFn: checkSetup,
   });
 };

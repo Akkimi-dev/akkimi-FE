@@ -1,7 +1,8 @@
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import { useState } from "react";
-import { setCharacter } from "../../apis/userApis";
 import { useNavigate } from "react-router-dom";
+import { useSetCharacter } from "../../hooks/user/useUser"; 
+import { useQueryClient } from "@tanstack/react-query";
 
 // 결과 SVG 매핑 (12개 조합)
 const resultSVGs = {
@@ -21,17 +22,37 @@ const resultSVGs = {
   "무의식형 생활러": "/result/muuisik-life.svg",
 };
 
+// character 문자열 ↔ ID 매핑
+const characterIdMap = {
+  "실속형 미식파": 1,
+  "실속형 스타일파": 2,
+  "실속형 취미러": 3,
+  "실속형 생활러": 4,
+  "감정형 미식파": 5,
+  "감정형 스타일파": 6,
+  "감정형 취미러": 7,
+  "감정형 생활러": 8,
+  "무의식형 미식파": 9,
+  "무의식형 스타일파": 10,
+  "무의식형 취미러": 11,
+  "무의식형 생활러": 12,
+};
+
 export default function SurveyPage() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
+  const queryClient = useQueryClient();
 
-  // ✅ 결과 매핑
+  // ✅ setCharacter 훅 사용
+  const { mutate: saveCharacter } = useSetCharacter();
+
+  // 결과 매핑
   const q1Result = ["실속형", "감정형", "무의식형"];
   const q2Result = ["미식파", "스타일파", "취미러", "생활러"];
 
-  // ✅ 최종 결과값
+  // 최종 결과 문자열
   const finalResult =
     answers[1] !== undefined && answers[2] !== undefined
       ? `${q1Result[answers[1]]} ${q2Result[answers[2]]}`
@@ -61,13 +82,24 @@ export default function SurveyPage() {
 
   // 결과 화면
   if (step === "result") {
-    const handleSaveCharacter = async () => {
-      try {
-        await setCharacter(finalResult);
-        nav("/settings");
-      } catch (err) {
-        console.error("캐릭터 저장 실패:", err);
-      }
+    const handleSaveCharacter = () => {
+      if (!finalResult) return;
+
+      const characterId = characterIdMap[finalResult]; // ✅ 문자열 → ID 변환
+
+      saveCharacter(characterId, {
+        onSuccess: () => {
+          // 저장 성공 후 userProfile 캐시 갱신
+          queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+          nav("/settings");
+          console.log("✅ finalResult:", finalResult);
+          console.log("✅ 매핑된 characterId:", characterIdMap[finalResult]);
+          console.log("✅ 선택된 maltuId:", answers[4]); // 말투 확인
+        },
+        onError: (err) => {
+          console.error("캐릭터 저장 실패:", err);
+        },
+      });
     };
 
     return (
@@ -97,6 +129,7 @@ export default function SurveyPage() {
     );
   }
 
+  // 질문 화면
   return (
     <NoNavLayout>
       <div className="relative w-full flex flex-col min-h-full bg-[#E3FFF9]">
@@ -190,13 +223,14 @@ export default function SurveyPage() {
                 </>
               }
               options={[
-                "20년지기 같은 친근한 말투",
-                "이모티콘을 많이 쓰는 귀여운 말투",
-                "예의범절을 갖춘 깍듯한 말투",
-                "나를 가르쳐주는 선생님 말투",
+                { id: 1, label: "부드러운 존댓말과 함께 격려해주는 말투" },
+                { id: 2, label: "단호하고 간결하게 절약을 독려하는 말투" },
+                { id: 3, label: "다정한 친구같은 반말로 권유하는 말투" },
+                { id: 4, label: "숫자와 데이터를 중심으로 분석해주는 말투" },
               ]}
-              onSelect={(i) => setAnswers({ ...answers, 4: i })}
+              onSelect={(id) => setAnswers({ ...answers, 4: id })}
               selected={answers[4]}
+              isObjectOptions
             />
           )}
         </div>
@@ -226,7 +260,7 @@ function isDisabled(answers, step) {
 }
 
 // 단일 선택 컴포넌트
-function Question({ subtitle, question, options, onSelect, selected }) {
+function Question({ subtitle, question, options, onSelect, selected, isObjectOptions }) {
   return (
     <div className="w-full flex flex-col items-center gap-[10px] p-[32px_24px] rounded-[24px] bg-white mb-20">
       {subtitle && (
@@ -234,19 +268,23 @@ function Question({ subtitle, question, options, onSelect, selected }) {
       )}
       <h2 className="text-xl sur-question-font text-center pb-7">{question}</h2>
       <div className="flex flex-col gap-3 mt-2 w-full">
-        {options.map((opt, i) => (
-          <button
-            key={i}
-            className={`p-4 ${
-              selected === i
-                ? "sur-chosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#5ACBB0]"
-                : "sur-notchosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#DDE2E7]"
-            }`}
-            onClick={() => onSelect(i)}
-          >
-            {opt}
-          </button>
-        ))}
+        {options.map((opt, i) => {
+          const value = isObjectOptions ? opt.id : i;
+          const label = isObjectOptions ? opt.label : opt;
+          return (
+            <button
+              key={value}
+              className={`p-4 ${
+                selected === value
+                  ? "sur-chosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#5ACBB0]"
+                  : "sur-notchosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#DDE2E7]"
+              }`}
+              onClick={() => onSelect(value)}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
