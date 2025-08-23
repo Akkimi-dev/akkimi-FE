@@ -17,13 +17,13 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useAuthStore.getState();
-    config.headers.Authorization = `Bearer ${
-          accessToken || "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJMT0NBTF9QSE9ORTowMTEwMTEwMTE4MyIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE3NTU5NjY4NjcsImV4cCI6MTc1NTk3MDQ2N30.FMXUtdx-HvfPFF1Jqjxw4A7nZvBzMcMCzwkX5V0yByOZlPCe-ob-l7GGXUpHAQiBogyW7qiFKMG90G7XQDtwMQ"
-        }`;
+    // config.headers.Authorization = `Bearer ${
+    //       accessToken || "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJMT0NBTF9QSE9ORTowMTEwMTEwMTE4MyIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE3NTU5NjY4NjcsImV4cCI6MTc1NTk3MDQ2N30.FMXUtdx-HvfPFF1Jqjxw4A7nZvBzMcMCzwkX5V0yByOZlPCe-ob-l7GGXUpHAQiBogyW7qiFKMG90G7XQDtwMQ"
+    //     }`;
    
-    // if (accessToken) {
-    //   config.headers.Authorization = `Bearer ${accessToken}`;
-    // }
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
         return config;
       },
   (error) => Promise.reject(error)
