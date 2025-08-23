@@ -17,6 +17,7 @@ import GoalCreatePage from './pages/goal/GoalCreatePage';
 import ConsumptionEditPage from './pages/Consumption/ConsumptionEditPage.jsx';
 import GoalEditPage from './pages/goal/GoalEditPage.jsx';
 import ToneDetailPage from "./pages/chatbot/ToneDetailPage";
+import UserNamePage from './pages/user/userNamePage.jsx';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/support-detail" element={<SupportDetail />} />
         <Route path="location-change" element={<LocationChangePage />} />
         <Route path="chatbotMaltu" element={<ChatbotMaltu />} />
+        <Route path="/user/userName" element={<UserNamePage />} />
         <Route path="tone-list" element={<ToneList />} />
         <Route path="/tone/:toneId" element={<ToneDetailPage />} />        <Route path="chatbot" element={<ChatbotPage />} />
         <Route path="consumption/create/:goalId" element={<ConsumptionCreatePage />} />
