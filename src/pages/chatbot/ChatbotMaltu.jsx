@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Dropdown2Icon from "../../assets/Settings/dropdown2.svg?react";
@@ -7,65 +7,45 @@ import Goback2Icon from "../../assets/Settings/gobackarrow2.svg?react";
 import Goback3Arrow from "../../assets/Settings/gobackarrow3.svg?react";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 
+import {
+  useMyMaltus,
+  usePublicMaltus,
+  useSetMaltu,
+  useCurrentMaltu,
+  useDefaultMaltus, // ✅ 기본 말투도 가져오기
+} from "../../hooks/chat/useMaltu";
+
 export default function ChatbotMaltu() {
   const nav = useNavigate();
   const [showDescription, setShowDescription] = useState(false);
-  const [myTones, setMyTones] = useState([]);
-  const [selectedTone, setSelectedTone] = useState(null);
   const [modalTone, setModalTone] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
-  
-  const [exploreTones, setExploreTones] = useState([
-    { id: "t1", label: "격식있는 말투", description: "예의 바르고 정중한 말투" },
-    { id: "t2", label: "인생을 상담하는 말투", description: "깊이 있는 조언을 주는 말투" },
-    { id: "t3", label: "아이디어를 받는 말투", description: "창의적 아이디어를 주고받는 말투" },
-    { id: "t4", label: "당장 자고 싶은 말투", description: "피곤하고 졸린 말투" },
-    { id: "t5", label: "이제 그만말투", description: "단호하고 그만하자는 말투" },
-  ]);
 
-  // 로컬스토리지에서 초기값 불러오기
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("myTones") || "[]");
-    setMyTones(saved);
+  // ✅ 현재 말투 변경 mutation
+  const { mutate: setMaltuMutation } = useSetMaltu();
 
-    const savedSelected = JSON.parse(localStorage.getItem("selectedTone"));
-    if (savedSelected) setSelectedTone(savedSelected);
-  }, []);
+  // ✅ 현재 말투 조회
+  const { data: currentMaltu, isLoading: currentMaltuLoading } = useCurrentMaltu();
 
-  // storage 이벤트 감지 → 다른 페이지에서 적용하기 눌렀을 때 반영
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const savedSelected = JSON.parse(localStorage.getItem("selectedTone"));
-      if (savedSelected) setSelectedTone(savedSelected);
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+  // ✅ 내 말투 목록
+  const { data: myMaltus = [] } = useMyMaltus();
 
-  // 내가 만든 말투 추가
-  const handleAddMyTone = (newTone) => {
-    const updated = [...myTones, newTone];
-    setMyTones(updated);
-    localStorage.setItem("myTones", JSON.stringify(updated));
+  // ✅ 공개 말투 목록
+  const { data: publicMaltus = [] } = usePublicMaltus();
 
-    setExploreTones((prev) => [...prev, newTone]);
-  };
+  // ✅ 기본 말투 목록
+  const { data: defaultMaltus = [] } = useDefaultMaltus();
 
-  // 말투 다운로드
-  const handleDownloadTone = (tone) => {
-    const updatedMyTones = [...myTones, tone];
-    setMyTones(updatedMyTones);
-    localStorage.setItem("myTones", JSON.stringify(updatedMyTones));
+  // ✅ 기본 말투를 제외한 공개 말투 목록
+  const filteredPublicMaltus = publicMaltus.filter(
+    (tone) => !defaultMaltus.some((d) => d.maltuId === tone.maltuId)
+  );
 
-    const updatedExplore = exploreTones.filter((t) => t.id !== tone.id);
-    setExploreTones(updatedExplore);
-  };
-
-  // 페이지네이션용
+  // ✅ 내 말투 페이지네이션
   const chunkedTones = [];
-  for (let i = 0; i < myTones.length; i += 3) {
-    chunkedTones.push(myTones.slice(i, i + 3));
+  for (let i = 0; i < myMaltus.length; i += 3) {
+    chunkedTones.push(myMaltus.slice(i, i + 3));
   }
 
   return (
@@ -83,7 +63,7 @@ export default function ChatbotMaltu() {
         </header>
 
         <main className="flex flex-col gap-6 mt-2">
-          {/* 현재 말투 */}
+          {/* ✅ 현재 말투 */}
           <section className="px-4">
             <h2 className="maltu-mine mb-2">현재 말투</h2>
             <div
@@ -91,7 +71,11 @@ export default function ChatbotMaltu() {
               onClick={() => setShowDescription(!showDescription)}
             >
               <span className="text-sm text-gray-700">
-                {selectedTone ? selectedTone.label : "선택된 말투 없음"}
+                {currentMaltuLoading
+                  ? "불러오는 중..."
+                  : currentMaltu
+                  ? currentMaltu.maltuName
+                  : "선택된 말투 없음"}
               </span>
               <Dropdown2Icon
                 className={`w-4 h-4 text-gray-500 transition-transform ${
@@ -99,10 +83,10 @@ export default function ChatbotMaltu() {
                 }`}
               />
             </div>
-            {showDescription && selectedTone && (
-              <div className="maltu-detail-font mt-1 px-3 py-2 rounded-[12px] border border-[#DDE2E7] bg-[#F1F1F5]
-                  shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)] flex p-4 justify-between items-center self-stretch">
-                {selectedTone.description}
+
+            {showDescription && currentMaltu && (
+              <div className="maltu-detail-font mt-1 px-3 py-2 rounded-[12px] border border-[#DDE2E7] bg-[#F1F1F5] shadow flex p-4 justify-between items-center self-stretch">
+                {currentMaltu.prompt}
               </div>
             )}
           </section>
@@ -120,7 +104,7 @@ export default function ChatbotMaltu() {
 
             <hr className="w-full border-t border-[#DDE2E7] my-4" />
 
-            {myTones.length === 0 ? (
+            {myMaltus.length === 0 ? (
               <p className="text-sm text-gray-400 text-center">
                 아직 저장된 말투가 없습니다.
               </p>
@@ -142,46 +126,33 @@ export default function ChatbotMaltu() {
                     >
                       {page.map((tone) => (
                         <div
-                          key={tone.id}
-                          className={`flex mb-2 items-center justify-between rounded-2xl px-4 py-3 shadow-sm cursor-pointer transition 
-                            ${
-                              selectedTone?.id === tone.id
-                                ? "border border-[#5ACBB0] bg-[#E6FAF6]"
-                                : "border border-gray-200"
-                            }`}
+                          key={tone.maltuId}
+                          className={`flex mb-2 items-center justify-between rounded-2xl px-4 py-3 shadow-sm cursor-pointer transition ${
+                            currentMaltu?.maltuId === tone.maltuId
+                              ? "border border-[#5ACBB0] bg-[#E6FAF6]"
+                              : "border border-gray-200"
+                          }`}
                         >
                           {/* 왼쪽: 말투 라벨 */}
                           <div
                             className="flex items-center gap-2"
-                            onClick={() => setModalTone(tone)} // 상세 + 수정 모달 열기
+                            onClick={() => setModalTone(tone)}
                           >
                             <span className="text-sm font-medium">
-                              {tone.label}
+                              {tone.maltuName}
                             </span>
                           </div>
 
                           {/* 오른쪽: 라디오 버튼 */}
                           <div
-                            className={`w-5 h-5 rounded-full border flex items-center justify-center cursor-pointer
-                              transition-colors duration-200
-                              ${
-                                selectedTone?.id === tone.id
-                                  ? "border-[#5ACBB0] bg-[#5ACBB0]"
-                                  : "border-gray-300"
-                              }`}
-                            onClick={() => {
-                              // ✅ 선택된 말투 갱신
-                              setSelectedTone(tone);
-                              localStorage.setItem(
-                                "selectedTone",
-                                JSON.stringify(tone)
-                              );
-
-                              // ✅ 다른 컴포넌트에서도 현재 말투가 반영되도록 이벤트 발생
-                              window.dispatchEvent(new Event("storage"));
-                            }}
+                            className={`w-5 h-5 rounded-full border flex items-center justify-center cursor-pointer transition-colors duration-200 ${
+                              currentMaltu?.maltuId === tone.maltuId
+                                ? "border-[#5ACBB0] bg-[#5ACBB0]"
+                                : "border-gray-300"
+                            }`}
+                            onClick={() => setMaltuMutation(tone.maltuId)}
                           >
-                            {selectedTone?.id === tone.id && (
+                            {currentMaltu?.maltuId === tone.maltuId && (
                               <div className="w-3 h-3 bg-[#5ACBB0] rounded-full" />
                             )}
                           </div>
@@ -215,31 +186,28 @@ export default function ChatbotMaltu() {
             </div>
 
             <div className="flex flex-col gap-3 px-4">
-              {exploreTones.slice(0, visibleCount).map((tone) => (
+              {filteredPublicMaltus.slice(0, visibleCount).map((tone) => (
                 <div
-                  key={tone.id}
+                  key={tone.maltuId}
                   className="flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white"
-                  onClick={() => nav(`/tone/${tone.id}`, { state: { tone } })}
+                  onClick={() => nav(`/tone/${tone.maltuId}`, { state: { tone } })}
                 >
-                  <span className="maltu-public-name">
-                    {tone.label}
-                  </span>
+                  <span className="maltu-public-name">{tone.maltuName}</span>
                   <Goback2Icon className="w-4 h-4 text-gray-400" />
                 </div>
               ))}
             </div>
 
-             {/* 더보기 버튼 */}
-              {visibleCount < exploreTones.length && (
-                <div className="flex justify-center mt-4 px-4">
-                  <button
-                    onClick={() => setVisibleCount((prev) => prev + 5)}
-                    className="flex w-[361px] px-4 py-2 justify-center items-center gap-[10px] rounded-[30px] bg-[#DDE2E7] maltu-more-font"
-                  >
-                    더보기
-                  </button>
-                </div>
-              )}
+            {visibleCount < filteredPublicMaltus.length && (
+              <div className="flex justify-center mt-4 px-4">
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + 5)}
+                  className="flex w-[361px] px-4 py-2 justify-center items-center gap-[10px] rounded-[30px] bg-[#DDE2E7] maltu-more-font"
+                >
+                  더보기
+                </button>
+              </div>
+            )}
           </section>
         </main>
 
@@ -247,9 +215,11 @@ export default function ChatbotMaltu() {
         {modalTone && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
             <div className="bg-white rounded-xl p-6 w-80 shadow-lg text-center">
-              <h2 className="text-base font-semibold mb-2">{modalTone.label}</h2>
+              <h2 className="text-base font-semibold mb-2">
+                {modalTone.maltuName}
+              </h2>
               <p className="text-sm text-gray-700 whitespace-pre-line mb-4">
-                {modalTone.description}
+                {modalTone.prompt}
               </p>
               <button
                 onClick={() => setModalTone(null)}

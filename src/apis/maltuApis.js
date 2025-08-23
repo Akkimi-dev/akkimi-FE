@@ -36,7 +36,7 @@ export const updateMaltu = async (maltuId, payload) => {
   return response.data.result;
 };
 
-// 말투 공유 수정
+// 말투 공유 여부 수정
 export const updateMaltuShare = async (maltuId, isPublic) => {
   const response = await api.put(`/api/v1/maltus/${maltuId}?isPublic=${isPublic}`);
   return response.data.result;
@@ -46,4 +46,16 @@ export const updateMaltuShare = async (maltuId, isPublic) => {
 export const deleteMaltu = async (maltuId) => {
   const response = await api.delete(`/api/v1/maltus/${maltuId}`);
   return response.data.result;
+};
+
+// ✅ 현재 말투 변경
+export const setMaltu = async (maltuId) => {
+  const response = await api.put(`/api/v1/users/current-maltu/${maltuId}`);
+  return response.data.result;
+};
+
+// ✅ 현재 말투 조회
+export const getCurrentMaltu = async () => {
+  const res = await api.get("/api/v1/users/current-maltu");
+  return res.data.result;
 };
