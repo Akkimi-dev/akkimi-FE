@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUserProfile, changeNickname, setMaltu, changeRegion } from "../../apis/userApis";
 
 {/*프로필 정보를 가져오는 훅 (GET)

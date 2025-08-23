@@ -11,20 +11,21 @@ import Grape9 from "../../assets/home/grape/grape-9.png";
 import Grape10 from "../../assets/home/grape/grape-10.png";
 
 const grapeBackgrounds = {
-  1: Grape10,
-  2: Grape9,
-  3: Grape8,
-  4: Grape7,
-  5: Grape6,
-  6: Grape5,
-  7: Grape4,
-  8: Grape3,
-  9: Grape2,
-  10: Grape1,
+  1: Grape1,
+  2: Grape2,
+  3: Grape3,
+  4: Grape4,
+  5: Grape5,
+  6: Grape6,
+  7: Grape7,
+  8: Grape8,
+  9: Grape9,
+  10: Grape10,
 };
 
 export default function Grape({goal, date, usedBudget, goalBudget}){
-  const level = Math.min(10, Math.ceil((usedBudget / goalBudget) * 10));
+  const level = Math.min(10, Math.ceil((usedBudget / goalBudget) * 10) + 1);
+  console.log(level)
   const GrapeBg = grapeBackgrounds[level] || Grape1;
 
   return(

@@ -34,7 +34,7 @@ export default function App() {
         <Route path="chatbotMaltu" element={<ChatbotMaltu />} />
         <Route path="tone-list" element={<ToneList />} />
         <Route path="/tone/:toneId" element={<ToneDetailPage />} />        <Route path="chatbot" element={<ChatbotPage />} />
-        <Route path="consumption/create" element={<ConsumptionCreatePage />} />
+        <Route path="consumption/create/:goalId" element={<ConsumptionCreatePage />} />
         <Route path="consumption/edit/:id" element={<ConsumptionEditPage />} />
         <Route path="/goal/create" element={<GoalCreatePage />} />
         <Route path="/goal/edit/:id" element={<GoalEditPage />} />

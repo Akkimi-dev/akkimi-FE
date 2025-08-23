@@ -1,4 +1,3 @@
-import { useMe } from "../hooks/auth/useMe";
 import Consumption from "../components/home/Consumption";
 import Goal from "../components/home/Goal";
 import Grape from "../components/home/Grape";
@@ -6,28 +5,37 @@ import Header from "../components/home/Header";
 import NavLayout from "../components/layouts/NavLayout";
 import SadFaceIcon from "../assets/home/sadface.svg?react";
 import Plus2Icon from "../assets/home/plus2.svg?react";
-import Edit2Icon from "../assets/home/edit2.svg?react";
 import Pen from "../assets/home/pen.svg?react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/date";
+import { useMe } from "../hooks/auth/useMe";
+import { useCurrentGoals } from "../hooks/goal/useGoal";
 
 export default function HomePage() {
   const { user } = useMe();
   const navigate = useNavigate();
 
-  // Mock Data (나중에 API 연동 예정)
-  const goalData = {
-    goalId: 1,
-    goal: "영국 가즈아",
-    startDate: "25.08.01",
-    endDate: "25.08.31",
-    goalBudget: 200000,
-    usedBudget: 80000,
-    dDay: 20,
+  // 현재 목표 조회 훅 연결
+  const { data: currentGoal } = useCurrentGoals();
+
+  const toYYMMDD = (iso) => {
+    if (!iso || typeof iso !== 'string') return '';
+    const [y, m, d] = iso.split('-');
+    if (!y || !m || !d) return iso;
+    return `${y.slice(2)}.${m}.${d}`; // '25.08.01'
   };
 
-  // // 목표 없을 때 테스트
-  // const goalData = null;
+  const goalData = currentGoal
+    ? {
+        goalId: currentGoal.goalId,
+        goal: currentGoal.purpose ?? '',
+        startDate: toYYMMDD(currentGoal.startDate),
+        endDate: toYYMMDD(currentGoal.endDate),
+        goalBudget: currentGoal.purposeBudget ?? 0,
+        usedBudget: currentGoal.totalSum ?? 0,
+        dDay: currentGoal.dday ?? 0,
+      }
+    : null;
 
   return (
     <NavLayout>
@@ -46,7 +54,7 @@ export default function HomePage() {
           ) : (
             <div className="flex w-full min-h-[190px] p-4 flex-col justify-center items-center gap-[10px] bg-[#DDE2E7]">
               <div className="flex flex-col items-center gap-[10px] self-stretch 
-                              p-[39px_86px] rounded-[24px] border border-[#5ACBB0] bg-white">
+                              py-9 rounded-[24px] border border-[#5ACBB0] bg-white">
                 <SadFaceIcon className="w-[26px] h-[26px]" />
                 <p className="home-not-yet-font mb-3">현재 진행중인 목표가 없어요</p>
                 <button
@@ -93,7 +101,9 @@ export default function HomePage() {
         </div>
 
         {/* 소비 영역 */}
-        <Consumption date={formatDate()} /> 
+        {goalData && (
+          <Consumption goalId={goalData.goalId} date={formatDate()} />
+        )}
       </div>
     </NavLayout>
   );
