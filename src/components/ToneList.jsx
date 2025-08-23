@@ -1,31 +1,38 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Goback3Arrow from "../assets/Settings/gobackarrow3.svg?react";
+import { createMaltu } from "../apis/userApis";
 
 export default function ToneList() {
   const nav = useNavigate();
 
-  // 입력 상태
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
-  // 모달 상태
   const [errorModal, setErrorModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
 
-  const handleAddTone = () => {
+  const handleAddTone = async () => {
     if (!name.trim() || !description.trim()) {
       setErrorModal(true);
       return;
     }
 
-    // 로컬스토리지에 저장 (내 말투 리스트 반영용)
-    const savedTones = JSON.parse(localStorage.getItem("myTones") || "[]");
-    const newTone = { id: Date.now(), label: name, description };
-    localStorage.setItem("myTones", JSON.stringify([...savedTones, newTone]));
+    try {
+      // ✅ 서버에 저장
+      const newTone = await createMaltu(name, true, description);
 
-    // 성공 모달 열기
-    setSuccessModal(true);
+      // ✅ 성공 모달 띄우고 → 닫을 때 nav(-1) + 데이터 전달
+      setSuccessModal(true);
+
+      setTimeout(() => {
+        setSuccessModal(false);
+        nav(-1, { state: { newTone: newTone.result } });
+      }, 1000);
+    } catch (err) {
+      console.error("말투 생성 에러:", err);
+      setErrorModal(true);
+    }
   };
 
   return (
@@ -45,7 +52,6 @@ export default function ToneList() {
 
       {/* 메인 */}
       <main className="flex flex-col gap-6 mt-4 px-4">
-        {/* 말투 제목 */}
         <div>
           <label className="block maltu-make-subtitle-font mb-1">말투 제목</label>
           <input
@@ -53,24 +59,18 @@ export default function ToneList() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full border rounded-lg p-2"
-            
           />
         </div>
 
-        {/* 프롬프트 */}
         <div>
           <label className="block maltu-make-subtitle-font mb-1">프롬프트</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="flex w-full p-4 justify-between items-center self-stretch
-         rounded-[16px] border border-[#DDE2E7] bg-[#F1F1F5]
-         shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)]"
-            
+            className="flex w-full p-4 rounded-[16px] border border-[#DDE2E7] bg-[#F1F1F5]"
           />
         </div>
 
-        {/* 저장 버튼 */}
         <button
           onClick={handleAddTone}
           className="mt-4 bg-[#5ACBB0] text-white py-2 rounded-lg"
@@ -83,35 +83,26 @@ export default function ToneList() {
       {errorModal && (
         <div className="fixed top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 
                 bg-white rounded-2xl shadow-lg p-6 w-[300px] text-center">
-            <h2 className="text-sm font-medium text-gray-800 mb-4">
-              내용을 모두 입력해주세요!
-            </h2>
-            <button
-              onClick={() => setErrorModal(false)}
-              className="mt-2 px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
-            >
-              확인
-            </button>
-          </div>
+          <h2 className="text-sm font-medium text-gray-800 mb-4">
+            내용을 모두 입력해주세요!
+          </h2>
+          <button
+            onClick={() => setErrorModal(false)}
+            className="mt-2 px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
+          >
+            확인
+          </button>
+        </div>
       )}
 
       {/* 성공 모달 */}
       {successModal && (
         <div className="fixed top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 
                 bg-white rounded-2xl shadow-lg p-6 w-[300px] text-center">
-            <h2 className="text-sm font-medium text-gray-800 mb-4">
-              말투가 성공적으로 저장되었습니다!
-            </h2>
-            <button
-              onClick={() => {
-                setSuccessModal(false);
-                nav(-1); // 뒤로 가서 내 말투 리스트 확인
-              }}
-              className="mt-2 px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
-            >
-              확인
-            </button>
-          </div>
+          <h2 className="text-sm font-medium text-gray-800 mb-4">
+            말투가 성공적으로 저장되었습니다!
+          </h2>
+        </div>
       )}
     </div>
   );

@@ -6,12 +6,15 @@ const gotoAuth = () => {
   window.location.replace('/auth');
 };
 
+console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
+
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL, // 백엔드 URL .env로
   headers: {
     'Content-Type': 'application/json',
+    Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJMT0NBTF9QSE9ORTowMTAxMjM0NTY3OCIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE3NTU4ODczNTgsImV4cCI6MTc1NTg5MDk1OH0.ggmpbKTB_WoJgmf6nAPEEqiXZ_l4B47KMareQ9-03CarRUedz22AZexa_l0zzb5GLhyieOuyra8UXF6kjYI4dQ"
   },
-});
+  });
 
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(

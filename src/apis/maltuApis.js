@@ -1,9 +1,18 @@
 import api from "./axios";
 
 // 말투 생성
-export const createMaltu = async (payload) => {
-  const response = await api.post("/api/v1/maltus", payload);
-  return response.data;
+export const createMaltu = async (maltuName, isPublic, prompt) => {
+  try {
+    const response = await api.post("/api/v1/maltus", {
+      maltuName,
+      isPublic,
+      prompt,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("말투 생성 실패:", error);
+    throw error;
+  }
 };
 
 // 말투 상세 조회

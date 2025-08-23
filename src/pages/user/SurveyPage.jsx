@@ -21,6 +21,22 @@ const resultSVGs = {
   "무의식형 생활러": "/result/muuisik-life.svg",
 };
 
+// 캐릭터 이름 → ID 매핑
+const characterIdMap = {
+  "실속형 미식파": 1,
+  "실속형 스타일파": 2,
+  "실속형 취미러": 3,
+  "실속형 생활러": 4,
+  "감정형 미식파": 5,
+  "감정형 스타일파": 6,
+  "감정형 취미러": 7,
+  "감정형 생활러": 8,
+  "무의식형 미식파": 9,
+  "무의식형 스타일파": 10,
+  "무의식형 취미러": 11,
+  "무의식형 생활러": 12,
+};
+
 export default function SurveyPage() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState({});
@@ -31,7 +47,7 @@ export default function SurveyPage() {
   const q1Result = ["실속형", "감정형", "무의식형"];
   const q2Result = ["미식파", "스타일파", "취미러", "생활러"];
 
-  // ✅ 최종 결과값
+  // ✅ 최종 결과값 (문자열)
   const finalResult =
     answers[1] !== undefined && answers[2] !== undefined
       ? `${q1Result[answers[1]]} ${q2Result[answers[2]]}`
@@ -63,13 +79,18 @@ export default function SurveyPage() {
   if (step === "result") {
     const handleSaveCharacter = async () => {
       try {
-        await setCharacter(finalResult);
+        const characterId = characterIdMap[finalResult];
+        if (!characterId) {
+          throw new Error("characterId 매핑 실패");
+        }
+        await setCharacter(characterId);
         nav("/settings");
       } catch (err) {
         console.error("캐릭터 저장 실패:", err);
       }
     };
 
+    
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-[#D9F5EE] px-6">
         {/* 결과 컨테이너 */}

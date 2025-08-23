@@ -5,43 +5,84 @@ import GobackIcon from '../../assets/settings/gobackarrow.svg?react';
 import Goback2Icon from '../../assets/settings/gobackarrow2.svg?react';
 import AgainIcon from '../../assets/settings/againarrow.svg?react';
 
+// API
+import { getUserProfile } from "../../apis/userApis";
+import {updateNickname} from "../../apis/userApis";
+
+
+
 
 export default function SettingsPage() {
   const nav = useNavigate();
-  const [location, setLocation] = useState("서울시 마포구"); // 기본값
+  const [nickname, setNickname] = useState("");
+  const [message, setMessage] = useState("");
+  const [location, setLocation] = useState("서울 마포구"); // 기본값
   const [profile, setProfile] = useState(null);
+  const [maltu, setMaltu] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // 목업 데이터
+  // 목업 데이터 (추후 API 연동 시 서버 데이터로 교체 가능)
   const goal = "영국에 갈끄야";
   const startDate = "25.08.01";
   const endDate = "25.08.31";
   const goalBudget = "500,000원";
 
-  // localStorage에서 불러오기
+   // 프로필 조회
+    useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const res = await getUserProfile(); // 여기서 res = response.data
+          setProfile(res); // res.data 아님!
+          console.log("API 응답: ", res);
+        } catch (error) {
+          console.error("프로필 불러오기 실패:", error);
+        }
+      };
+      fetchProfile();
+    }, []);
+  
+  //닉네임 변경
+   const handleNicknameChange = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken"); // 저장된 토큰 불러오기
+      const res = await updateNickname(accessToken, nickname);
+      setMessage(res.message);
+    } catch (err) {
+      setMessage("닉네임 변경 실패 ❌");
+    }
+  };
+
+
+  //현재 말투 조회
+    useEffect(() => {
+      const fetchMaltu = async () => {
+        try {
+          const data = await getCurrentMaltu();
+          setMaltu(data.result);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchMaltu();
+    }, []);
+
+
+
+  // localStorage에서 지역 불러오기
   useEffect(() => {
     const saved = localStorage.getItem("selectedLocation");
     if (saved) {
       const { city, district } = JSON.parse(saved);
       if (city && district) {
-        setLocation(`${city}시 ${district}`);
+        setLocation(`${city} ${district}`);
       }
     }
   }, []);
 
-  //api 연결
-  //프로필 조회
-  useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const data = await getUserProfile();
-      setProfile(data);
-    } catch (error) {
-      console.error("프로필 불러오기 실패:", error);
-    }
-  };
-  fetchProfile();
-}, []);
-
+ 
 
   return (
     <NavLayout>
@@ -52,7 +93,7 @@ export default function SettingsPage() {
           내 프로필
         </div>
         <div className="flex flex-row items-center set-name-font rounded-t-2xl p-4 gap-2 bg-white">
-          <span>{profile?.name ?? "이름 없음"}님</span>
+          <span>{profile?.nickname ?? "이름 없음"}님</span>
           <GobackIcon className="w-4 h-4" />
         </div>
 
