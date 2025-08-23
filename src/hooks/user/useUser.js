@@ -16,10 +16,7 @@ export const useUpdateNickname = () => {
       console.log("✅ 닉네임 변경 성공:", data);
       // 'userProfile' 쿼리 캐시를 무효화하여 최신 데이터로 다시 가져옴
       queryClient.invalidateQueries("userProfile");
-    },
-    onError: (error) => {
-      console.error("❌ 닉네임 변경 실패:", error);
-    },
+    }
   });
 };
 
@@ -31,10 +28,7 @@ export const useSetMaltu = () => {
     onSuccess: (data) => {
       console.log("✅ 말투 설정 성공:", data);
       queryClient.invalidateQueries("userProfile");
-    },
-    onError: (error) => {
-      console.error("❌ 말투 설정 실패:", error);
-    },
+    }
   });
 };
 
@@ -46,9 +40,6 @@ export const useChangeRegion = () => {
     onSuccess: (data) => {
       console.log("✅ 지역 변경 성공:", data);
       queryClient.invalidateQueries("userProfile");
-    },
-    onError: (error) => {
-      console.error("❌ 지역 변경 실패:", error);
-    },
+    }
   });
 };
