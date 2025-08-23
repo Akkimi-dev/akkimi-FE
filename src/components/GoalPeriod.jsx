@@ -45,11 +45,11 @@ export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
       <label className="text-sm goal-subtitle-font">목표 기간</label>
       <div className="flex items-center justify-between border-b py-2">
         <span className="flex-1 text-center goal-input-font">
-          {startDate ? startDate.toLocaleDateString("ko-KR") : ""}
+          {startDate ?? ""}
         </span>
         <span className="mx-2">~</span>
         <span className="flex-1 text-center goal-input-font">
-          {endDate ? endDate.toLocaleDateString("ko-KR") : ""}
+          {endDate ?? ""}
         </span>
 
         <button

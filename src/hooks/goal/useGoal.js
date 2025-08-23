@@ -1,6 +1,3 @@
-
-
-// src/hooks/goal/useGoal.js
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createSavingGoal,

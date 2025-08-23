@@ -73,7 +73,7 @@ export default function SurveyPage() {
   // 로딩 화면
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-full">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-black"></div>
         <p className="mt-4 sur-loading-font">소비 성향을 분석하고 있어요</p>
       </div>
@@ -103,9 +103,9 @@ export default function SurveyPage() {
     };
 
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-[#D9F5EE] px-6">
+      <div className="flex flex-col items-center justify-around h-full bg-[#D9F5EE] px-6">
         {/* 결과 컨테이너 */}
-        <div className="bg-white rounded-2xl shadow-md w-full max-w-md p-8 flex flex-col items-center gap-4">
+        <div className="bg-white rounded-2xl shadow-md w-full max-w-md py-4 px-8 flex flex-col items-center">
           {finalResult && (
             <img
               src={resultSVGs[finalResult]}
@@ -116,12 +116,12 @@ export default function SurveyPage() {
         </div>
 
         {/* 하단 텍스트 */}
-        <p className="mt-6 survey-fighting-font">당신의 절약을 응원합니다!</p>
+        <p className="survey-fighting-font">당신의 절약을 응원합니다!</p>
 
         {/* 시작 버튼 */}
         <button
           onClick={handleSaveCharacter}
-          className="mt-4 start-akkimi-font flex justify-center items-center gap-[10px] self-stretch px-[12px] py-[12px] rounded-[100px] bg-gradient-to-t from-[#5ACBB0] to-[#03FFDA]"
+          className="start-akkimi-font flex justify-center items-center gap-[10px] self-stretch px-[12px] py-[12px] rounded-[100px] bg-gradient-to-t from-[#5ACBB0] to-[#03FFDA]"
         >
           아끼미 시작하기
         </button>
