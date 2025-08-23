@@ -8,11 +8,11 @@ import Plus2Icon from "../assets/home/plus2.svg?react";
 import Pen from "../assets/home/pen.svg?react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/date";
-import { useMe } from "../hooks/auth/useMe";
 import { useCurrentGoals } from "../hooks/goal/useGoal";
+import { useUserProfile } from "../hooks/user/useUser";
 
 export default function HomePage() {
-  const { user } = useMe();
+  const { data: profile } = useUserProfile();
   const navigate = useNavigate();
 
   // 현재 목표 조회 훅 연결
@@ -39,9 +39,9 @@ export default function HomePage() {
 
   return (
     <NavLayout>
-      <div className="bg-bg-blue flex flex-col gap-8 pb-5">
+      <div className="bg-bg-blue flex flex-col gap-8">
         <div>
-          <Header name={user?.name || ""} />
+          <Header name={profile?.nickname || ""} />
 
           {/* 상단 목표 카드 */}
           {goalData ? (
@@ -61,7 +61,7 @@ export default function HomePage() {
                   onClick={() => navigate("/goal/create")}
                   className="home-set-new-goal flex justify-center items-center gap-2 
                              px-[12px] py-[10px] pl-[16px] rounded-[30px] bg-[#5ACBB0] text-white"
-                >
+                > 
                   새로운 목표 설정하기
                   <Plus2Icon className="w-5 h-5" />
                 </button>

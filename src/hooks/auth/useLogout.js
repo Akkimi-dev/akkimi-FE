@@ -7,15 +7,21 @@ import { useNavigate } from 'react-router-dom';
 // 로그아웃 훅
 export function useLogout() {
   const qc = useQueryClient();
-  const { clearTokens } = useAuthStore();
+  const { clearAuth } = useAuthStore();
   const navigate = useNavigate();
 
+  const { refreshToken } = useAuthStore.getState()
+
   const  { mutate, mutateAsync, isLoading, error } = useMutation({
-    mutationFn: () => logoutApi(),
-    onSuccess: () => {
-      clearTokens();
-      qc.invalidateQueries({ queryKey: ['me'] });
-      navigate('/auth');
+    mutationFn: () => logoutApi( refreshToken ),
+    onSuccess: async () => {
+      // 토큰 제거
+      clearAuth();
+      // 모든 진행 중 쿼리 취소
+      await qc.cancelQueries();
+      qc.clear();
+      // 인증 페이지로 이동(뒤로가기 방지)
+      navigate('/auth', { replace: true });
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
