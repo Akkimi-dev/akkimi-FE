@@ -22,7 +22,7 @@ export default function HomePage() {
     startDate: "25.08.01",
     endDate: "25.08.31",
     goalBudget: 200000,
-    usedBudget: 1000,
+    usedBudget: 80000,
     dDay: 20,
   };
 
