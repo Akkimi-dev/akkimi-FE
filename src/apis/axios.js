@@ -10,6 +10,7 @@ export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL, // 백엔드 URL .env로
   headers: {
     'Content-Type': 'application/json',
+    //Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJMT0NBTF9QSE9ORTowMTAxMTAwMTEwMCIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE3NTU5NDA0MjUsImV4cCI6MTc1NTk0NDAyNX0.KPTauB5p5u4IKnlZa_vSk6O3WDd0uHHxX69Ldybl4Cz1yYBJbbf1NART3UzRoyC7k77N9O4z_8wJoz7FWB2Ndg`
   },
 });
 
@@ -17,11 +18,14 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useAuthStore.getState();
+    // config.headers.Authorization = `Bearer ${
+    //       accessToken || "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJMT0NBTF9QSE9ORTowMTAxMTAwMTEwMCIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE3NTU5NDA0MjUsImV4cCI6MTc1NTk0NDAyNX0.KPTauB5p5u4IKnlZa_vSk6O3WDd0uHHxX69Ldybl4Cz1yYBJbbf1NART3UzRoyC7k77N9O4z_8wJoz7FWB2Ndg"
+    //     }`;
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-    return config;
-  },
+        return config;
+      },
   (error) => Promise.reject(error)
 );
 
