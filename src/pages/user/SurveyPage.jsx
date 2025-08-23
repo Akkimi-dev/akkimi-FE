@@ -1,7 +1,7 @@
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetCharacter } from "../../hooks/user/useUser"; 
+import { useSetCharacter, useSetMaltu } from "../../hooks/user/useUser"; 
 import { useQueryClient } from "@tanstack/react-query";
 
 // 결과 SVG 매핑 (12개 조합)
@@ -45,8 +45,9 @@ export default function SurveyPage() {
   const nav = useNavigate();
   const queryClient = useQueryClient();
 
-  // ✅ setCharacter 훅 사용
+  // 캐릭터 저장, 말투 저장 훅
   const { mutate: saveCharacter } = useSetCharacter();
+  const { mutate: saveMaltu } = useSetMaltu();
 
   // 결과 매핑
   const q1Result = ["실속형", "감정형", "무의식형"];
@@ -83,24 +84,30 @@ export default function SurveyPage() {
   // 결과 화면
   if (step === "result") {
     const handleSaveCharacter = () => {
-      if (!finalResult) return;
+  if (!finalResult) return;
 
-      const characterId = characterIdMap[finalResult]; // ✅ 문자열 → ID 변환
+  const characterId = characterIdMap[finalResult];
+  const selectedMaltuId = answers[4]; // ✅ 설문 말투 성향 결과
 
-      saveCharacter(characterId, {
-        onSuccess: () => {
-          // 저장 성공 후 userProfile 캐시 갱신
-          queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-          nav("/settings");
-          console.log("✅ finalResult:", finalResult);
-          console.log("✅ 매핑된 characterId:", characterIdMap[finalResult]);
-          console.log("✅ 선택된 maltuId:", answers[4]); // 말투 확인
-        },
-        onError: (err) => {
-          console.error("캐릭터 저장 실패:", err);
-        },
-      });
-    };
+  saveCharacter(characterId, {
+    onSuccess: () => {
+      if (selectedMaltuId) {
+       saveMaltu(selectedMaltuId, {
+  onSuccess: () => {
+    // ✅ currentMaltu 최신화
+    queryClient.invalidateQueries({ queryKey: ["currentMaltu"] });
+    nav("/settings");
+  },
+  onError: (err) => console.error("말투 저장 실패:", err),
+});
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+        nav("/settings");
+      }
+    },
+    onError: (err) => console.error("캐릭터 저장 실패:", err),
+  });
+};
 
     return (
       <div className="flex flex-col items-center justify-around h-full bg-[#D9F5EE] px-6">
@@ -133,7 +140,6 @@ export default function SurveyPage() {
   return (
     <NoNavLayout>
       <div className="relative w-full flex flex-col min-h-full bg-[#E3FFF9]">
-        {/* 상단 제목 + 진행도 */}
         <div className="w-full flex flex-col items-center py-6">
           <h1 className="sur-title-font py-2">소비/성향 테스트</h1>
           <div className="w-[85%]">
@@ -150,7 +156,6 @@ export default function SurveyPage() {
           </div>
         </div>
 
-        {/* 질문 */}
         <div className="flex-1 px-6 pb-6">
           {step === 1 && (
             <Question
@@ -235,7 +240,6 @@ export default function SurveyPage() {
           )}
         </div>
 
-        {/* 버튼 */}
         <div className="w-full">
           <button
             className={`absolute left-1/2 -translate-x-1/2 bottom-10
@@ -260,7 +264,14 @@ function isDisabled(answers, step) {
 }
 
 // 단일 선택 컴포넌트
-function Question({ subtitle, question, options, onSelect, selected, isObjectOptions }) {
+function Question({
+  subtitle,
+  question,
+  options,
+  onSelect,
+  selected,
+  isObjectOptions,
+}) {
   return (
     <div className="w-full flex flex-col items-center gap-[10px] p-[32px_24px] rounded-[24px] bg-white mb-20">
       {subtitle && (

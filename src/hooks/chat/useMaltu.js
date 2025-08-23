@@ -8,40 +8,29 @@ import {
   updateMaltu,
   updateMaltuShare,
   deleteMaltu,
-} from "../apis/maltuApis";
+  getCurrentMaltu,
+  setMaltu,
+} from "../../apis/maltuApis";
 
-// 모든 공유된 말투 목록
-export const usePublicMaltus = () => {
-  return useQuery({
-    queryKey: ["publicMaltus"],
-    queryFn: getPublicMaltus,
-  });
-};
+// 공유 말투 목록
+export const usePublicMaltus = () =>
+  useQuery({ queryKey: ["publicMaltus"], queryFn: getPublicMaltus });
 
-// 내가 생성한 말투 목록
-export const useMyMaltus = () => {
-  return useQuery({
-    queryKey: ["myMaltus"],
-    queryFn: getMyMaltus,
-  });
-};
+// 내 말투 목록
+export const useMyMaltus = () =>
+  useQuery({ queryKey: ["myMaltus"], queryFn: getMyMaltus });
 
 // 기본 말투 목록
-export const useDefaultMaltus = () => {
-  return useQuery({
-    queryKey: ["defaultMaltus"],
-    queryFn: getDefaultMaltus,
-  });
-};
+export const useDefaultMaltus = () =>
+  useQuery({ queryKey: ["defaultMaltus"], queryFn: getDefaultMaltus });
 
 // 말투 상세 조회
-export const useMaltuDetail = (maltuId) => {
-  return useQuery({
+export const useMaltuDetail = (maltuId) =>
+  useQuery({
     queryKey: ["maltuDetail", maltuId],
     queryFn: () => getMaltuDetail(maltuId),
-    enabled: !!maltuId, // maltuId 있을 때만 호출
+    enabled: !!maltuId,
   });
-};
 
 // 말투 생성
 export const useCreateMaltu = () => {
@@ -49,7 +38,7 @@ export const useCreateMaltu = () => {
   return useMutation({
     mutationFn: createMaltu,
     onSuccess: () => {
-      queryClient.invalidateQueries(["myMaltus"]);
+      queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
     },
   });
 };
@@ -60,8 +49,8 @@ export const useUpdateMaltu = () => {
   return useMutation({
     mutationFn: ({ maltuId, payload }) => updateMaltu(maltuId, payload),
     onSuccess: (_, { maltuId }) => {
-      queryClient.invalidateQueries(["maltuDetail", maltuId]);
-      queryClient.invalidateQueries(["myMaltus"]);
+      queryClient.invalidateQueries({ queryKey: ["maltuDetail", maltuId] });
+      queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
     },
   });
 };
@@ -72,8 +61,8 @@ export const useUpdateMaltuShare = () => {
   return useMutation({
     mutationFn: ({ maltuId, isPublic }) => updateMaltuShare(maltuId, isPublic),
     onSuccess: () => {
-      queryClient.invalidateQueries(["myMaltus"]);
-      queryClient.invalidateQueries(["publicMaltus"]);
+      queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
+      queryClient.invalidateQueries({ queryKey: ["publicMaltus"] });
     },
   });
 };
@@ -84,7 +73,23 @@ export const useDeleteMaltu = () => {
   return useMutation({
     mutationFn: deleteMaltu,
     onSuccess: () => {
-      queryClient.invalidateQueries(["myMaltus"]);
+      queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
     },
   });
 };
+
+// ✅ 현재 말투 변경
+export const useSetMaltu = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (maltuId) => setMaltu(maltuId),
+    onSuccess: (_, maltuId) => {
+      queryClient.invalidateQueries({ queryKey: ["currentMaltu"] });
+      queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
+    },
+  });
+};
+
+// ✅ 현재 말투 가져오기
+export const useCurrentMaltu = () =>
+  useQuery({ queryKey: ["currentMaltu"], queryFn: getCurrentMaltu });
