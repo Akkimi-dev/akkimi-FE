@@ -2,22 +2,30 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Goback3Arrow from "../../assets/Settings/gobackarrow3.svg?react";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
+import { useSetMaltu } from "../../hooks/chat/useMaltu";
 
 export default function ToneDetailPage() {
   const nav = useNavigate();
   const location = useLocation();
   const tone = location.state?.tone;
 
+  // ✅ 현재 말투 설정 mutation
+  const { mutate: setMaltuMutation } = useSetMaltu();
+
   if (!tone) return <p>잘못된 접근입니다.</p>;
 
   const handleApply = () => {
-    // ✅ 선택한 말투 저장
-    localStorage.setItem("selectedTone", JSON.stringify(tone));
-
-    // storage 이벤트 강제 발생 → 다른 탭/컴포넌트 동기화
-    window.dispatchEvent(new Event("storage"));
-
-    nav(-1);
+    // ✅ 선택한 말투를 서버에 적용
+    setMaltuMutation(tone.maltuId, {
+      onSuccess: () => {
+        // 적용 완료 후 뒤로 이동
+        nav(-1);
+      },
+      onError: (err) => {
+        console.error("말투 적용 실패:", err);
+        alert("말투 적용에 실패했습니다. 다시 시도해주세요.");
+      },
+    });
   };
 
   return (
@@ -37,11 +45,11 @@ export default function ToneDetailPage() {
         {/* 본문 */}
         <main className="flex-1 p-5 overflow-auto">
           <h2 className="text-[#5ACBB0] text-sm font-semibold mb-1">말투 제목</h2>
-          <p className="text-lg font-bold mb-4">{tone.label}</p>
+          <p className="text-lg font-bold mb-4">{tone.maltuName}</p>
 
           <h3 className="text-[#5ACBB0] text-sm font-semibold mb-2">프롬프트</h3>
           <div className="p-4 rounded-xl border border-gray-300 bg-[#F1F1F5] text-sm leading-relaxed whitespace-pre-line">
-            {tone.description}
+            {tone.prompt}
           </div>
         </main>
 

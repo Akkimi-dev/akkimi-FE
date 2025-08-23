@@ -28,9 +28,8 @@ export const getCurrentMaltu = async () => {
 
 // 말투 설정
 export const setMaltu = async (maltuId) => {
-  const { data } = await axiosInstance.put(`/api/v1/users/current-maltu/${maltuId}`);
-  return data.result;
-};
+const { data } = await axiosInstance.put(`/api/v1/users/current-maltu/${maltuId}`);
+  return data.result;};
 
 // 지역 변경
 export const changeRegion = async (region) => {

@@ -48,13 +48,16 @@ export const useCurrentMaltu = () => {
   });
 };
 
-// 말투 설정
+// ✅ 현재 말투 설정 훅
 export const useSetMaltu = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: setMaltu,
+    mutationFn: (maltuId) => setMaltu(maltuId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["currentMaltu"] });
+      // ✅ 말투 바꾼 후 프로필 & 현재 말투 다시 불러오기
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["defaultMaltus"] });
+      queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
     },
   });
 };
