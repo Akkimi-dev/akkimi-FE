@@ -1,45 +1,56 @@
-import api from "./axios";
+import axiosInstance from "./axios";
 
 // 프로필 조회
 export const getUserProfile = async () => {
-  const response = await api.get("/api/v1/users");
-  console.log("요청 URL:", response.config.url);
-  console.log("응답 Content-Type:", response.headers["content-type"]);
-  return response.data.result;
+  const { data } = await axiosInstance.get("/api/v1/users");
+ return data?.result ?? {}; 
 };
 
 // 닉네임 변경
 export const changeNickname = async (nickname) => {
-  const response = await api.put("/api/v1/users/nickname", { nickname });
-  return response.data.result;
+  const { data } = await axiosInstance.put("/api/v1/users/nickname", {
+    nickname,
+  });
+  return data.result;
+};
+
+// 소비캐릭터 설정 및 수정
+export const setCharacter = async (characterId) => {
+  const { data } = await axiosInstance.put(`/api/v1/users/character/${characterId}`);
+  return data.result;
+};
+
+// 설정한 말투 조회
+export const getCurrentMaltu = async () => {
+  const { data } = await axiosInstance.get("/api/v1/users/current-maltu");
+  return data.result;
 };
 
 // 말투 설정
 export const setMaltu = async (maltuId) => {
-  const response = await api.put(`/api/v1/users/current-maltu/${maltuId}`);
-  return response.data.result;
+  const { data } = await axiosInstance.put(`/api/v1/users/current-maltu/${maltuId}`);
+  return data.result;
 };
 
 // 지역 변경
 export const changeRegion = async (region) => {
-  const response = await api.put("/api/v1/users/region", { region });
-  return response.data.result;
+  const { data } = await axiosInstance.put("/api/v1/users/region", {
+    region,
+  });
+  return data.result;
 };
 
-// 소비 캐릭터 설정 (characterId 전달)
-export const setCharacter = async (characterId) => {
-  const response = await api.put(`/api/v1/users/character/${characterId}`);
-  return response.data.result;
+// 비밀번호 변경
+export const changePassword = async ({ oldPassword, newPassword }) => {
+  const { data } = await axiosInstance.patch("/api/v1/users/password", {
+    oldPassword,
+    newPassword,
+  });
+  return data.result;
 };
 
-// isSetup 확인
-export const checkIsSetup = async () => {
-  const response = await api.get("/api/v1/users/setup");
-  return response.data.result;
-};
-
-// 현재 말투 조회
-export const getCurrentMaltu = async () => {
-  const response = await api.get("/api/v1/users/current-maltu");
-  return response.data.result;
+// Setup 확인 여부 조회
+export const checkSetup = async () => {
+  const { data } = await axiosInstance.get("/api/v1/users");
+  return data.result;
 };
