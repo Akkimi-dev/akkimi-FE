@@ -59,7 +59,7 @@ export default function SettingsPage() {
               :
               <span>이름을 정해주세요</span>
             }
-            <button className="" onClick={() => nav(`/user/userName?nickname=${profile.nickname}`)}><GobackIcon className="w-4 h-4" /></button>
+            <button className="" onClick={() => nav(`/user/userName`)}><GobackIcon className="w-4 h-4" /></button>
           </div>
           <button
             onClick={() => logout()}
