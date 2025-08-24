@@ -24,6 +24,7 @@ export function useLogout() {
       navigate('/auth', { replace: true });
     },
     onError: (error) => {
+      clearAuth();
       if (axios.isAxiosError(error)) {
         throw error.response?.data;
       }

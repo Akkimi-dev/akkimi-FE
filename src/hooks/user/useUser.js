@@ -25,6 +25,7 @@ export const useUpdateNickname = () => {
     mutationFn: changeNickname,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["checkSetup"] });
     },
   });
 };
@@ -36,6 +37,7 @@ export const useSetCharacter = () => {
     mutationFn: setCharacter,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["checkSetup"] });
     },
   });
 };
@@ -58,6 +60,7 @@ export const useSetMaltu = () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       queryClient.invalidateQueries({ queryKey: ["defaultMaltus"] });
       queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
+      queryClient.invalidateQueries({ queryKey: ["checkSetup"] });
     },
   });
 };
