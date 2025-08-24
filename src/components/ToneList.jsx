@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Goback3Arrow from "../assets/Settings/gobackarrow3.svg?react";
+import Goback3Arrow from "../assets/settings/gobackarrow3.svg?react";
 import { useCreateMaltu } from "../hooks/chat/useMaltu";
 
 export default function ToneList() {
