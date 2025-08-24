@@ -33,7 +33,7 @@ export default function App() {
             </PublicOnlyRoute>
           }
         />
-        <Route path="/auth/callback" element={<KakaoRedirect />} />
+        <Route path="auth/callback" element={<KakaoRedirect />} />
         <Route path="calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
         <Route path="survey" element={<ProtectedRoute><SurveyPage /></ProtectedRoute>} />
         <Route path="settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
