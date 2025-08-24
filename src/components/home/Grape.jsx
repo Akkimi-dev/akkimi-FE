@@ -47,10 +47,10 @@ export default function Grape({goal, date, usedBudget, goalBudget}){
         </div>
         <div className="w-full flex justify-end border-r pr-2 border-green-main">
           <div className="flex flex-col items-end justify-center">
-            <span className="text-green-main text-detail-02-regular leading-[120%]">지출</span>
+            <span className="text-green-main text-detail-02-regular leading-[120%]">잔액</span>
             <div className="flex items-center">
-              <span className="text-detail-02-regular leading-[120%] text-gray-40 ">{usedBudget}/</span>
-              <span className="text-green-main text-detail-02-regular leading-[120%]">{goalBudget}</span>
+              <span className="text-detail-02-regular leading-[120%] text-gray-40 ">{goalBudget}/</span>
+              <span className="text-green-main text-detail-02-regular leading-[120%]">{goalBudget - usedBudget}</span>
             </div>
           </div>  
         </div>

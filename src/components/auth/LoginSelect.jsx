@@ -68,7 +68,7 @@ export default function LoginSelect({ onChoose }) {
               className="cursor-pointer text-detail-02-regular text-gray-80"
               onClick={() => setOpen(true)}
             >
-              회원 가입
+              회원가입
             </button>
           </div>
         </div>
