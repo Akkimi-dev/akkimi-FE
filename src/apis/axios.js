@@ -17,7 +17,7 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useAuthStore.getState();
-   
+  
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -36,8 +36,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const status = error.response?.status;
-    // 백엔드 토큰 만료 상태 코드가 완전하지 않아 임시로...
-    if ([401, 403].includes(status)) {
+    if (status == 401) {
       const originalRequest = error.config;
 
       // 무한 루프 방지 이미 재발급 처리를 한 요청 -> 로그아웃
@@ -49,11 +48,12 @@ axiosInstance.interceptors.response.use(
       }
 
       const { refreshToken } = useAuthStore.getState();
-  
+
       // 리프레시 토큰 없을시 -> 에러
       if (!refreshToken) {
         return Promise.reject(error);
       }
+
 
       try {
         // 재발급 중일 경우에는 처리 x
@@ -85,7 +85,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // 재발급 실패시 로그아웃 처리
-        useAuthStore.getState().clearTokens();
+        useAuthStore.clearTokens();
         gotoAuth();
         return Promise.reject(refreshError);
       }

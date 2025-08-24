@@ -1,7 +1,6 @@
 
 import { axiosInstance } from './axios';
 
-
 /**
  * 오늘의 소비 내역 등록
  * POST /api/v1/goals/{goalId}/days/{date}/consumptions

@@ -1,4 +1,4 @@
-import axiosInstance from "./axios";
+import { axiosInstance } from "./axios";
 
 // 프로필 조회
 export const getUserProfile = async () => {
@@ -51,6 +51,6 @@ export const changePassword = async ({ oldPassword, newPassword }) => {
 
 // Setup 확인 여부 조회
 export const checkSetup = async () => {
-  const res = await axiosInstance.get("/api/v1/users");
+  const res = await axiosInstance.get("/api/v1/users/setup");
   return res.data.result;
 };

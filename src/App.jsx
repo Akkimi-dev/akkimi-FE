@@ -11,7 +11,7 @@ import SupportDetail from './pages/support/SupportDetail';
 import LocationChangePage from "./pages/user/LocationChangePage.jsx";
 import ChatbotPage from "./pages/chatbot/ChatbotPage.jsx";
 import ChatbotMaltu from "./pages/chatbot/ChatbotMaltu.jsx";
-import ToneList from "./components/ToneList.jsx";
+import ToneList from "./pages/chatbot/ToneList.jsx";
 import ConsumptionCreatePage from './pages/Consumption/ConsumptionCreatePage.jsx';
 import GoalCreatePage from './pages/goal/GoalCreatePage';
 import ConsumptionEditPage from './pages/consumption/ConsumptionEditPage.jsx';
