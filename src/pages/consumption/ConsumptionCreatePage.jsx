@@ -7,11 +7,13 @@ import MessageModalSSE from "../../components/consumption/MessageModalSSE";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import Header from "../../components/common/Header";
 import useErrorModal from "../../hooks/error/useErrorModal";
+import MessageModal from "../../components/consumption/MessageModal";
 
 export default function ConsumptionCreatePage() {
   const { goalId } = useParams();
   const [searchParams] = useSearchParams();
   const initialDate = searchParams.get("date") || "";
+  const [message, setMessage] = useState("");
 
   const [form, setForm] = useState({
     date: initialDate,
@@ -19,8 +21,8 @@ export default function ConsumptionCreatePage() {
     name: "",
     amount: "",
     memo: "",
+
   });
-  const [messageId, setMessageId] = useState(null);
 
   const { show: showError, Modal: ErrorModalMount } = useErrorModal();
 
@@ -48,14 +50,14 @@ export default function ConsumptionCreatePage() {
     }
 
     try {
-      const newMessageId = await createConsumptionMutation.mutateAsync({
+      const feedback = await createConsumptionMutation.mutateAsync({
         category,
         itemName: name,
         amount: parsedAmount,
         description: memo || '',
       });
-      console.log(newMessageId)
-      setMessageId(newMessageId);
+      console.log(feedback)
+      setMessage(feedback);
     } catch (err) {
       console.error(err);
       showError('소비 내역 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.');
@@ -71,9 +73,9 @@ export default function ConsumptionCreatePage() {
         onSave={handleSubmit}
         submitting={createConsumptionMutation.isPending}
       />
-      {/* {messageId !== null && (
-        <MessageModalSSE messageId={messageId} onClose={() => setMessageId(null)} />
-      )} */}
+      {message && (
+        <MessageModal message={message} onClose={() => setMessage(null)} />
+      )}
       <ErrorModalMount />
     </NoNavLayout>
   );

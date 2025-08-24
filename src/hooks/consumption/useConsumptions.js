@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createConsumption,
+  getConsumption,
   deleteConsumption as deleteConsumptionApi,
   updateConsumption as updateConsumptionApi,
   getMonthlyConsumptions,
@@ -32,6 +33,15 @@ export const useDailyConsumptions = (goalId, date) => {
     queryKey: ['dailyConsumptions', goalId, date],
     queryFn: () => getDailyConsumptions(goalId, date),
     enabled: !!goalId && !!date,
+  });
+};
+
+// 소비 내역 상세
+export const useGetConsumption = (consumptionId) => {
+  return useQuery({
+    queryKey: ['consumptionDetail', consumptionId],
+    queryFn: () => getConsumption(consumptionId),
+    enabled: !!consumptionId,
   });
 };
 

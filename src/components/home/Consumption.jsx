@@ -14,17 +14,24 @@ export default function Consumption({goalId, date}) {
   // 일간 소비 내역 API 연동
   const { data: dailyList } = useDailyConsumptions(goalId, date);
 
-  // API → UI 모델 매핑
+  // API → UI 모델 매핑 
+  // 메모로 선택된 아이디가 바꿔도 리렌더 최소화
   const consumptionList = useMemo(() => {
     if (!Array.isArray(dailyList)) return [];
     return dailyList.map((d) => ({
       id: d.consumptionId,
       category: d.category,
-      time: '', // API 응답에 시간 정보가 없으므로 공백
       consumptionName: d.itemName,
       price: d.amount,
+      feedback: d.feedback,
     }));
   }, [dailyList]);
+
+  // 선택된 아이템 객체 추출
+  const selectedItem = useMemo(() => {
+    if (!selectedItemId) return null;
+    return consumptionList.find((it) => it.id === selectedItemId) || null;
+  }, [selectedItemId, consumptionList]);
 
   return (
     <div className="p-4 flex flex-col gap-4 ">
@@ -41,9 +48,9 @@ export default function Consumption({goalId, date}) {
         consumptionList={consumptionList}
         onOpenModal={(item) => setSelectedItemId(item.id)}
       />
-      {selectedItemId && (
+      {selectedItem && (
         <MessageModal
-          message={` 20,000원짜리 돈까스..? 정말 최선이었어? 나 약간 실망했어. 더 합리적인 소비 할 수 있었잖아. 그래도.. `}
+          message={selectedItem.feedback ?? '피드백이 없습니다.'}
           onClose={() => setSelectedItemId(null)}
         />
       )}

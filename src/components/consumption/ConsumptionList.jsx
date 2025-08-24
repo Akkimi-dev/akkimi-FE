@@ -20,7 +20,7 @@ export default function ConsumptionList({consumptionList, onOpenModal}){
           goalId = {item.goalId}
           id={item.id}
           category={item.category}
-          time={item.time}
+          feedback={item.feedback}
           consumptionName={item.consumptionName}
           price={item.price}
           onClick={() => onOpenModal(item)}

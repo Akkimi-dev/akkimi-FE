@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Header from "../../components/common/Header";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import ConsumptionForm from "../../components/consumption/ConsumptionForm";
-import { useUpdateConsumption } from "../../hooks/consumption/useConsumptions";
+import { useUpdateConsumption, useGetConsumption } from "../../hooks/consumption/useConsumptions";
 import useErrorModal from "../../hooks/error/useErrorModal";
 
 export default function ConsumptionEditPage() {
@@ -21,6 +21,32 @@ export default function ConsumptionEditPage() {
     amount: "",
     memo: "",
   });
+
+  // 소비내역 상세 조회로 초기값 세팅
+  const {
+    data: consumption,
+    isError: isDetailError,
+    error: detailError,
+  } = useGetConsumption(id);
+
+  // 조회 성공 시 폼 초기값 주입
+  useEffect(() => {
+    if (!consumption) return;
+    setForm({
+      date: consumption?.date ?? "",
+      category: consumption?.category ?? "",
+      name: consumption?.itemName ?? "",
+      amount: consumption?.amount != null ? String(consumption.amount) : "",
+      memo: consumption?.description ?? "",
+    });
+  }, [consumption]);
+
+  // 조회 실패 시 에러 모달
+  useEffect(() => {
+    if (!isDetailError) return;
+    const serverMsg = detailError?.response?.data?.message;
+    showError(serverMsg || "소비내역을 불러오지 못했습니다.");
+  }, [isDetailError, detailError, showError]);
 
   const updateMutation = useUpdateConsumption(goalId, form.date, {
     onError: (err) => {
