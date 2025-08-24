@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUpdateNickname, useUserProfile } from '../../hooks/user/useUser';
 import useErrorModal from '../../hooks/error/useErrorModal';
 
+import NameDone from "../../assets/settings/nameDone.svg?react";
+
 import Header from '../../components/common/Header';
 
 export default function UserNamePage() {
@@ -18,6 +20,7 @@ export default function UserNamePage() {
   // 최초 1회 프로필 값으로 초기화
   const [value, setValue] = useState('');
   const [initialized, setInitialized] = useState(false);
+  const [done, setDone] = useState(false);
   useEffect(() => {
     if (!initialized && profile) {
       setValue(profile?.nickname ?? '');
@@ -54,13 +57,12 @@ export default function UserNamePage() {
     if (!isValid) {
       return showError('닉네임은 공백 제외 1~10자 이내로 입력하세요.');
     }
-
     try {
-      await updateNicknameMutation.mutateAsync( trimmed );
-      if (isInit) {
-        navigate(INIT_REDIRECT_URL, { replace: true });
+      await updateNicknameMutation.mutateAsync(trimmed);
+      if (isEdit) {
+        navigate('/settings', { replace: true });
       } else {
-        navigate(-1);
+        setDone(true);
       }
     } catch (err) {
       const serverMsg = err?.response?.data?.message || err?.message;
@@ -80,6 +82,43 @@ export default function UserNamePage() {
   if (isProfileLoading && !initialized) {
     return (
       <div className="relative w-full h-full px-6 pt-10">로딩중...</div>
+    );
+  }
+
+  const handleStartQuiz = () => {
+    navigate('/survey', { replace: isInit });
+  };
+  const handleLater = () => {
+    if (isInit) {
+      navigate('/', { replace: true });
+    } else {
+      navigate(-1);
+    }
+  };
+
+  if (done && !isEdit) {
+    return (
+      <div className="relative w-full h-full px-6 pt-10 flex flex-col items-center justify-center gap-15">
+        <NameDone />
+        <div className="w-full flex flex-col gap-1 max-w-[420px] items-center">
+          <span className='text-detail-01-regular text-gray-60'>1분만에 끝나는 간단 퀴즈</span>
+          <button
+            type="button"
+            onClick={handleStartQuiz}
+            className="px-6 py-4 w-full rounded-[30px] text-body-02-semibold bg-green hover:bg-green-main-dark-2 text-gray-100 mb-3"
+          >
+            소비성향 퀴즈 시작하기
+          </button>
+          <button
+            type="button"
+            onClick={handleLater}
+            className="px-6 py-4 w-full rounded-[30px] text-body-02-semibold bg-gray-10 hover:bg-gray-30 text-gray-60"
+          >
+            다음에 진행하기
+          </button>
+        </div>
+        <ErrorModalMount />
+      </div>
     );
   }
 
