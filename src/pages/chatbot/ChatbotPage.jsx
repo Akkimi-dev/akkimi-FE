@@ -1,4 +1,4 @@
-import ChatThread from "../../components/chatbot/chatThread";
+import ChatThread from "../../components/chatbot/ChatThread";
 import Header from "../../components/chatbot/Header";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 
