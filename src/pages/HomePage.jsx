@@ -9,11 +9,30 @@ import Pen from "../assets/home/pen.svg?react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/date";
 import { useCurrentGoals } from "../hooks/goal/useGoal";
-import { useUserProfile } from "../hooks/user/useUser";
+import { useUserProfile, useCheckSetup } from "../hooks/user/useUser";
+
+import { useEffect, useState } from "react";
+import MessageModal from "../components/home/Modal";
 
 export default function HomePage() {
   const { data: profile } = useUserProfile();
+
   const navigate = useNavigate();
+
+  const [showSetupModal, setShowSetupModal] = useState(false);
+  const [dismissedSetup, setDismissedSetup] = useState(false);
+  
+  // 설정 여부 조회 훅
+  const { data: setupState } = useCheckSetup();
+
+  // 설정 페이지 URL (필요한 경로로 교체)
+  const SETTINGS_URL = '/user/userName?type=init';
+
+  useEffect(() => {
+    console.log(setupState)
+    if (dismissedSetup) return;
+    if (setupState?.isSetup === false) setShowSetupModal(true);
+  }, [setupState, dismissedSetup]);
 
   // 현재 목표 조회 훅 연결
   const { data: currentGoal } = useCurrentGoals();
@@ -39,7 +58,7 @@ export default function HomePage() {
 
   return (
     <NavLayout>
-      <div className="bg-bg-blue flex flex-col gap-8">
+      <div className="bg-bg-blue min-h-[calc(100vh-69px)] flex flex-col gap-8">
         <div>
           <Header name={profile?.nickname || ""} />
 
@@ -105,6 +124,15 @@ export default function HomePage() {
           <Consumption goalId={goalData.goalId} date={formatDate()} />
         )}
       </div>
+      {showSetupModal && (
+        <MessageModal
+          message={"회원 정보를 입력하지 않으셨어요.\n설정하시겠어요?"}
+          onClose={() => { setShowSetupModal(false); setDismissedSetup(true); }}
+          onConfirm={() => { setShowSetupModal(false); navigate(SETTINGS_URL); }}
+          confirmText="하러 가기"
+          cancelText="나중에 하기"
+        />
+      )}
     </NavLayout>
   );
 }

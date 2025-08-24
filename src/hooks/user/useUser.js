@@ -23,7 +23,7 @@ export const useUpdateNickname = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: changeNickname,
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       queryClient.invalidateQueries({ queryKey: ["checkSetup"] });
     },
@@ -35,7 +35,7 @@ export const useSetCharacter = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: setCharacter,
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       queryClient.invalidateQueries({ queryKey: ["checkSetup"] });
     },
@@ -55,12 +55,13 @@ export const useSetMaltu = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (maltuId) => setMaltu(maltuId),
-    onSuccess: () => {
+    onSuccess: async () => {
       // ✅ 말투 바꾼 후 프로필 & 현재 말투 다시 불러오기
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       queryClient.invalidateQueries({ queryKey: ["defaultMaltus"] });
       queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
-      queryClient.invalidateQueries({ queryKey: ["checkSetup"] });
+      queryClient.setQueryData(['checkSetup'], { isSetup: true });
+      await queryClient.invalidateQueries({ queryKey: ["checkSetup"] });  
     },
   });
 };
