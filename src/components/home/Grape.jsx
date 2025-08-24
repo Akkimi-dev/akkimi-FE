@@ -24,7 +24,7 @@ const grapeBackgrounds = {
 };
 
 export default function Grape({goal, date, usedBudget, goalBudget}){
-  const level = Math.min(10, Math.ceil((usedBudget / goalBudget) * 10) + 1);
+  const level = Math.min(10, Math.ceil((usedBudget / goalBudget) * 10));
   console.log(level)
   const GrapeBg = grapeBackgrounds[level] || Grape1;
 
