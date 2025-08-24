@@ -29,7 +29,6 @@ export default function HomePage() {
   const SETTINGS_URL = '/user/userName?type=init';
 
   useEffect(() => {
-    console.log(setupState)
     if (dismissedSetup) return;
     if (setupState?.isSetup === false) setShowSetupModal(true);
   }, [setupState, dismissedSetup]);

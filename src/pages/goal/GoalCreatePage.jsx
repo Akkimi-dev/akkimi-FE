@@ -86,7 +86,7 @@ export default function GoalCreatePage() {
           <div className="flex items-center border-b py-2">
             <input
               type="number"
-              className="flex-1 focus:outline-none text-lg goal-input-font"
+              className="flex-1 focus:outline-none text-lg goal-input-font text-end"
               value={form.purposeBudget}
               onChange={e => setForm({ ...form, purposeBudget: e.target.value })}
             />

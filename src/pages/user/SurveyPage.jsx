@@ -122,16 +122,18 @@ export default function SurveyPage() {
           )}
         </div>
 
-        {/* 하단 텍스트 */}
-        <p className="survey-fighting-font">당신의 절약을 응원합니다!</p>
+        <div className="flex flex-col gap-2">
+          {/* 하단 텍스트 */}
+          <p className="survey-fighting-font">당신의 절약을 응원합니다!</p>
 
-        {/* 시작 버튼 */}
-        <button
-          onClick={handleSaveCharacter}
-          className="start-akkimi-font flex justify-center items-center gap-[10px] self-stretch px-[12px] py-[12px] rounded-[100px] bg-gradient-to-t from-[#5ACBB0] to-[#03FFDA]"
-        >
-          아끼미 시작하기
-        </button>
+          {/* 시작 버튼 */}
+          <button
+            onClick={handleSaveCharacter}
+            className="start-akkimi-font flex justify-center items-center gap-[10px] self-stretch px-[12px] py-[12px] rounded-[100px] bg-gradient-to-t from-[#5ACBB0] to-[#03FFDA]"
+          >
+            아끼미 시작하기
+          </button>
+        </div>
       </div>
     );
   }

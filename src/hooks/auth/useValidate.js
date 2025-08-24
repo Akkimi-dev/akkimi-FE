@@ -8,7 +8,7 @@ export function useValidatePhone() {
     mutationFn: async (phoneNumber) => {
       const normalizedPhone = phoneNumber.replace(/\D/g, '');
       const res = await validatePhone(normalizedPhone);
-      return Boolean(res?.result?.available);
+      return Boolean(res?.available);
     },
     retry: 0,
   });
@@ -22,7 +22,7 @@ export function useValidateEmail() {
     mutationFn: async (email) => {
       const trimmedEmail = email.trim();
       const res = await validateEmail(trimmedEmail);
-      return Boolean(res?.result?.available);
+      return Boolean(res?.available);
     },
     retry: 0,
   });

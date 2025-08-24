@@ -85,7 +85,7 @@ export default function ChatbotMaltu() {
             </div>
 
             {showDescription && currentMaltu && (
-              <div className="maltu-detail-font mt-1 px-3 py-2 rounded-[12px] border border-[#DDE2E7] bg-[#F1F1F5] shadow flex p-4 justify-between items-center self-stretch">
+              <div className=" maltu-detail-font mt-1 px-3 py-2 rounded-[12px] border border-[#DDE2E7] bg-[#F1F1F5] shadow flex p-4 justify-between items-center self-stretch">
                 {currentMaltu.prompt}
               </div>
             )}
@@ -111,7 +111,7 @@ export default function ChatbotMaltu() {
             ) : (
               <>
                 <div
-                  className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-2"
+                  className="flex overflow-x-auto snap-x snap-mandatory gap-4"
                   onScroll={(e) => {
                     const pageIndex = Math.round(
                       e.target.scrollLeft / e.target.clientWidth
@@ -127,7 +127,7 @@ export default function ChatbotMaltu() {
                       {page.map((tone) => (
                         <div
                           key={tone.maltuId}
-                          className={`flex mb-2 items-center justify-between rounded-2xl px-4 py-3 shadow-sm cursor-pointer transition ${
+                          className={`flex mb-1 items-center justify-between rounded-2xl p-4 shadow-sm cursor-pointer transition ${
                             currentMaltu?.maltuId === tone.maltuId
                               ? "border border-[#5ACBB0] bg-[#E6FAF6]"
                               : "border border-gray-200"
@@ -141,6 +141,7 @@ export default function ChatbotMaltu() {
                             <span className="text-sm font-medium">
                               {tone.maltuName}
                             </span>
+                            <button className="" onClick={() => nav(`/`)}><GobackIcon className="w-4 h-4" /></button>
                           </div>
 
                           {/* 오른쪽: 라디오 버튼 */}
