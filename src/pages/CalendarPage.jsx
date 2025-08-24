@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import ListIcon from "../assets/calendar/list.svg?react";
 import PreviousIcon from "../assets/calendar/previousmonth.svg?react";
@@ -8,69 +8,69 @@ import PlusIcon from "../assets/calendar/plus.svg?react";
 import Modal from "../components/modal/Modal";
 import NavLayout from "../components/layouts/NavLayout";
 import Consumption from "../components/calendar/Consumption";
-
+import { useMonthlyConsumptionsSummary } from "../hooks/consumption/useConsumptions";
+import { useGoals } from "../hooks/goal/useGoal";
 
 export default function CalendarPage() {
   const [tab, setTab] = useState("goal"); 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedGoalId, setSelectedGoalId] = useState(1);
+  const [selectedGoalId, setSelectedGoalId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(7); // 0=1월 → 7=8월
   const [currentYear, setCurrentYear] = useState(2025);
+
+  const monthStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`;
+  const { data: monthlySummaryData } = useMonthlyConsumptionsSummary(selectedGoalId, monthStr);
+  const summaryList = monthlySummaryData?.summary ?? [];
+  const summaryMap = useMemo(() => {
+    const obj = {};
+    for (const item of summaryList) {
+      if (item && item.date) obj[item.date] = item.price ?? 0;
+    }
+    return obj;
+  }, [summaryList]);
+
   const navigate = useNavigate();
 
-  // === 목표 부분 Mock 데이터 ===
-  const goals = [
-    { 
-      id: 1, 
-      title: "영국에 갈끄야", 
-      amount: 500000, 
-      startDate: "2025-08-01", 
-      endDate: "2025-08-24" 
-    },
-    { 
-      id: 2, 
-      title: "노트북 사기", 
-      amount: 800000, 
-      startDate: "2025-07-15", 
-      endDate: "2025-08-20" 
-    },
-    { 
-      id: 3, 
-      title: "비상금 만들기", 
-      amount: 300000, 
-      startDate: "2025-08-10", 
-      endDate: "2025-09-05" 
-    },
-  ];
+  // 목표 목록 API 연동
+  const { data: goalsResp } = useGoals();
+  const goals = useMemo(() => {
+    if (!Array.isArray(goalsResp)) return [];
+    return goalsResp.map((g) => ({
+      id: g.goalId,
+      title: g.purpose ?? '',
+      amount: g.purposeBudget ?? 0,
+      startDate: g.startDate,
+      endDate: g.endDate,
+    }));
+  }, [goalsResp]);
+
+  // 초기 선택 목표 설정: 첫 번째 목표
+  React.useEffect(() => {
+    if (selectedGoalId == null && goals.length > 0) {
+      setSelectedGoalId(goals[0].id);
+    }
+  }, [goals, selectedGoalId]);
 
   const selectedGoal = goals.find((g) => g.id === selectedGoalId);
 
-  // === 소비내역 Mock 데이터 ===
-  const mockData = {
-    "2025-08-10": [80000, 20000],
-    "2025-08-11": [80000],
-    "2025-08-12": [40000, 30000],
-    "2025-08-13": [120000],
-    "2025-08-14": [40000],
-    "2025-08-15": [20000, 10000],
-  };
+  // 월 총지출 (API 요약 합계)
+  const monthTotal = summaryList.reduce((sum, it) => sum + (it?.price ?? 0), 0);
 
-  // 총 지출 (mockData 합산)
-  const totalSpending = Object.entries(mockData)
-    .filter(([date]) => {
-      const d = new Date(date);
-      return d >= new Date(selectedGoal.startDate) && d <= new Date(selectedGoal.endDate);
-    })
-    .flatMap(([_, arr]) => arr)
-    .reduce((acc, cur) => acc + cur, 0);
+  // 목표 기간 내(해당 달에 한정) 총지출
+  const goalStart = selectedGoal ? new Date(selectedGoal.startDate) : null;
+  const goalEnd = selectedGoal ? new Date(selectedGoal.endDate) : null;
+  const goalPeriodTotal = selectedGoal
+    ? summaryList.reduce((sum, it) => {
+        if (!it?.date) return sum;
+        const d = new Date(it.date);
+        return d >= goalStart && d <= goalEnd ? sum + (it.price ?? 0) : sum;
+      }, 0)
+    : 0;
 
-  // 결과 (목표 - 총 지출)
-  const result = selectedGoal.amount - totalSpending;
-
-  // 목표 기간
-  const goalStart = new Date(selectedGoal.startDate);
-  const goalEnd = new Date(selectedGoal.endDate);
+  // 화면 상단에 표시할 총액: 목표 탭은 목표기간 합, 월별 탭은 월 합
+  const totalSpending = tab === "goal" ? goalPeriodTotal : monthTotal;
+  const result = selectedGoal ? selectedGoal.amount - goalPeriodTotal : 0;
 
   // 캘린더 정보
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -111,21 +111,35 @@ export default function CalendarPage() {
       {/* 목표 부분 */}
       {tab === "goal" && (
         <div className="flex items-center justify-between w-full h-[76px] py-3 bg-[#F3F7FB] px-4">
-          <div className="flex flex-row items-center justify-between flex-1 gap-4 rounded-[16px] border border-[#5ACBB0] bg-white px-4 py-3">
-            <p className="cal-goal-title-font">[{selectedGoal.title}]</p>
-            <p className="cal-goal-price-font">
-              지출 목표{" "}
-              <span className="cal-goal-money-font">
-                {selectedGoal.amount.toLocaleString()}원
-              </span>
-            </p>
-          </div>
-          <button
-            className="flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white ml-2"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <ListIcon className="w-6 h-6 text-[#5ACBB0]" />
-          </button>
+          {selectedGoal ? (
+            <>
+              <div className="flex flex-row items-center justify-between flex-1 gap-4 rounded-[16px] border border-[#5ACBB0] bg-white px-4 py-3">
+                <p className="cal-goal-title-font">[{selectedGoal.title}]</p>
+                <p className="cal-goal-price-font">
+                  지출 목표{" "}
+                  <span className="cal-goal-money-font">
+                    {selectedGoal.amount.toLocaleString()}원
+                  </span>
+                </p>
+              </div>
+              <button
+                className="flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white ml-2"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <ListIcon className="w-6 h-6 text-[#5ACBB0]" />
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-row items-center justify-between flex-1 gap-4 rounded-[16px] border border-[#DDE2E7] bg-white px-4 py-3">
+              <p className="cal-goal-title-font text-[#7A828A]">목표를 선택하세요</p>
+              <button
+                className="flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <ListIcon className="w-6 h-6 text-[#5ACBB0]" />
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -142,7 +156,7 @@ export default function CalendarPage() {
                 </span>
               </p>
               <p className="cal-total-use-font flex items-center">
-                결과{" "}
+                잔액{" "}
                 <span
                   className={`ml-4 ${
                     result < 0
@@ -232,13 +246,10 @@ export default function CalendarPage() {
                   currentMonth + 1
                 ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                 const currentDate = new Date(currentYear, currentMonth, day);
-                const spending =
-                  currentDate >= goalStart && currentDate <= goalEnd && mockData[dateKey]
-                    ? mockData[dateKey].reduce((a, b) => a + b, 0)
-                    : 0;
+                const priceForDay = summaryMap[dateKey] ?? 0;
                 const isSelected = selectedDate === day;
-                const isInGoalPeriod =
-                  currentDate >= goalStart && currentDate <= goalEnd;
+                const isInGoalPeriod = goalStart && goalEnd ? (currentDate >= goalStart && currentDate <= goalEnd) : false;
+                const spending = tab === "goal" ? (isInGoalPeriod ? priceForDay : 0) : priceForDay;
 
                 return (
                   <div
@@ -299,12 +310,9 @@ export default function CalendarPage() {
                 <p className="cal-use-money-subtitle-font">일 지출 총액</p>
                 <p className="cal-use-money-price-font">
                   {(
-                    mockData[
-                      `${currentYear}-${String(currentMonth + 1).padStart(
-                        2,
-                        "0"
-                      )}-${String(selectedDate).padStart(2, "0")}`
-                    ]?.reduce((a, b) => a + b, 0) || 0
+                    summaryMap[
+                      `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(selectedDate).padStart(2, "0")}`
+                    ] ?? 0
                   ).toLocaleString()}
                   원
                 </p>
@@ -313,6 +321,7 @@ export default function CalendarPage() {
 
             {/* 소비 내역 */}
             <Consumption
+              goalId={selectedGoalId}
               date={`${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(selectedDate).padStart(2, "0")}`}
             />
           </div>

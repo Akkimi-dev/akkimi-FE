@@ -49,6 +49,12 @@
     line-height: 120%;
     letter-spacing: 0;
   }
+  .text-heading-01-regular {
+    font-weight: 400; /* Semibold */
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+  }
   .text-heading-01-semibold {
     font-weight: 600; /* Semibold */
     font-size: 24px;
@@ -921,7 +927,6 @@ letter-spacing: 0.18px;
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -933,7 +938,6 @@ line-height: 150%; /* 18px */
 text-align: center;
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -944,7 +948,6 @@ line-height: 150%; /* 24px */
   color: #000;
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -957,7 +960,6 @@ letter-spacing: 0.18px;
 text-align: center;
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -968,7 +970,6 @@ line-height: 150%; /* 24px */
   color: #000;
 
 /* Heading/02_Semibold */
-font-family: Pretendard;
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
@@ -979,7 +980,6 @@ line-height: 120%; /* 24px */
   color: var(--Green-04, #5ACBB0);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -990,7 +990,6 @@ line-height: 150%; /* 21px */
 color: #000;
 
 /* Body/01_Regular */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 400;
@@ -1001,7 +1000,6 @@ line-height: 150%; /* 27px */
   color: var(--Point-Red, #FF1953);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -1012,7 +1010,6 @@ line-height: 150%; /* 24px */
   color: var(--100, #191919);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -1023,7 +1020,6 @@ line-height: 150%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -1047,7 +1043,6 @@ input[type=number] {
   color: var(--Green-02, #074E42);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -1058,7 +1053,6 @@ line-height: 150%; /* 24px */
   color: #000;
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -1070,7 +1064,6 @@ line-height: 150%; /* 24px */
 text-align: center;
 
 /* Detail/02_Semibold */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 600;
@@ -1082,7 +1075,6 @@ line-height: 150%; /* 18px */
 text-align: center;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -1093,7 +1085,6 @@ line-height: 150%; /* 18px */
   color: var(--60, #6C7582);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -1104,7 +1095,6 @@ line-height: 150%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Body/02_Semibold */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 600;
@@ -1116,7 +1106,6 @@ line-height: 150%; /* 24px */
   color: #000;
 
 /* Detail/02_Regular */
-font-family: Pretendard;
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -1127,7 +1116,6 @@ line-height: 150%; /* 18px */
   color: #000;
 
 /* Body/01_Semibold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 600;
@@ -1139,7 +1127,6 @@ letter-spacing: 0.18px;
   color: var(--Green-04, #5ACBB0);
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -1150,7 +1137,6 @@ line-height: 150%; /* 21px */
   color: #000;
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -1161,7 +1147,6 @@ line-height: 150%; /* 24px */
   color: var(--80, #3C434F);
 
 /* Body/02_Regular */
-font-family: Pretendard;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -1173,7 +1158,6 @@ line-height: 150%; /* 24px */
 text-align: center;
 
 /* Detail/01_Regular */
-font-family: Pretendard;
 font-size: 14px;
 font-style: normal;
 font-weight: 400;
@@ -1184,7 +1168,6 @@ line-height: 150%; /* 21px */
   color: var(--White, #FFF);
 
 /* Body/01_Bold */
-font-family: Pretendard;
 font-size: 18px;
 font-style: normal;
 font-weight: 700;

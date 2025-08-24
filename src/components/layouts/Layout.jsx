@@ -13,7 +13,7 @@ export default function Layout() {
     );
   } else {
     return (
-      <div className="relative h-[100dvh] flex justify-around items-center bg-gray-10">
+      <div className="relative h-[100dvh] flex justify-around items-center bg-green-50">
         <div className='border-2 border-gray-80 rounded-[3px]'>
           <div className="w-[375px] bg-white xs:h-[667px]">
             <div id="layout-portal" className="absolute inset-0 pointer-events-none" />
@@ -22,7 +22,7 @@ export default function Layout() {
         </div>
         <div className="w-[375px] px-6 flex flex-col items-center gap-4">
           <Logo/>
-          <div className="rounded-2xl border  border-green-main bg-white backdrop-blur p-6 shadow-sm">
+          <div className="rounded-2xl border border-green-main bg-white backdrop-blur p-6 shadow-sm">
             <h2 className="text-heading-01-bold">모바일 전용 서비스</h2>
             <p className="mt-2 text-body-02-regular text-gray-600">
               이 서비스는 모바일 환경에 최적화되어 있습니다.

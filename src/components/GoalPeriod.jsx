@@ -4,10 +4,39 @@ import PreviousIcon from "../assets/calendar/previousmonth.svg?react";
 import NextIcon from "../assets/calendar/nextmonth.svg?react";
 
 export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
+  // 헬퍼: Date/문자열 상호 변환
+  
+  const toDate = (v) => {
+    if (!v) return null;
+    if (v instanceof Date) return v;
+    if (typeof v === 'string') {
+      const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) {
+        const [, yy, mm, dd] = m;
+        return new Date(Number(yy), Number(mm) - 1, Number(dd)); // local midnight
+      }
+      // fallback: let Date parse other formats
+      return new Date(v);
+    }
+    return null;
+  };
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const toISO = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const displayLabel = (v) => {
+    if (!v) return '';
+    if (v instanceof Date && !isNaN(v)) return toISO(v);
+    if (typeof v === 'string') return v;
+    return '';
+  };
+
   const [showCalendar, setShowCalendar] = useState(false);
 
   const [currentYear, setCurrentYear] = useState(2025);
   const [currentMonth, setCurrentMonth] = useState(7); // 0=1월 → 7=8월
+
+  // props를 Date로 정규화 (내부 계산용)
+  const start = toDate(startDate);
+  const end = toDate(endDate);
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -15,24 +44,25 @@ export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
   const handleDateClick = (day) => {
     const clicked = new Date(currentYear, currentMonth, day);
 
-    if (!startDate || (startDate && endDate)) {
-      // 시작일이 없거나, 이미 시작/종료가 모두 선택된 상태면 시작일만 다시 설정
-      if (onChange) onChange(clicked, null);
-    } else if (!endDate) {
-      // 종료일이 아직 없고, 클릭한 날짜가 시작일 이후라면 종료일 설정
-      if (clicked >= startDate) {
-        if (onChange) onChange(startDate, clicked);
-      } else {
-        // 시작일보다 이전을 클릭한 경우: 시작일을 다시 선택
-        if (onChange) onChange(clicked, null);
-      }
+    if (!start || (start && end)) {
+      // 시작일이 없거나 이미 양쪽 선택된 경우 → 시작일 다시 설정
+      onChange && onChange(toISO(clicked), null);
+      return;
+    }
+
+    // 종료일 선택 단계
+    if (clicked >= start) {
+      onChange && onChange(startDate, toISO(clicked));
+    } else {
+      // 시작일보다 이전 클릭 시 시작일 재설정
+      onChange && onChange(toISO(clicked), null);
     }
   };
 
   const isBetween = (day) => {
-    if (!startDate || !endDate) return false;
+    if (!start || !end) return false;
     const d = new Date(currentYear, currentMonth, day);
-    return d > startDate && d < endDate;
+    return d > start && d < end;
   };
 
   const formatDate = (date) => {
@@ -44,13 +74,9 @@ export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
     <div>
       <label className="text-sm goal-subtitle-font">목표 기간</label>
       <div className="flex items-center justify-between border-b py-2">
-        <span className="flex-1 text-center goal-input-font">
-          {startDate ? startDate.toLocaleDateString("ko-KR") : ""}
-        </span>
+        <span className="flex-1 text-center goal-input-font">{displayLabel(startDate)}</span>
         <span className="mx-2">~</span>
-        <span className="flex-1 text-center goal-input-font">
-          {endDate ? endDate.toLocaleDateString("ko-KR") : ""}
-        </span>
+        <span className="flex-1 text-center goal-input-font">{displayLabel(endDate)}</span>
 
         <button
           onClick={() => setShowCalendar(true)}
@@ -102,10 +128,10 @@ export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
             {/* 선택된 시작/종료일 표시 */}
             <div className="flex justify-between mb-3">
               <span className="goal-modal-date">
-                시작일: {formatDate(startDate)}
+                시작일: {formatDate(start)}
               </span>
               <span className="goal-modal-date">
-                종료일: {formatDate(endDate)}
+                종료일: {formatDate(end)}
               </span>
             </div>
 
@@ -128,9 +154,8 @@ export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
               {Array.from({ length: daysInMonth }).map((_, i) => {
                 const day = i + 1;
                 const d = new Date(currentYear, currentMonth, day);
-                const isStart =
-                  startDate && d.getTime() === startDate.getTime();
-                const isEnd = endDate && d.getTime() === endDate.getTime();
+                const isStart = start && d.getTime() === start.getTime();
+                const isEnd = end && d.getTime() === end.getTime();
 
                 return (
                   <div
@@ -161,7 +186,7 @@ export default function GoalPeriod({ startDate, endDate, onChange, onSave }) {
                 }`}
                 disabled={!startDate || !endDate}
                 onClick={() => {
-                  if (onSave) onSave(startDate, endDate); // ✅ 부모에 값 전달
+                  if (onSave) onSave(displayLabel(startDate), displayLabel(endDate)); // ✅ 부모에 값 전달
                   setShowCalendar(false); // ✅ 모달 닫기
                 }}
               >

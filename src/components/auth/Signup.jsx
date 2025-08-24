@@ -8,6 +8,8 @@ import { useState } from "react";
 import { useSignup } from "../../hooks/auth/useSignup";
 import { useValidatePhone, useValidateEmail } from "../../hooks/auth/useValidate";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../stores/useAuthStore";
+import useErrorModal from '../../hooks/error/useErrorModal';
 
 export default function Signup({flow, onInit}) {
   const navigate = useNavigate();
@@ -17,15 +19,19 @@ export default function Signup({flow, onInit}) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [dupChecked, setDupChecked] = useState(false);        
-  const [dupTaken, setDupTaken] = useState(false);            
+  const [dupAvailable, setDupAvailable] = useState(false);            
   const [dupMsg, setDupMsg] = useState("");                
 
   const { checkPhone, isLoading: checkingPhone } = useValidatePhone();
   const { checkEmail, isLoading: checkingEmail } = useValidateEmail();
 
-  const { mutate, isPending, error } = useSignup(flow);
+  const { mutate, isPending, reset } = useSignup(flow);
+
+  const { setTokens } = useAuthStore(); 
+  const { Modal: ErrorModalPortal, show: showError } = useErrorModal();
 
   const isPhone = flow === "phone_signup";
   const headingTitle = isPhone ? "휴대폰 번호로 가입하기" : "이메일로 가입하기";
@@ -35,17 +41,17 @@ export default function Signup({flow, onInit}) {
   const labelText = isPhone ? "휴대폰 번호" : "이메일";
   const inputType = isPhone ? "tel" : "email";
   const autoCompleteAttr = isPhone ? "tel" : "email";
+
   const warningText = isPhone
     ? "휴대폰 번호 작성이 완료되지 않았습니다"
     : "이메일 형식이 올바르지 않습니다";
-  const contactBorderClass = dupTaken
-    ? "border-login-waring"
-    : (isInvalid && value.length > 0
+
+  const contactBorderClass = dupAvailable
+    ? "border-gray-60 focus:border-green-main-dark-2"
+    : ( 13 > value.length && value.length> 0
         ? "border-login-waring"
         : "border-gray-60 focus:border-green-main-dark-2");
-  const textClass = showPassword
-    ? "text-body-02-semibold"
-    : "pb-4 text-[50px] text-space tracking-[-0.15em]";
+  const textClass = "text-body-02-semibold";
 
   const isPasswordInvalid = password.length > 0 && password.length < 8;
   const passwordWarningText = "비밀번호는 8자 이상이어야 합니다";
@@ -84,7 +90,7 @@ export default function Signup({flow, onInit}) {
     }
     setValue(val);
     setDupChecked(false);
-    setDupTaken(false);
+    setDupAvailable(false);
     setDupMsg("");
   };
 
@@ -92,37 +98,58 @@ export default function Signup({flow, onInit}) {
     if (!isContactValid) return;
     setDupMsg("");
     setDupChecked(false);
-    setDupTaken(false);
+    setDupAvailable(false);
     try {
       if (isPhone) {
         const available = await checkPhone(value);
-        setDupChecked(available);
-        setDupTaken(!available);
         if (!available) setDupMsg("이미 사용 중인 휴대폰 번호입니다.");
+        setDupChecked(true);
+        setDupAvailable(available);
       } else {
         const available = await checkEmail(value);
-        setDupChecked(available);
-        setDupTaken(!available);
         if (!available) setDupMsg("이미 사용 중인 이메일입니다.");
+        setDupChecked(true);
+        setDupAvailable(available);
       }
     } catch {
       setDupChecked(false);
-      setDupTaken(false);
+      setDupAvailable(false);
       setDupMsg("중복 확인에 실패했습니다.");
     }
   };
 
   const handleSubmit = () => {
     if (isSubmitDisabled) return;
+
+    reset();
+
+    const onSuccess = (res) => {
+      const data = res?.result ?? res;
+      const access = data?.accessToken ?? data?.access_token;
+      const refresh = data?.refreshToken ?? data?.refresh_token;
+
+      // 로그인 훅과 동일한 토큰 저장 로직
+      setTokens(access, refresh);
+
+      // 민감정보 정리
+      setPassword("");
+      setConfirmPassword("");
+      setShowPassword(false);
+      setShowConfirmPassword(false);
+
+      setTimeout(() => navigate('/user/userName?type=init'), 0); 
+    };
+
+    const onError = (e) => {
+      const msg = e?.response?.data?.message || '아이디 비밀번호를 확인해주세요!';
+      showError(msg);
+    };
+
     if (isPhone) {
-      // 서버에는 숫자만 전달 (하이픈 제거)
-      const phoneNumber = value.replace(/\D/g, "");
-      mutate({ phoneNumber, password });
-      navigate('/auth?init=1')
+      const phoneNumber = value.replace(/\D/g, '');
+      mutate({ phoneNumber, password }, { onSuccess, onError });
     } else {
-      const email = value;
-      mutate({ email, password });
-      navigate('/auth?init=1')
+      mutate({ email: value.trim(), password }, { onSuccess, onError });
     }
   };
 
@@ -142,22 +169,22 @@ export default function Signup({flow, onInit}) {
       <div className="w-full flex flex-col gap-14 px-4">
         <div className="w-full flex flex-col gap-[30px]">
           {/* 최상단: 비밀번호 확인 (조건: 휴대폰/이메일 유효 && 중복체크 통과 && 비밀번호 입력 시작) */}
-          {(!isInvalid && value.length > 0 && dupChecked && password.length > 7) && (
+          {(!isInvalid && value.length > 0 && dupAvailable && password.length > 7) && (
             <div className="w-full flex flex-col gap-1 relative">
               <span className="text-detail-01-regular text-gray-60">
                 비밀번호 확인
               </span>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 ${confirmBorderClass} ${textClass}`}
                 placeholder=""
-                autoComplete="current-password"
+                autoComplete="new-password"
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className={`absolute ${confirmPassword.length > 0 ? "right-9" : "right-3" } cursor-pointer top-[39px] text-gray-60`}
               >
                 <Eye />
@@ -176,7 +203,7 @@ export default function Signup({flow, onInit}) {
           )}
 
           {/* 중간: 비밀번호 (조건: 휴대폰/이메일 유효 && 중복체크 통과) */}
-          {(!isInvalid && value.length > 0 && dupChecked) && (
+          {(!isInvalid && value.length > 0 && dupAvailable) && (
             <div className="w-full flex flex-col gap-1 relative">
               <span className="text-detail-01-regular text-gray-60">
                 비밀번호
@@ -187,7 +214,7 @@ export default function Signup({flow, onInit}) {
                 onChange={(e) => setPassword(e.target.value)}
                 className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 ${passwordBorderClass} ${textClass}`}
                 placeholder=""
-                autoComplete="current-password"
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -224,17 +251,17 @@ export default function Signup({flow, onInit}) {
               inputMode={isPhone ? "numeric" : undefined}
               maxLength={isPhone ? 13 : undefined}
             />
-            {dupTaken ? (
+            { isInvalid && value.length > 0 ? (
+              <>
+                <Waring className="absolute right-3 top-[40px]" />
+                <span className="text-yellow-500 text-sm mt-1"> { warningText } </span>
+              </>
+            ) : dupChecked && !dupAvailable ? (
               <>
                 <Error className="absolute right-3 top-[41px]" />
                 <span className="text-yellow-500 text-sm mt-1">{dupMsg}</span>
               </>
-            ) : isInvalid && value.length > 0 ? (
-              <>
-                <Waring className="absolute right-3 top-[40px]" />
-                <span className="text-yellow-500 text-sm mt-1">{warningText}</span>
-              </>
-            ) : (!isInvalid && value.length > 0 && dupChecked) ? (
+            ) : (!isInvalid && value.length > 0 && dupChecked && dupAvailable) ? (
               <Check className="absolute right-3 top-[40px]" />
             ) : null}
           </div>
@@ -260,12 +287,8 @@ export default function Signup({flow, onInit}) {
               : ((isPhone ? checkingPhone : checkingEmail) ? "확인 중..." : "중복 확인")}
           </span>
         </button>
-        {error && (
-          <span className="text-red-500 text-detail-01-semibold">
-            {error.response?.data?.message || error.message || String(error)}
-          </span>
-        )}
       </div>
+      <ErrorModalPortal />
     </div>
   );
 }

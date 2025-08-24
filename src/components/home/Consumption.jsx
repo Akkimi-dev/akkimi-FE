@@ -1,15 +1,5 @@
-const mockConsumptionList = [
-  { id: 1, category: "식비", time: "12:30", consumptionName: "점심 식사", price: 8000 },
-  { id: 2, category: "교통", time: "13:00", consumptionName: "지하철", price: 1250 },
-  { id: 3, category: "카페", time: "15:00", consumptionName: "아메리카노", price: 4500 },
-  { id: 4, category: "쇼핑", time: "18:00", consumptionName: "티셔츠", price: 25000 },
-  { id: 5, category: "기타", time: "20:00", consumptionName: "편의점", price: 3000 },
-  { id: 6, category: "식비", time: "12:30", consumptionName: "점심 식사", price: 8000 },
-  { id: 7, category: "교통", time: "13:00", consumptionName: "지하철", price: 1250 },
-  { id: 8, category: "카페", time: "15:00", consumptionName: "아메리카노", price: 4500 },
-  { id: 9, category: "쇼핑", time: "18:00", consumptionName: "티셔츠", price: 25000 },
-  { id: 10, category: "기타", time: "20:00", consumptionName: "편의점", price: 3000 },
-];
+import { useMemo } from "react";
+import { useDailyConsumptions } from "../../hooks/consumption/useConsumptions";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,22 +7,38 @@ import Plus from "../../assets/home/plus.svg?react";
 import ConsumptionList from "../consumption/ConsumptionList";
 import MessageModal from "../consumption/MessageModal";
 
-export default function Consumption({date}) {
+export default function Consumption({goalId, date}) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const navigate = useNavigate();
+
+  // 일간 소비 내역 API 연동
+  const { data: dailyList } = useDailyConsumptions(goalId, date);
+
+  // API → UI 모델 매핑
+  const consumptionList = useMemo(() => {
+    if (!Array.isArray(dailyList)) return [];
+    return dailyList.map((d) => ({
+      id: d.consumptionId,
+      category: d.category,
+      time: '', // API 응답에 시간 정보가 없으므로 공백
+      consumptionName: d.itemName,
+      price: d.amount,
+    }));
+  }, [dailyList]);
 
   return (
     <div className="p-4 flex flex-col gap-4 ">
       <span className="text-body-01-semibold text-gray-100">오늘 내 소비</span>
       <button
-       onClick={() => navigate(`/consumption/create?date=${date}`)}
+       onClick={() => navigate(`/consumption/create/${goalId}?date=${date}`)}
         className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
       >
         <span>소비 내역 작성하기</span>
         <Plus />
       </button>
       <ConsumptionList
-        consumptionList={mockConsumptionList}
+        goalId={goalId}
+        consumptionList={consumptionList}
         onOpenModal={(item) => setSelectedItemId(item.id)}
       />
       {selectedItemId && (

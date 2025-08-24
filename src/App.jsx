@@ -11,33 +11,44 @@ import SupportDetail from './pages/support/SupportDetail';
 import LocationChangePage from "./pages/user/LocationChangePage.jsx";
 import ChatbotPage from "./pages/chatbot/ChatbotPage.jsx";
 import ChatbotMaltu from "./pages/chatbot/ChatbotMaltu.jsx";
-import ToneList from "./components/ToneList.jsx";
+import ToneList from "./pages/chatbot/ToneList.jsx";
 import ConsumptionCreatePage from './pages/Consumption/ConsumptionCreatePage.jsx';
 import GoalCreatePage from './pages/goal/GoalCreatePage';
-import ConsumptionEditPage from './pages/Consumption/ConsumptionEditPage.jsx';
+import ConsumptionEditPage from './pages/consumption/ConsumptionEditPage.jsx';
 import GoalEditPage from './pages/goal/GoalEditPage.jsx';
 import ToneDetailPage from "./pages/chatbot/ToneDetailPage";
+import UserNamePage from './pages/user/userNamePage.jsx';
+import { PublicOnlyRoute, ProtectedRoute } from './router.jsx';
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="calendar" element={<CalendarPage />} />
-        <Route path="survey" element={<SurveyPage />} />
-        <Route path="settings" element={<SettingsPage />} />
-        <Route path="support" element={<SupportPage />} />
-        <Route path="auth" element={<AuthPage />} />
-        <Route path="/auth/callback" element={<KakaoRedirect/>} />
-        <Route path="/support-detail" element={<SupportDetail />} />
-        <Route path="location-change" element={<LocationChangePage />} />
-        <Route path="chatbotMaltu" element={<ChatbotMaltu />} />
-        <Route path="tone-list" element={<ToneList />} />
-        <Route path="/tone/:toneId" element={<ToneDetailPage />} />        <Route path="chatbot" element={<ChatbotPage />} />
-        <Route path="consumption/create" element={<ConsumptionCreatePage />} />
-        <Route path="consumption/edit/:id" element={<ConsumptionEditPage />} />
-        <Route path="/goal/create" element={<GoalCreatePage />} />
-        <Route path="/goal/edit/:id" element={<GoalEditPage />} />
+        <Route index element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+        <Route
+          path="auth"
+          element={
+            <PublicOnlyRoute>
+              <AuthPage />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route path="/auth/callback" element={<KakaoRedirect />} />
+        <Route path="calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
+        <Route path="survey" element={<ProtectedRoute><SurveyPage /></ProtectedRoute>} />
+        <Route path="settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+        <Route path="support" element={<ProtectedRoute><SupportPage /></ProtectedRoute>} />
+        <Route path="support-detail" element={<ProtectedRoute><SupportDetail /></ProtectedRoute>} />
+        <Route path="location-change" element={<ProtectedRoute><LocationChangePage /></ProtectedRoute>} />
+        <Route path="chatbotMaltu" element={<ProtectedRoute><ChatbotMaltu /></ProtectedRoute>} />
+        <Route path="user/userName" element={<ProtectedRoute><UserNamePage /></ProtectedRoute>} />
+        <Route path="tone-list" element={<ProtectedRoute><ToneList /></ProtectedRoute>} />
+        <Route path="tone/:toneId" element={<ProtectedRoute><ToneDetailPage /></ProtectedRoute>} />
+        <Route path="chatbot" element={<ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
+        <Route path="consumption/create/:goalId" element={<ProtectedRoute><ConsumptionCreatePage /></ProtectedRoute>} />
+        <Route path="consumption/edit/:id" element={<ProtectedRoute><ConsumptionEditPage /></ProtectedRoute>} />
+        <Route path="goal/create" element={<ProtectedRoute><GoalCreatePage /></ProtectedRoute>} />
+        <Route path="goal/edit/:id" element={<ProtectedRoute><GoalEditPage /></ProtectedRoute>} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -17,15 +17,12 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useAuthStore.getState();
-    // config.headers.Authorization = `Bearer ${
-    //       accessToken || "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJMT0NBTF9QSE9ORTowMTEwMTEwMTE4MyIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE3NTU5NjY4NjcsImV4cCI6MTc1NTk3MDQ2N30.FMXUtdx-HvfPFF1Jqjxw4A7nZvBzMcMCzwkX5V0yByOZlPCe-ob-l7GGXUpHAQiBogyW7qiFKMG90G7XQDtwMQ"
-    //     }`;
-   
+  
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-        return config;
-      },
+    return config;
+  },
   (error) => Promise.reject(error)
 );
 
@@ -39,8 +36,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const status = error.response?.status;
-    // 백엔드 토큰 만료 상태 코드가 완전하지 않아 임시로...
-    if ([401, 403].includes(status)) {
+    if (status == 401) {
       const originalRequest = error.config;
 
       // 무한 루프 방지 이미 재발급 처리를 한 요청 -> 로그아웃
@@ -51,12 +47,13 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      
       const { refreshToken } = useAuthStore.getState();
-      // 리프레시 토큰 없을시 -> 에러 -> 로그아웃 처리
+
+      // 리프레시 토큰 없을시 -> 에러
       if (!refreshToken) {
         return Promise.reject(error);
       }
+
 
       try {
         // 재발급 중일 경우에는 처리 x
@@ -88,7 +85,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // 재발급 실패시 로그아웃 처리
-        useAuthStore.getState().clearTokens();
+        useAuthStore.clearTokens();
         gotoAuth();
         return Promise.reject(refreshError);
       }

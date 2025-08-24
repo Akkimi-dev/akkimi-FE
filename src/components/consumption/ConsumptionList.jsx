@@ -17,6 +17,7 @@ export default function ConsumptionList({consumptionList, onOpenModal}){
       {visibleList.map((item) => (
         <ConsumptionItem
           key={item.id}
+          goalId = {item.goalId}
           id={item.id}
           category={item.category}
           time={item.time}
