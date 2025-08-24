@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUpdateNickname, useUserProfile } from '../../hooks/user/useUser';
 import useErrorModal from '../../hooks/error/useErrorModal';
 
@@ -8,6 +8,9 @@ import Header from '../../components/common/Header';
 export default function UserNamePage() {
   const navigate = useNavigate();
   const { show: showError, Modal: ErrorModalMount } = useErrorModal();
+  const [searchParams] = useSearchParams();
+  const isInit = searchParams.get('type') === 'init';
+  const INIT_REDIRECT_URL = '/survey';
 
   // 프로필 조회로 모드 결정 (닉네임 존재 여부)
   const { data: profile, isLoading: isProfileLoading, isError: isProfileError } = useUserProfile();
@@ -54,7 +57,11 @@ export default function UserNamePage() {
 
     try {
       await updateNicknameMutation.mutateAsync( trimmed );
-      navigate(-1);
+      if (isInit) {
+        navigate(INIT_REDIRECT_URL, { replace: true });
+      } else {
+        navigate(-1);
+      }
     } catch (err) {
       const serverMsg = err?.response?.data?.message || err?.message;
       showError(serverMsg || '알 수 없는 오류가 발생했습니다.');

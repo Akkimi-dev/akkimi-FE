@@ -18,7 +18,6 @@ import {
 export default function ChatbotMaltu() {
   const nav = useNavigate();
   const [showDescription, setShowDescription] = useState(false);
-  const [modalTone, setModalTone] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
 
@@ -85,7 +84,7 @@ export default function ChatbotMaltu() {
             </div>
 
             {showDescription && currentMaltu && (
-              <div className="maltu-detail-font mt-1 px-3 py-2 rounded-[12px] border border-[#DDE2E7] bg-[#F1F1F5] shadow flex p-4 justify-between items-center self-stretch">
+              <div className=" maltu-detail-font mt-1 px-3 py-2 rounded-[12px] border border-[#DDE2E7] bg-[#F1F1F5] shadow flex p-4 justify-between items-center self-stretch">
                 {currentMaltu.prompt}
               </div>
             )}
@@ -111,7 +110,7 @@ export default function ChatbotMaltu() {
             ) : (
               <>
                 <div
-                  className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-2"
+                  className="flex overflow-x-auto snap-x snap-mandatory gap-4"
                   onScroll={(e) => {
                     const pageIndex = Math.round(
                       e.target.scrollLeft / e.target.clientWidth
@@ -127,7 +126,7 @@ export default function ChatbotMaltu() {
                       {page.map((tone) => (
                         <div
                           key={tone.maltuId}
-                          className={`flex mb-2 items-center justify-between rounded-2xl px-4 py-3 shadow-sm cursor-pointer transition ${
+                          className={`flex mb-1 items-center justify-between rounded-2xl p-4 shadow-sm cursor-pointer transition ${
                             currentMaltu?.maltuId === tone.maltuId
                               ? "border border-[#5ACBB0] bg-[#E6FAF6]"
                               : "border border-gray-200"
@@ -136,11 +135,12 @@ export default function ChatbotMaltu() {
                           {/* 왼쪽: 말투 라벨 */}
                           <div
                             className="flex items-center gap-2"
-                            onClick={() => setModalTone(tone)}
+                            onClick={() => nav(`/tone/${tone.maltuId}`)}
                           >
                             <span className="text-sm font-medium">
                               {tone.maltuName}
                             </span>
+                            <Goback2Icon className="w-4 h-4" />
                           </div>
 
                           {/* 오른쪽: 라디오 버튼 */}
@@ -210,26 +210,6 @@ export default function ChatbotMaltu() {
             )}
           </section>
         </main>
-
-        {/* 설명 모달 */}
-        {modalTone && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-            <div className="bg-white rounded-xl p-6 w-80 shadow-lg text-center">
-              <h2 className="text-base font-semibold mb-2">
-                {modalTone.maltuName}
-              </h2>
-              <p className="text-sm text-gray-700 whitespace-pre-line mb-4">
-                {modalTone.prompt}
-              </p>
-              <button
-                onClick={() => setModalTone(null)}
-                className="px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
-              >
-                닫기
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </NoNavLayout>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Goback3Arrow from "../assets/settings/gobackarrow3.svg?react";
-import { useCreateMaltu } from "../hooks/chat/useMaltu";
+import Goback3Arrow from "../../assets/Settings/gobackarrow3.svg?react";
+import { useCreateMaltu } from "../../hooks/chat/useMaltu";
 
 export default function ToneList() {
   const nav = useNavigate();
@@ -39,7 +39,7 @@ export default function ToneList() {
   };
 
   return (
-    <div className="max-w-full mx-auto min-h-screen bg-white flex flex-col">
+    <div className="max-w-full mx-auto min-h-full bg-white flex flex-col">
       <div className="h-[40px]" />
 
       {/* 헤더 */}

@@ -91,7 +91,7 @@ export default function MessageModalSSE({ messageId, onClose }) {
     esRef.current = api;
 
     return () => {
-      try { api?.close?.(); } catch {}
+      try { api?.close?.(); } catch {console.log("에러")}
       clearTimers();
       endStream();
     };

@@ -19,9 +19,16 @@ export default function Consumption({ goalId, date }) {
       id: d.consumptionId,
       category: d.category,
       consumptionName: d.itemName,
+      feedback: d.feedback,
       price: d.amount,
     }));
   }, [dailyList]);
+
+  // 선택된 아이템 객체 추출
+  const selectedItem = useMemo(() => {
+    if (!selectedItemId) return null;
+    return consumptionList.find((it) => it.id === selectedItemId) || null;
+  }, [selectedItemId, consumptionList]);
 
   const handleCreateClick = () => {
     const path = `/consumption/create/${goalId}?date=${date}`;
@@ -35,8 +42,8 @@ export default function Consumption({ goalId, date }) {
         onOpenModal={(item) => setSelectedItemId(item.id)}
       />
       {selectedItemId && (
-        <MessageModal
-          message={` 20,000원짜리 돈까스..? 정말 최선이었어? 나 약간 실망했어. 더 합리적인 소비 할 수 있었잖아. 그래도.. `}
+         <MessageModal
+          message={selectedItem.feedback.feedback ?? '피드백이 없습니다.'}
           onClose={() => setSelectedItemId(null)}
         />
       )}

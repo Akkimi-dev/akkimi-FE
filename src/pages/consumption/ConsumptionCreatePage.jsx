@@ -7,11 +7,15 @@ import MessageModalSSE from "../../components/consumption/MessageModalSSE";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import Header from "../../components/common/Header";
 import useErrorModal from "../../hooks/error/useErrorModal";
+import MessageModal from "../../components/consumption/MessageModal";
+import LoadingModal from "../../components/common/LodingModal";
 
 export default function ConsumptionCreatePage() {
   const { goalId } = useParams();
   const [searchParams] = useSearchParams();
   const initialDate = searchParams.get("date") || "";
+  const [message, setMessage] = useState("");
+  const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
 
   const [form, setForm] = useState({
     date: initialDate,
@@ -19,8 +23,8 @@ export default function ConsumptionCreatePage() {
     name: "",
     amount: "",
     memo: "",
+
   });
-  const [messageId, setMessageId] = useState(null);
 
   const { show: showError, Modal: ErrorModalMount } = useErrorModal();
 
@@ -47,23 +51,27 @@ export default function ConsumptionCreatePage() {
       return showError('목표 ID(goalId)를 찾을 수 없습니다. 경로에 goalId가 포함되어야 합니다.');
     }
 
+    setIsLoadingFeedback(true);
     try {
-      const newMessageId = await createConsumptionMutation.mutateAsync({
+      const res = await createConsumptionMutation.mutateAsync({
         category,
         itemName: name,
         amount: parsedAmount,
         description: memo || '',
       });
-      console.log(newMessageId)
-      setMessageId(newMessageId);
+      console.log(res.feedback)
+      setMessage(res.feedback);
     } catch (err) {
       console.error(err);
       showError('소비 내역 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      setIsLoadingFeedback(false);
     }
   };
 
   return (
     <NoNavLayout>
+      <LoadingModal open={isLoadingFeedback} message="아끼미가 피드백을 고민하고 있어요." />
       <Header header={"소비 내역 생성"}/>
       <ConsumptionForm
         form={form}
@@ -71,9 +79,9 @@ export default function ConsumptionCreatePage() {
         onSave={handleSubmit}
         submitting={createConsumptionMutation.isPending}
       />
-      {/* {messageId !== null && (
-        <MessageModalSSE messageId={messageId} onClose={() => setMessageId(null)} />
-      )} */}
+      {message && (
+        <MessageModal message={message} onClose={() => setMessage(null)} />
+      )}
       <ErrorModalMount />
     </NoNavLayout>
   );

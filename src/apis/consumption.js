@@ -14,6 +14,16 @@ export const createConsumption = async (goalId, date, payload) => {
 };
 
 /**
+ * 소비 내역 조회
+ * GET /api/v1/consumptions/{consumptionId}
+ */
+export const getConsumption = async (consumptionId) => {
+  const res = await axiosInstance.get(`/api/v1/consumptions/${consumptionId}`);
+  return res.data.result;
+};
+
+
+/**
  * 소비 내역 삭제
  * DELETE /api/v1/consumptions/{consumptionId}
  */
