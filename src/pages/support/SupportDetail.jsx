@@ -80,7 +80,7 @@ export default function SupportDetail() {
               <span
                 className={
                   goodPrice
-                    ? 'flex justify-center items-center w-[93px] h-[26px] px-2 py-1 rounded-[30px] bg-[#CAF6EC] text-[12px] support-goodprice-badge-font'
+                    ? 'flex justify-center items-center w-[100px] h-[26px] px-2 py-1 rounded-[30px] bg-[#CAF6EC] text-[12px] support-goodprice-badge-font'
                     : 'flex justify-center items-center w-[68px] h-[26px] px-2 py-1 rounded-[30px] border border-[#CAF6EC] text-[12px] support-akke-badge-font'
                 }
               >
