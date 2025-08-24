@@ -53,7 +53,7 @@ export default function UserNamePage() {
     }
 
     try {
-      await updateNicknameMutation.mutateAsync({ nickname: trimmed });
+      await updateNicknameMutation.mutateAsync( trimmed );
       navigate(-1);
     } catch (err) {
       const serverMsg = err?.response?.data?.message || err?.message;
