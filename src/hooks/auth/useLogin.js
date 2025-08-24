@@ -1,7 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { loginEmail, loginPhone, kakaoLogin } from '../../apis/auth';
-import { useAuthStore } from '../../stores/useAuthStore';
 
 export function useLogin(flow) {
   const { mutate, mutateAsync, isPending, error, reset } = useMutation({
@@ -19,20 +17,10 @@ export function useLogin(flow) {
 }
 
 export function useKakaoLogin() {
-  const { setTokens } = useAuthStore();
-
-  const { mutateAsync, isLoading, error } = useMutation({
+  const { mutate, mutateAsync, isLoading, error } = useMutation({
     mutationFn: (code) => kakaoLogin(code),
-    onSuccess: ({ accessToken, refreshToken }) => {
-      setTokens({ accessToken, refreshToken });
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        throw error.response?.data;
-      }
-    },
     retry: 0,
   });
 
-  return { mutateAsync, isLoading, error };
+  return { mutate, mutateAsync, isLoading, error };
 }
