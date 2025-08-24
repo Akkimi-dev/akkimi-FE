@@ -72,21 +72,40 @@ export default function ChatThread() {
   const sentinelRef = useRef(null);      // 상단 감지용 센티넬 (선택한 div)
   const ioRef = useRef(null);            // IO 인스턴스 저장
   const lastLoadAtRef = useRef(0);       // 연속 로딩 방지 쿨다운
+  const isPrependingRef = useRef(false);
   const IO_COOLDOWN_MS = 200;            // IO 트리거 최소 간격
 
-  // 메세지 로드 시 마다 실행
+  // 메세지 로드/변경 시 스크롤 정책
   useEffect(() => {
-    if (didInitialScrollRef.current) {
-      requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'auto' }));
-      appendScrollRefId.current = data.nextBeforeId
-      return
-    };
     if (!messages || messages.length === 0) return;
-    didInitialScrollRef.current = true;
-    requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'auto' }));
-    // 최상위 id
-    appendScrollRefId.current = data.nextBeforeId
+
+    // 최초 진입: 맨 아래로 고정
+    if (!didInitialScrollRef.current) {
+      didInitialScrollRef.current = true;
+      requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'auto' }));
+      appendScrollRefId.current = data.nextBeforeId;
+      return;
+    }
+
+    // 이전 페이지 프리펜딩된 경우: 기존 최상단 앵커로 복원(점프 방지)
+    if (isPrependingRef.current) {
+      isPrependingRef.current = false;
+      requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'auto' }));
+      appendScrollRefId.current = data.nextBeforeId;
+      return;
+    }
+
+    // 그 외(신규 메세지 추가/갱신): 맨 아래로 스무스
+    requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
+    appendScrollRefId.current = data.nextBeforeId;
   }, [messages.length]);
+
+  // 로컬 에코(내가 보낸 메세지)가 추가되면 맨 아래로 스무스 이동
+  useEffect(() => {
+    if (pendingUserMsgs.length > 0) {
+      requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
+    }
+  }, [pendingUserMsgs.length]);
 
   // 상단 센티넬이 뷰포트 상단 (0px)까지 내려오면 자동으로 이전 페이지 로드
   useEffect(() => {
@@ -110,6 +129,7 @@ export default function ChatThread() {
 
         // 불러오기 전 실제 최상단 메시지를 앵커로 지정
         appendScrollRefId.current = messages?.[0]?.chatId ?? 0;
+        isPrependingRef.current = true; // 이전 페이지 프리펜딩 플래그
 
         lastLoadAtRef.current = now;
         fetchNextPage();

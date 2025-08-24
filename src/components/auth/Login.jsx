@@ -135,6 +135,9 @@ export default function Login({flow, onInit}) {
               className={`focus:outline-none focus:shadow-none w-full h-12 border p-2 leading-[32px] rounded pr-10 ${passwordBorderClass} ${textClass}`}
               placeholder=""
               autoComplete="current-password"
+              lang="en"    
+              autoCapitalize="none"
+              inputMode="latin"    
             />
             <button
               type="button"
