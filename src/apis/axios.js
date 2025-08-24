@@ -48,9 +48,9 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      
       const { refreshToken } = useAuthStore.getState();
-      // 리프레시 토큰 없을시 -> 에러 -> 로그아웃 처리
+  
+      // 리프레시 토큰 없을시 -> 에러
       if (!refreshToken) {
         return Promise.reject(error);
       }
