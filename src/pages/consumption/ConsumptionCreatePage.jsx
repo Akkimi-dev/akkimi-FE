@@ -81,7 +81,12 @@ export default function ConsumptionCreatePage() {
         submitting={createConsumptionMutation.isPending}
       />
       {message && (
-        <MessageModal message={message} onClose={() => { setMessage(null); navigate(-1, { replace: true }); }} />
+        <MessageModal
+          message={message}
+          onClose={() => { setMessage(null); navigate(-1, { replace: true }); }}
+          onReply={() => navigate("/chatbot", { replace: true })}
+          replyLabel="답장하기"
+        />
       )}
       <ErrorModalMount />
     </NoNavLayout>
