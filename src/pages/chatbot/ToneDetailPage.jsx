@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Goback3Arrow from "../../assets/Settings/gobackarrow3.svg?react";
+import Goback3Arrow from "../../assets/settings/gobackarrow3.svg?react";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import { useSetMaltu } from "../../hooks/chat/useMaltu";
 

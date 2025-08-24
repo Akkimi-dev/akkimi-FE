@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DropdownIcon from "../assets/Settings/dropdown2.svg?react";
-import UpIcon from "../assets/Settings/Up.svg?react";
-import Edit2Icon from "../assets/Settings/edit2.svg?react";
+import DropdownIcon from "../assets/settings/dropdown2.svg?react";
+import UpIcon from "../assets/settings/Up.svg?react";
+import Edit2Icon from "../assets/settings/edit2.svg?react";
 
 import { useUserProfile } from "../hooks/user/useUser";
 import { useDefaultMaltus, useMyMaltus } from "../hooks/chat/useMaltu";

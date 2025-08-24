@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import Chat from './chat';
+import Chat from './Chat';
 import ChatInput from "../../assets/chatbot/chatInput.svg?react";
 import { useChatHistoryInfiniteQuery, useSendMessageMutation } from '../../hooks/chat/useChat';
 import { getChatApi } from '../../apis/chatApis';

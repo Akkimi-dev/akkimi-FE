@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
-import GobackIcon from "../../assets/Goal/goback.svg?react";
+import GobackIcon from "../../assets/goal/goback.svg?react";
 import GoalPeriod from "../../components/GoalPeriod";
 import Header from "../../components/chatbot/Header";
 import { useGoalDetail, useUpdateGoal, useDeleteGoal } from "../../hooks/goal/useGoal";

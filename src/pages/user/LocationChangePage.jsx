@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GobackIcon from "../../assets/Settings/goback.svg?react";
+import GobackIcon from "../../assets/settings/goback.svg?react";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 
 export default function LocationChangePage() {

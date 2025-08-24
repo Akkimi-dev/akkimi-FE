@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DownArrow from "../../assets/consumption/downArrow.svg?react";
-import ConsumptionItem from "./consumptionItem";
+import ConsumptionItem from "./ConsumptionItem";
 
 export default function ConsumptionList({consumptionList, onOpenModal}){
   const [visibleCount, setVisibleCount] = useState(3);
