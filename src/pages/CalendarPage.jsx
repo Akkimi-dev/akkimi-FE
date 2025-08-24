@@ -84,7 +84,7 @@ export default function CalendarPage() {
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
 
   return (
-    <NavLayout>
+    <NavLayout currentPage="ledger">
     <div className="w-full bg-white flex flex-col">
       {/* Header */}
       <header className="flex items-center px-4 py-3">

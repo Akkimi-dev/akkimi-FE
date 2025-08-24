@@ -11,7 +11,7 @@ import ProfileHover from '../../assets/navbar/profileHover.svg?react';
 
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar({ currentPage }) {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
@@ -48,14 +48,32 @@ export default function Navbar() {
           {/* 좌측 그룹 */}
           <div className="flex flex-1 justify-around pt-1 pb-2">
             <button onClick={handleHomeClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
-              <HomeIcon className="w-6 h-6 block group-hover:hidden" />
-              <HomeHover className="w-6 h-6 hidden group-hover:block" />
-              <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 ">홈</span>
+              {currentPage === 'home' ? (
+                <>
+                  <HomeHover className="w-6 h-6 block" />
+                  <span className="text-detail-02-semibold text-green-main">홈</span>
+                </>
+              ) : (
+                <>
+                  <HomeIcon className="w-6 h-6 block group-hover:hidden" />
+                  <HomeHover className="w-6 h-6 hidden group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">홈</span>
+                </>
+              )}
             </button>
             <button onClick={handleLedgerClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
-              <LedgerIcon className="w-6 h-6 block group-hover:hidden" />
-              <LedgerHover className="w-6 h-6 hidden group-hover:block" />
-              <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 ">가계부</span>
+              {currentPage === 'ledger' ? (
+                <>
+                  <LedgerHover className="w-6 h-6 block" />
+                  <span className="text-detail-02-semibold text-green-main">가계부</span>
+                </>
+              ) : (
+                <>
+                  <LedgerIcon className="w-6 h-6 block group-hover:hidden" />
+                  <LedgerHover className="w-6 h-6 hidden group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">가계부</span>
+                </>
+              )}
             </button>
           </div>
 
@@ -66,7 +84,7 @@ export default function Navbar() {
               className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[19px] flex w-[72px] h-[72px] pt-2 px-3 pb-0 items-start justify-center gap-[10px] shrink-0 rounded-full shadow-[0_2px_4px_0_#0000001A] bg-green-main-dark border border-green-main-dark-2 hover:border-green-main"
             >
               <div className='bg-[#03FFDA]'>
-                <AkkimiIcon className="w-12 h-12" />  
+                <AkkimiIcon className="w-12 h-12" />
               </div>
             </button>
           </div>
@@ -74,14 +92,32 @@ export default function Navbar() {
           {/* 우측 그룹 */}
           <div className="flex flex-1 justify-around pt-1 pb-2">
             <button onClick={handleSavingClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
-              <SavingIcon className="w-6 h-6 block group-hover:hidden" />
-              <SavingHover className="w-6 h-6 hidden group-hover:block" />
-              <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 ">아껴바요</span>
+              {currentPage === 'saving' ? (
+                <>
+                  <SavingHover className="w-6 h-6 block" />
+                  <span className="text-detail-02-semibold text-green-main">아껴바요</span>
+                </>
+              ) : (
+                <>
+                  <SavingIcon className="w-6 h-6 block group-hover:hidden" />
+                  <SavingHover className="w-6 h-6 hidden group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">아껴바요</span>
+                </>
+              )}
             </button>
-           <button onClick={handleProfileClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
-              <ProfileIcon className="w-6 h-6 block group-hover:hidden" />
-              <ProfileHover className="w-6 h-6 hidden group-hover:block" />
-              <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 ">프로필</span>
+            <button onClick={handleProfileClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
+              {currentPage === 'profile' ? (
+                <>
+                  <ProfileHover className="w-6 h-6 block" />
+                  <span className="text-detail-02-semibold text-green-main">프로필</span>
+                </>
+              ) : (
+                <>
+                  <ProfileIcon className="w-6 h-6 block group-hover:hidden" />
+                  <ProfileHover className="w-6 h-6 hidden group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">프로필</span>
+                </>
+              )}
             </button>
           </div>
         </div>

@@ -46,7 +46,7 @@ export default function SettingsPage() {
   const goalBudget = currentGoal?.purposeBudget ?? 0;
 
   return (
-    <NavLayout>
+    <NavLayout currentPage="profile">
       <div className="bg-[#F1F1F5]">
         {/* 프로필 */}
         <div className="flex w-full p-4 h-12 flex-col justify-center items-start gap-2 shrink-0 bg-[#F1F1F5] set-title-font py-10">

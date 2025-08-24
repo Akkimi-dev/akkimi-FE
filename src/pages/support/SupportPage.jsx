@@ -312,7 +312,7 @@ export default function SupportPage() {
   }, [selected]);
 
   return (
-    <NavLayout>
+    <NavLayout currentPage="saving">
       <div className="w-full min-h-screen mx-auto bg-white flex flex-col">
         {/* 헤더 */}
         <header className="flex w-full h-12 px-4 flex-row justify-between items-center self-center">
