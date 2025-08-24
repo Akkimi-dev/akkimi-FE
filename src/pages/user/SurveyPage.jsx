@@ -96,13 +96,13 @@ export default function SurveyPage() {
   onSuccess: () => {
     // ✅ currentMaltu 최신화
     queryClient.invalidateQueries({ queryKey: ["currentMaltu"] });
-    nav("/settings");
+    nav("/settings", { replace: true });
   },
   onError: (err) => console.error("말투 저장 실패:", err),
 });
       } else {
         queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-        nav("/settings");
+        nav("/settings", { replace: true });
       }
     },
     onError: (err) => console.error("캐릭터 저장 실패:", err),

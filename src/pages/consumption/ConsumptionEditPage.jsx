@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Header from "../../components/common/Header";
 import NoNavLayout from "../../components/layouts/NoNavLayout";
 import ConsumptionForm from "../../components/consumption/ConsumptionForm";
 import { useUpdateConsumption, useGetConsumption } from "../../hooks/consumption/useConsumptions";
 import useErrorModal from "../../hooks/error/useErrorModal";
+import MessageModal from "../../components/consumption/MessageModal";
 
 export default function ConsumptionEditPage() {
+  const navigate = useNavigate();
   const { id } = useParams(); // 소비내역 ID (/:id)
   const [searchParams] = useSearchParams(); // ?goalId=...&date=YYYY-MM-DD(선택)
   const goalId = searchParams.get("goalId");
@@ -21,6 +23,8 @@ export default function ConsumptionEditPage() {
     amount: "",
     memo: "",
   });
+
+  const [message, setMessage] = useState(null);
 
   // 소비내역 상세 조회로 초기값 세팅
   const {
@@ -54,7 +58,7 @@ export default function ConsumptionEditPage() {
       return showError(serverMsg || "알 수 없는 오류가 발생했습니다.");
     },
     onSuccess: () => {
-      // navigate(-1);
+      setMessage("소비내역이 수정되었어요.");
     },
   });
 
@@ -90,6 +94,12 @@ export default function ConsumptionEditPage() {
         onSave={handleSubmit}
         submitting={updateMutation.isPending}
       />
+      {message && (
+        <MessageModal
+          message={message}
+          onClose={() => { setMessage(null); navigate(-1, { replace: true }); }}
+        />
+      )}
       <ErrorModalMount />
     </NoNavLayout>
   );
