@@ -23,6 +23,11 @@ export default function Consumption({ goalId, date }) {
     }));
   }, [dailyList]);
 
+  const handleCreateClick = () => {
+    const path = `/consumption/create/${goalId}?date=${date}`;
+    console.log('[Consumption] navigate ->', path, { goalId, date });
+    navigate(path);
+  };
   return (
     <div className="flex flex-col gap-4 ">
       <ConsumptionList
@@ -36,7 +41,7 @@ export default function Consumption({ goalId, date }) {
         />
       )}
       <button
-        onClick={() => navigate(`/consumption/create?date=${date}`)}
+        onClick={handleCreateClick}
         className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
       >
         <span>소비 내역 작성하기</span>
