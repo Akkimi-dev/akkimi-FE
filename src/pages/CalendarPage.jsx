@@ -10,7 +10,7 @@ import NavLayout from "../components/layouts/NavLayout";
 import Consumption from "../components/calendar/Consumption";
 import { useMonthlyConsumptionsSummary } from "../hooks/consumption/useConsumptions";
 import { useGoals } from "../hooks/goal/useGoal";
-
+ 
 export default function CalendarPage() {
   const [tab, setTab] = useState("goal"); 
   const [isModalOpen, setIsModalOpen] = useState(false);
