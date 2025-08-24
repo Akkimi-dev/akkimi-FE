@@ -12,7 +12,6 @@ import {
   usePublicMaltus,
   useSetMaltu,
   useCurrentMaltu,
-  useDefaultMaltus, // ✅ 기본 말투도 가져오기
 } from "../../hooks/chat/useMaltu";
 
 export default function ChatbotMaltu() {
@@ -32,14 +31,6 @@ export default function ChatbotMaltu() {
 
   // ✅ 공개 말투 목록
   const { data: publicMaltus = [] } = usePublicMaltus();
-
-  // ✅ 기본 말투 목록
-  const { data: defaultMaltus = [] } = useDefaultMaltus();
-
-  // ✅ 기본 말투를 제외한 공개 말투 목록
-  const filteredPublicMaltus = publicMaltus.filter(
-    (tone) => !defaultMaltus.some((d) => d.maltuId === tone.maltuId)
-  );
 
   // ✅ 내 말투 페이지네이션
   const chunkedTones = [];
@@ -186,7 +177,7 @@ export default function ChatbotMaltu() {
             </div>
 
             <div className="flex flex-col gap-3 px-4">
-              {filteredPublicMaltus.slice(0, visibleCount).map((tone) => (
+              { publicMaltus.slice(0, visibleCount).map((tone) => (
                 <div
                   key={tone.maltuId}
                   className="flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white"
@@ -198,7 +189,7 @@ export default function ChatbotMaltu() {
               ))}
             </div>
 
-            {visibleCount < filteredPublicMaltus.length && (
+            {visibleCount < publicMaltus.length && (
               <div className="flex justify-center mt-4 px-4">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 5)}
