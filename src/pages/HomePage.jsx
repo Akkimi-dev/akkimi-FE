@@ -77,8 +77,7 @@ export default function HomePage() {
                 <p className="home-not-yet-font mb-3">현재 진행중인 목표가 없어요</p>
                 <button
                   onClick={() => navigate("/goal/create")}
-                  className="home-set-new-goal flex justify-center items-center gap-2 
-                             px-[12px] py-[10px] pl-[16px] rounded-[30px] bg-[#5ACBB0] text-white"
+                  className="cursor-pointer home-set-new-goal flex justify-center items-center gap-2 px-[12px] py-[10px] pl-[16px] rounded-[30px] bg-[#5ACBB0] text-white"
                 > 
                   새로운 목표 설정하기
                   <Plus2Icon className="w-5 h-5" />
@@ -92,7 +91,7 @@ export default function HomePage() {
             <div className="w-full flex flex-col gap-4"> 
               <div className="w-full flex justify-between">
                 <span className="text-body-01-semibold text-gray-100">진행중인 목표</span>
-                <button onClick={goalData ? () => navigate(`/goal/edit/${goalData.goalId}`) : () => navigate("/goal/create")}><Pen/></button>
+                <button className="cursor-pointer" onClick={goalData ? () => navigate(`/goal/edit/${goalData.goalId}`) : () => navigate("/goal/create")}><Pen/></button>
               </div>
               {goalData ? (
                 <Goal
@@ -104,10 +103,7 @@ export default function HomePage() {
               ) : (
                 <button
                   onClick={() => navigate("/goal/create")}
-                  className="flex flex-col justify-center items-center 
-                            h-[76px] px-4 pt-2 pb-3 gap-[10px] self-stretch 
-                            rounded-[16px] border border-[#6C7582] bg-[#F1F1F5]
-                            hover:bg-[#e4e7ec] transition"
+                  className="cursor-pointer flex flex-col justify-center items-center h-[76px] px-4 pt-2 pb-3 gap-[10px] self-stretch rounded-[16px] border border-[#6C7582] bg-[#F1F1F5] hover:bg-[#e4e7ec] transition"
                 >
                   <p className="home-goal-font text-center">
                     새로운 목표를 추가하세요

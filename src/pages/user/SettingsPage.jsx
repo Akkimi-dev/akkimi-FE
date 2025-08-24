@@ -59,7 +59,7 @@ export default function SettingsPage() {
               :
               <span>이름을 정해주세요</span>
             }
-            <button className="" onClick={() => nav(`/user/userName`)}><GobackIcon className="w-4 h-4" /></button>
+            <button className="cursor-pointer" onClick={() => nav(`/user/userName`)}><GobackIcon className="w-4 h-4" /></button>
           </div>
           <button
             onClick={() => logout()}
@@ -102,7 +102,7 @@ export default function SettingsPage() {
               </div>
               <button
                 onClick={() => nav('/goal/create')}
-                className="flex justify-center items-center gap-2 px-4 py-2 rounded-[8px] bg-[#CAF6EC] border border-[#DDE2E7] set-again-font"
+                className="cursor-pointer flex justify-center items-center gap-2 px-4 py-2 rounded-[8px] bg-[#CAF6EC] border border-[#DDE2E7] set-again-font"
               >
                 목표 만들기
               </button>
@@ -118,7 +118,7 @@ export default function SettingsPage() {
               </div>
               <button
                 onClick={() => nav("/survey")}
-                className="flex justify-center items-center gap-1 rounded-[30px] border border-[#DDE2E7] bg-[#CAF6EC] py-1 pl-3 pr-2 set-again-font"
+                className="cursor-pointer flex justify-center items-center gap-1 rounded-[30px] border border-[#DDE2E7] bg-[#CAF6EC] py-1 pl-3 pr-2 set-again-font"
               >
                 테스트 다시하기
                 <AgainIcon className="w-3 h-3" />
@@ -133,7 +133,7 @@ export default function SettingsPage() {
               <div className="set-result-font">{location}</div>
               <button
                 onClick={() => nav("/location-change")}
-                className="flex justify-center items-center gap-1 rounded-[30px] border border-[#DDE2E7] bg-[#CAF6EC] py-1 pl-3 pr-2 set-again-font"
+                className="cursor-pointer flex justify-center items-center gap-1 rounded-[30px] border border-[#DDE2E7] bg-[#CAF6EC] py-1 pl-3 pr-2 set-again-font"
               >
                 지역 변경하기
                 <AgainIcon className="w-3 h-3" />
@@ -147,7 +147,7 @@ export default function SettingsPage() {
           <div className="set-goal-font">챗봇 설정</div>
           <button
             onClick={() => nav("/chatbotmaltu")}
-            className="flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)] set-result-font"
+            className="cursor-pointer flex p-4 justify-between items-center self-stretch rounded-[16px] border border-[#DDE2E7] bg-white shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)] set-result-font"
           >
             <span>말투 설정</span>
             <Goback2Icon className="w-4 h-4" />
