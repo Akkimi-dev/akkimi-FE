@@ -1,5 +1,5 @@
 import NoNavLayout from "../../components/layouts/NoNavLayout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetCharacter, useSetMaltu } from "../../hooks/user/useUser"; 
 import { useQueryClient } from "@tanstack/react-query";
@@ -42,6 +42,7 @@ export default function SurveyPage() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
   const nav = useNavigate();
   const queryClient = useQueryClient();
 
@@ -66,9 +67,18 @@ export default function SurveyPage() {
         setLoading(false);
         setStep("result");
       }, 2000);
-    } else {
-      setStep(step + 1);
+      return;
     }
+
+    // 페이지 전환(나가기) 애니메이션
+    setIsLeaving(true);
+    setTimeout(() => {
+      setStep((prev) => prev + 1);
+      // 다음 컴포넌트가 마운트되고 나서(엔터 애니메이션)
+      requestAnimationFrame(() => {
+        setIsLeaving(false);
+      });
+    }, 360); // 나가기 애니메이션 시간과 맞춤
   };
 
   // 로딩 화면
@@ -110,9 +120,9 @@ export default function SurveyPage() {
 };
 
     return (
-      <div className="flex flex-col items-center justify-around h-full bg-[#D9F5EE] px-6">
+      <div className="flex flex-col items-center h-full bg-[#D9F5EE] px-6 pt-4 gap-5">
         {/* 결과 컨테이너 */}
-        <div className="bg-white rounded-2xl shadow-md w-full max-w-md py-4 px-8 flex flex-col items-center">
+        <div className="bg-white rounded-2xl shadow-md w-full max-w-[350px] py-9 px-11 flex flex-col items-center">
           {finalResult && (
             <img
               src={resultSVGs[finalResult]}
@@ -171,6 +181,7 @@ export default function SurveyPage() {
               ]}
               onSelect={(i) => setAnswers({ ...answers, 1: i })}
               selected={answers[1]}
+              isLeaving={isLeaving}
             />
           )}
           {step === 2 && (
@@ -191,6 +202,7 @@ export default function SurveyPage() {
               ]}
               onSelect={(i) => setAnswers({ ...answers, 2: i })}
               selected={answers[2]}
+              isLeaving={isLeaving}
             />
           )}
           {step === 3 && (
@@ -217,6 +229,7 @@ export default function SurveyPage() {
               ]}
               onSelect={(list) => setAnswers({ ...answers, 3: list })}
               selected={answers[3] || []}
+              isLeaving={isLeaving}
             />
           )}
           {step === 4 && (
@@ -238,6 +251,7 @@ export default function SurveyPage() {
               onSelect={(id) => setAnswers({ ...answers, 4: id })}
               selected={answers[4]}
               isObjectOptions
+              isLeaving={isLeaving}
             />
           )}
         </div>
@@ -273,9 +287,25 @@ function Question({
   onSelect,
   selected,
   isObjectOptions,
+  isLeaving,
 }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // 컴포넌트 마운트 시 엔터 애니메이션 트리거
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => {
+      cancelAnimationFrame(id);
+      setMounted(false);
+    };
+  }, []);
+
   return (
-    <div className="w-full flex flex-col items-center gap-[10px] p-[32px_24px] rounded-[24px] bg-white mb-20">
+    <div
+      className={`w-full flex flex-col items-center gap-[10px] p-[32px_24px] rounded-[24px] bg-white mb-20 transition-all duration-500 ease-out ${
+        isLeaving ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'
+      }`}
+      style={{ willChange: 'opacity, transform' }}
+    >
       {subtitle && (
         <p className="text-center text-sm sur-situation-font">{subtitle}</p>
       )}
@@ -287,11 +317,17 @@ function Question({
           return (
             <button
               key={value}
-              className={`p-4 ${
+              className={`p-4 ease-out ${
                 selected === value
-                  ? "sur-chosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#5ACBB0]"
-                  : "sur-notchosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#DDE2E7]"
+                  ? 'sur-chosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#5ACBB0]'
+                  : 'sur-notchosen-font flex w-full h-full px-4 py-4 justify-center items-center gap-[10px] rounded-[8px] bg-[#DDE2E7]'
               }`}
+              style={{
+                opacity: mounted && !isLeaving ? 1 : 0,
+                transform: mounted && !isLeaving ? 'translateY(0)' : 'translateY(14px)',
+                transition: `opacity 500ms ease-out ${i * 140}ms, transform 500ms ease-out ${i * 140}ms, background-color 150ms ease-out 0ms`,
+                willChange: 'opacity, transform, background-color',
+              }}
               onClick={() => onSelect(value)}
             >
               {label}
@@ -304,7 +340,16 @@ function Question({
 }
 
 // 다중 선택 컴포넌트
-function MultiQuestion({ subtitle, question, options, onSelect, selected }) {
+function MultiQuestion({ subtitle, question, options, onSelect, selected, isLeaving }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => {
+      cancelAnimationFrame(id);
+      setMounted(false);
+    };
+  }, []);
+
   const toggleOption = (i) => {
     const newSelection = selected.includes(i)
       ? selected.filter((v) => v !== i)
@@ -313,7 +358,12 @@ function MultiQuestion({ subtitle, question, options, onSelect, selected }) {
   };
 
   return (
-    <div className="w-full flex flex-col items-center gap-[10px] p-[48px_24px] rounded-[24px] bg-white mb-20">
+    <div
+      className={`w-full flex flex-col items-center gap-[10px] p-[48px_24px] rounded-[24px] bg-white mb-20 transition-all duration-500 ease-out ${
+        isLeaving ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'
+      }`}
+      style={{ willChange: 'opacity, transform' }}
+    >
       {subtitle && (
         <p className="text-center text-sm sur-situation-font">{subtitle}</p>
       )}
@@ -322,11 +372,17 @@ function MultiQuestion({ subtitle, question, options, onSelect, selected }) {
         {options.map((opt, i) => (
           <button
             key={i}
-            className={`sur-notchosen-font flex w-full px-2 py-3 justify-center items-center gap-[8px] rounded-[8px] ${
+            className={`sur-notchosen-font flex w-full px-2 py-3 justify-center items-center gap-[8px] ease-out ${
               selected.includes(i)
-                ? " bg-[#5ACBB0] sur-3-chosen-font"
-                : "bg-[#DDE2E7] sur-3-notchosen-font"
+                ? ' bg-[#5ACBB0] sur-3-chosen-font'
+                : 'bg-[#DDE2E7] sur-3-notchosen-font'
             }`}
+            style={{
+              opacity: mounted && !isLeaving ? 1 : 0,
+              transform: mounted && !isLeaving ? 'translateY(0)' : 'translateY(14px)',
+              transition: `opacity 500ms ease-out ${i * 110}ms, transform 500ms ease-out ${i * 110}ms, background-color 150ms ease-out 0ms`,
+              willChange: 'opacity, transform, background-color',
+            }}
             onClick={() => toggleOption(i)}
           >
             {opt}
