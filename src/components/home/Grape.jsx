@@ -29,12 +29,12 @@ export default function Grape({goal, date, usedBudget, goalBudget}){
   const GrapeBg = grapeBackgrounds[level] || Grape1;
 
   return(
-    <div className="w-full h-[240px] relative p-4 flex flex-col justify-between bg-white">
+    <div className="w-full h-[240px] relative p-4 flex flex-col justify-between bg-white  border-b border-green">
       <div className="absolute inset-0">
         <img src={GrapeBg} alt={`grape-${level}`} className="w-full h-full object-fill" />
       </div>
       <div className="relative z-10 flex flex-col justify-between h-full">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4"> 
           <div className="w-fit px-4 py-2 rounded-[30px] flex justify-center items-center gap-2 bg-white border border-green-main">
             <Dot/>
             <span className="text-body-02-regular text-gray-100 !leading-[100%] ">{goal}</span>

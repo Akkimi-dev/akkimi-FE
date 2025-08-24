@@ -255,7 +255,7 @@ export default function ChatThread() {
 
       <div ref={bottomRef} />
       
-      <div className='fixed sm:absolute sm:inset-x-0 bottom-0 z-50 w-full max-w-[768px] py-3 px-4 flex gap-2'>
+      <div className='fixed sm:absolute sm:inset-x-0 bottom-0 z-50 w-full max-w-[768px] pb-3 px-4 flex gap-2 bg-bg-blue'>
         <input
           type='text'
           className='w-9 flex-1 bg-chat-input rounded-[40px] px-4 py-3 outline-none'
@@ -270,6 +270,7 @@ export default function ChatThread() {
           type='button'
           onClick={() => input.trim() && sendUserMessage()}
           aria-label='전송'
+          className={"cursor-pointer"}
           disabled={isPending || isSSE}
           aria-busy={isPending || isSSE}
         >

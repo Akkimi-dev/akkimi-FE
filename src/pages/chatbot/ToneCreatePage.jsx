@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Goback3Arrow from "../../assets/settings/gobackarrow3.svg?react";
 import { useCreateMaltu } from "../../hooks/chat/useMaltu";
@@ -9,6 +9,24 @@ export default function ToneList() {
   // 입력 상태
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+
+  const descRef = useRef(null);
+
+  const handleDescriptionChange = (e) => {
+    const v = e.target.value;
+    setDescription(v);
+    if (descRef.current) {
+      descRef.current.style.height = 'auto';
+      descRef.current.style.height = descRef.current.scrollHeight + 'px';
+    }
+  };
+
+  useEffect(() => {
+    if (descRef.current) {
+      descRef.current.style.height = 'auto';
+      descRef.current.style.height = descRef.current.scrollHeight + 'px';
+    }
+  }, [description]);
 
   // 모달 상태
   const [errorModal, setErrorModal] = useState(false);
@@ -70,8 +88,11 @@ export default function ToneList() {
         <div>
           <label className="block maltu-make-subtitle-font mb-1">프롬프트</label>
           <textarea
+            ref={descRef}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={handleDescriptionChange}
+            rows={3}
+            style={{ height: 'auto', overflow: 'hidden' }}
             className="flex w-full p-4 justify-between items-center self-stretch
          rounded-[16px] border border-[#DDE2E7] bg-[#F1F1F5]
          shadow-[2px_4px_4px_0_rgba(0,0,0,0.05)]"

@@ -24,7 +24,7 @@ export default function ErrorModal({message, onClose}){
     <div
       role="alertdialog"
       aria-modal="true"
-      className={`fixed top-0 mx:absolute mx:inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-50 pointer-events-auto transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}
+      className={`fixed top-0 mx:absolute mx:inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-100 pointer-events-auto transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}
       onClick={onClose}
     >
       {/* 메세지 모달 */}

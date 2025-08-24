@@ -110,7 +110,7 @@ export default function MessageModalSSE({ messageId, onClose }) {
 
   return createPortal(
     <div
-      className="absolute inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-50 pointer-events-auto"
+      className="absolute inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-100 pointer-events-auto"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"

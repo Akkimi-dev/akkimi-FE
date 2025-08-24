@@ -10,6 +10,13 @@ import NavLayout from "../components/layouts/NavLayout";
 import Consumption from "../components/calendar/Consumption";
 import { useMonthlyConsumptionsSummary } from "../hooks/consumption/useConsumptions";
 import { useGoals } from "../hooks/goal/useGoal";
+
+// YYYY-MM-DD ↔ Date (LOCAL, not UTC)
+function parseLocalYmd(ymd) {
+  if (!ymd) return null;
+  const [y, m, d] = ymd.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
  
 export default function CalendarPage() {
   const [tab, setTab] = useState("goal"); 
@@ -58,12 +65,12 @@ export default function CalendarPage() {
   const monthTotal = summaryList.reduce((sum, it) => sum + (it?.price ?? 0), 0);
 
   // 목표 기간 내(해당 달에 한정) 총지출
-  const goalStart = selectedGoal ? new Date(selectedGoal.startDate) : null;
-  const goalEnd = selectedGoal ? new Date(selectedGoal.endDate) : null;
+  const goalStart = selectedGoal ? parseLocalYmd(selectedGoal.startDate) : null;
+  const goalEnd = selectedGoal ? parseLocalYmd(selectedGoal.endDate) : null;
   const goalPeriodTotal = selectedGoal
     ? summaryList.reduce((sum, it) => {
         if (!it?.date) return sum;
-        const d = new Date(it.date);
+        const d = parseLocalYmd(it.date);
         return d >= goalStart && d <= goalEnd ? sum + (it.price ?? 0) : sum;
       }, 0)
     : 0;
@@ -77,7 +84,7 @@ export default function CalendarPage() {
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
 
   return (
-    <NavLayout>
+    <NavLayout currentPage="ledger">
     <div className="w-full bg-white flex flex-col">
       {/* Header */}
       <header className="flex items-center px-4 py-3">

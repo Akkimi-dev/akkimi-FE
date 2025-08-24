@@ -1,4 +1,4 @@
-import { useParams} from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { useCreateConsumption } from "../../hooks/consumption/useConsumptions";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import MessageModal from "../../components/consumption/MessageModal";
 import LoadingModal from "../../components/common/LodingModal";
 
 export default function ConsumptionCreatePage() {
+  const navigate = useNavigate();
   const { goalId } = useParams();
   const [searchParams] = useSearchParams();
   const initialDate = searchParams.get("date") || "";
@@ -80,7 +81,7 @@ export default function ConsumptionCreatePage() {
         submitting={createConsumptionMutation.isPending}
       />
       {message && (
-        <MessageModal message={message} onClose={() => setMessage(null)} />
+        <MessageModal message={message} onClose={() => { setMessage(null); navigate(-1, { replace: true }); }} />
       )}
       <ErrorModalMount />
     </NoNavLayout>

@@ -56,7 +56,7 @@ export default function HomePage() {
     : null;
 
   return (
-    <NavLayout>
+    <NavLayout currentPage="home">
       <div className="bg-bg-blue min-h-[calc(100vh-69px)] flex flex-col gap-8">
         <div>
           <Header name={profile?.nickname || ""} />
