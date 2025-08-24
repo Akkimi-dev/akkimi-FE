@@ -11,7 +11,7 @@ export default function LoadingModal({ open = false, message = '로딩 중...' }
       aria-modal="true"
       aria-busy="true"
       aria-live="polite"
-      className={`fixed top-0 inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-50 pointer-events-auto transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}
+      className={`fixed top-0 inset-0 w-full h-full bg-bg-modal flex justify-center items-center z-100 pointer-events-auto transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}
     >
       {/* 로딩 모달 */}
       <div
