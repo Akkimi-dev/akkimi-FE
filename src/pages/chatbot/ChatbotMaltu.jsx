@@ -18,7 +18,6 @@ import {
 export default function ChatbotMaltu() {
   const nav = useNavigate();
   const [showDescription, setShowDescription] = useState(false);
-  const [modalTone, setModalTone] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
 
@@ -136,12 +135,12 @@ export default function ChatbotMaltu() {
                           {/* 왼쪽: 말투 라벨 */}
                           <div
                             className="flex items-center gap-2"
-                            onClick={() => setModalTone(tone)}
+                            onClick={() => nav(`/tone/${tone.maltuId}`)}
                           >
                             <span className="text-sm font-medium">
                               {tone.maltuName}
                             </span>
-                            <button className="" onClick={() => nav(`/`)}><GobackIcon className="w-4 h-4" /></button>
+                            <Goback2Icon className="w-4 h-4" />
                           </div>
 
                           {/* 오른쪽: 라디오 버튼 */}
@@ -211,26 +210,6 @@ export default function ChatbotMaltu() {
             )}
           </section>
         </main>
-
-        {/* 설명 모달 */}
-        {modalTone && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-            <div className="bg-white rounded-xl p-6 w-80 shadow-lg text-center">
-              <h2 className="text-base font-semibold mb-2">
-                {modalTone.maltuName}
-              </h2>
-              <p className="text-sm text-gray-700 whitespace-pre-line mb-4">
-                {modalTone.prompt}
-              </p>
-              <button
-                onClick={() => setModalTone(null)}
-                className="px-4 py-2 bg-[#5ACBB0] text-white rounded-lg"
-              >
-                닫기
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </NoNavLayout>
   );

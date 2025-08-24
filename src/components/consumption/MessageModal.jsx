@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import ChatAvatar from "../../assets/chatbot/chatAvatar.svg?react";
 
-export default function MessageModal({message, onClose}){
+export default function MessageModal({ message, onClose}){
   const portalTarget = document.getElementById('layout-portal') || document.body;
 
   return createPortal(
@@ -14,7 +14,14 @@ export default function MessageModal({message, onClose}){
             <span className="text-body-02-semibold text-gray-100">아끼미</span>
           </div>
           <div className="w-full">
-            <p className="text-body-02-regular text-gray-100">{message}</p>
+            <p className="text-body-02-regular text-gray-100">
+              {String(message).split('\n').map((line, idx) => (
+                <span key={idx}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
           </div>
         </div>
 

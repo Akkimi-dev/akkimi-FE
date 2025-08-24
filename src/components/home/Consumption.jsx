@@ -50,7 +50,7 @@ export default function Consumption({goalId, date}) {
       />
       {selectedItem && (
         <MessageModal
-          message={selectedItem.feedback ?? '피드백이 없습니다.'}
+          message={selectedItem.feedback.feedback ?? '피드백이 없습니다.'}
           onClose={() => setSelectedItemId(null)}
         />
       )}

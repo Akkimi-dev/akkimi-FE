@@ -83,7 +83,7 @@ export const useSetMaltu = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (maltuId) => setMaltu(maltuId),
-    onSuccess: (_, maltuId) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["currentMaltu"] });
       queryClient.invalidateQueries({ queryKey: ["myMaltus"] });
     },

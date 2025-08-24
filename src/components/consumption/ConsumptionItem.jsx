@@ -9,7 +9,6 @@ export default function ConsumptionItem({ id, goalId, category, consumptionName,
     <div className="flex flex-col gap-1" onClick={() => navigate(`/consumption/edit/${id}?goalId=${goalId}`)}>
       <div className="flex gap-1 items-center">
         <span className="text-detail-02-regular text-yellow-2">{category}</span>
-        <div className="h-[13px] w-[1px] bg-gray-30"></div>
       </div>
       <span className="text-body-02-semibold text-gray-100">{consumptionName}</span>
     </div>
