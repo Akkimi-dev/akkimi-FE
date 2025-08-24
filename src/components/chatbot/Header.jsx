@@ -27,14 +27,14 @@ export default function Header() {
 
   return (
     <div className="fixed sm:absolute sm:inset-x-0 top-0 z-50 w-full h-12 flex justify-between items-center bg-bg-blue">
-      <button className="px-4" onClick={() => navigate(-1)}>
+      <button className="cursor-pointer px-4" onClick={() => navigate(-1)}>
         <BackArrow />
       </button>
       <span className="text-heading-02-semibold text-gray-100">
         아끼미
       </span>
       <div className="relative" ref={menuRef}>
-        <button className="p-4" onClick={() => setOpen(!open)}>
+        <button className="cursor-pointer p-4" onClick={() => setOpen(!open)}>
           <More/>
         </button>
         {open && (
@@ -42,9 +42,9 @@ export default function Header() {
             <button className="px-6 py-4 flex hover:bg-gray-20">
               <span className="text-body-02-regular leading-[120%] whitespace-nowrap">말투 설정</span>
             </button>
-            <button className="px-6 py-4 flex hover:bg-gray-20">
+            {/* <button className="px-6 py-4 flex hover:bg-gray-20">
               <span className="text-body-02-regular leading-[120%] whitespace-nowrap">색상 변경</span>
-            </button>
+            </button> */}
           </div>
         )}
       </div>

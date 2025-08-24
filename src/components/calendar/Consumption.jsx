@@ -49,7 +49,7 @@ export default function Consumption({ goalId, date }) {
       )}
       <button
         onClick={handleCreateClick}
-        className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
+        className="cursor-pointer px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
       >
         <span>소비 내역 작성하기</span>
         <Plus />

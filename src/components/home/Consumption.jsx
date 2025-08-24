@@ -38,7 +38,7 @@ export default function Consumption({goalId, date}) {
       <span className="text-body-01-semibold text-gray-100">오늘 내 소비</span>
       <button
        onClick={() => navigate(`/consumption/create/${goalId}?date=${date}`)}
-        className="px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
+        className="cursor-pointer px-4 py-6 flex justify-between bg-white border border-green-main-dark-2 rounded-2xl"
       >
         <span>소비 내역 작성하기</span>
         <Plus />

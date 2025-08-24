@@ -94,7 +94,7 @@ export default function CalendarPage() {
       {/* Tabs */}
       <div className="w-full flex">
         <button
-          className={`flex-1 py-3 text-base ${
+          className={`cursor-pointer flex-1 py-3 text-base ${
             tab === "goal"
               ? "cal-selected-font border-b-[2px] border-[#074E42] bg-white"
               : "cal-none-selected-font bg-[#F1F1F5] border-b-0"
@@ -104,7 +104,7 @@ export default function CalendarPage() {
           목표 내 소비
         </button>
         <button
-          className={`flex-1 py-3 text-base ${
+          className={`cursor-pointer flex-1 py-3 text-base ${
             tab === "month"
               ? "cal-selected-font border-b-[2px] border-[#074E42] bg-white"
               : "cal-none-selected-font bg-[#F1F1F5] border-b-0"
@@ -130,7 +130,7 @@ export default function CalendarPage() {
                 </p>
               </div>
               <button
-                className="flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white ml-2"
+                className="cursor-pointer flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white ml-2"
                 onClick={() => setIsModalOpen(true)}
               >
                 <ListIcon className="w-6 h-6 text-[#5ACBB0]" />
@@ -140,7 +140,7 @@ export default function CalendarPage() {
             <div className="flex flex-row items-center justify-between flex-1 gap-4 rounded-[16px] border border-[#DDE2E7] bg-white px-4 py-3">
               <p className="cal-goal-title-font text-[#7A828A]">목표를 선택하세요</p>
               <button
-                className="flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white"
+                className="cursor-pointer flex p-[10px] items-center justify-center rounded-[16px] border border-[#5ACBB0] bg-white"
                 onClick={() => setIsModalOpen(true)}
               >
                 <ListIcon className="w-6 h-6 text-[#5ACBB0]" />
@@ -190,6 +190,7 @@ export default function CalendarPage() {
           {/* 상단 월 이동 버튼 */}
           <div className="flex items-center justify-center px-2 mb-3">
             <button
+              className="cursor-pointer"
               onClick={() =>
                 setCurrentMonth((prev) =>
                   prev === 0
@@ -204,6 +205,7 @@ export default function CalendarPage() {
               {currentYear}년 {currentMonth + 1}월
             </h2>
             <button
+              className="cursor-pointer"
               onClick={() =>
                 setCurrentMonth((prev) =>
                   prev === 11

@@ -339,7 +339,7 @@ export default function SupportPage() {
                   setSelected(idx);
                   setVisibleCount(6);
                 }}
-                className={`shrink-0 flex justify-center items-center gap-[10px] px-4 py-2 rounded-[30px] whitespace-nowrap border-none support-category-name-font ${
+                className={`cursor-pointer shrink-0 flex justify-center items-center gap-[10px] px-4 py-2 rounded-[30px] whitespace-nowrap border-none support-category-name-font ${
                   selected === idx ? 'bg-[#CAF6EC]' : 'bg-[#F1F1F5]'
                 }`}
               >
@@ -385,7 +385,7 @@ export default function SupportPage() {
               <div className="col-span-2 flex justify-center mt-2">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 6)}
-                  className="flex px-4 py-2 justify-center items-center gap-[10px] w-full rounded-[30px] bg-[#F1F1F5] support-more"
+                  className="cursor-pointer flex px-4 py-2 justify-center items-center gap-[10px] w/full rounded-[30px] bg-[#F1F1F5] support-more"
                 >
                   더보기
                 </button>
