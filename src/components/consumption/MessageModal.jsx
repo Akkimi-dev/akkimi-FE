@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import ChatAvatar from "../../assets/chatbot/chatAvatar.svg?react";
 
-export default function MessageModal({ message, onClose}){
+export default function MessageModal({ message, onClose, onReply, replyLabel = "답장하기" }){
   const portalTarget = document.getElementById('layout-portal') || document.body;
 
   return createPortal(
@@ -24,14 +24,24 @@ export default function MessageModal({ message, onClose}){
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          className="cursor-pointer w-full rounded-[8px] py-2 bg-green-main-dark-2"
-          onClick={onClose}
-        >
-          <span>닫기</span>
-        </button>
+        <div className="w-full flex gap-3">
+          {onReply && (
+            <button
+              type="button"
+              onClick={onReply}
+              className="cursor-pointer flex-1 h-10 rounded-[8px] text-body-02-semibold border border-green-main-dark-2 bg-white hover:bg-gray-10 text-gray-60"
+            >
+              {replyLabel}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="cursor-pointer flex-1 h-10 rounded-[8px] text-body-02-semibold bg-green-main-dark-2 text-white hover:bg-green hover:text-gray-40"
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </div>,
     portalTarget
