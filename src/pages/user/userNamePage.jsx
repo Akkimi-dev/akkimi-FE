@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUpdateNickname, useUserProfile } from '../../hooks/user/useUser';
 import useErrorModal from '../../hooks/error/useErrorModal';
 
-import NameDone from "../../assets/settings/nameDone.svg?react";
+import nameDoneUrl from '../../assets/settings/nameDone.svg?url';
 
 import Header from '../../components/common/Header';
 
@@ -20,15 +20,16 @@ export default function UserNamePage() {
   // 최초 1회 프로필 값으로 초기화
   const [value, setValue] = useState('');
   const [initialized, setInitialized] = useState(false);
+  const [mode, setMode] = useState(null); // 'create' | 'edit'
   const [done, setDone] = useState(false);
   useEffect(() => {
     if (!initialized && profile) {
       setValue(profile?.nickname ?? '');
+      const hasNickname = Boolean((profile?.nickname ?? '').trim());
+      setMode(hasNickname ? 'edit' : 'create');
       setInitialized(true);
     }
   }, [profile, initialized]);
-
-  const isEdit = Boolean((profile?.nickname ?? '').trim());
 
   const updateNicknameMutation = useUpdateNickname();
 
@@ -59,8 +60,12 @@ export default function UserNamePage() {
     }
     try {
       await updateNicknameMutation.mutateAsync(trimmed);
-      if (isEdit) {
-        navigate('/settings', { replace: true });
+      if (mode === 'edit') {
+        if (isInit) {
+          navigate('/survey', { replace: true });
+        } else {
+          navigate('/settings', { replace: true });
+        }
       } else {
         setDone(true);
       }
@@ -70,8 +75,8 @@ export default function UserNamePage() {
     }
   };
 
-  const pendingLabel = isEdit ? '수정 중…' : '저장 중…';
-  const submitLabel  = isEdit ? '수정 완료' : '완료';
+  const pendingLabel = mode === 'edit' ? '수정 중…' : '저장 중…';
+  const submitLabel  = mode === 'edit' ? '수정 완료' : '완료';
 
   if (isProfileError) {
     return (
@@ -88,6 +93,7 @@ export default function UserNamePage() {
   const handleStartQuiz = () => {
     navigate('/survey', { replace: isInit });
   };
+  
   const handleLater = () => {
     if (isInit) {
       navigate('/', { replace: true });
@@ -96,10 +102,10 @@ export default function UserNamePage() {
     }
   };
 
-  if (done && !isEdit) {
+  if (done && mode === 'create') {
     return (
       <div className="relative w-full h-full px-6 pt-10 flex flex-col items-center justify-center gap-15">
-        <NameDone />
+        <img src={nameDoneUrl} alt="완료" className="max-w-[400px] h-auto" />
         <div className="w-full flex flex-col gap-1 max-w-[420px] items-center">
           <span className='text-detail-01-regular text-gray-60'>1분만에 끝나는 간단 퀴즈</span>
           <button
@@ -124,7 +130,7 @@ export default function UserNamePage() {
 
   return (
     <div className="relative w-full h-full px-6 pt-10 flex flex-col gap-10">
-      {isEdit ? (
+      {mode === 'edit' ? (
         <div className='pb-4'>
           <Header header="닉네임 수정"/>
         </div>
