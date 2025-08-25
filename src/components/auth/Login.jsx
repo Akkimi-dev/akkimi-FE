@@ -35,9 +35,7 @@ export default function Login({flow, onInit}) {
   const borderClass = isInvalid && value.length > 0
     ? "border-login-waring"
     : "border-gray-60 focus:border-green-main-dark-2";
-  const textClass = showPassword
-    ? "text-body-02-semibold"
-    : "pb-4 text-[50px] text-space tracking-[-0.15em]";
+  const textClass = "text-body-02-semibold"
 
   const isPasswordInvalid = password.length > 0 && password.length < 8;
   const passwordWarningText = "비밀번호는 8자 이상이어야 합니다";
