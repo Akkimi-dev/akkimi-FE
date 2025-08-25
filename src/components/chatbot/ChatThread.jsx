@@ -3,19 +3,17 @@ import Chat from './Chat';
 import ChatInput from "../../assets/chatbot/chatInput.svg?react";
 import { useChatHistoryInfiniteQuery, useSendMessageMutation } from '../../hooks/chat/useChat';
 import { getChatApi } from '../../apis/chatApis';
-import { useQueryClient } from '@tanstack/react-query';
 import { computeTimeLabels } from '../../utils/chatTime'
+//import { useQueryClient } from '@tanstack/react-query';
 
 export default function ChatThread() {
   // 캐시 무효화를 위한 qc 선언
-  const qc = useQueryClient();
+  // const qc = useQueryClient();
 
-  const DONE_GRACE_MS = 500;   // onDone 이후 잠깐 대기
-  const IDLE_GRACE_MS = 30000;  // 마지막 토큰 이후 유예 유예 시간 이후에는 sse 끊긴 걸로 간주
-  const HARD_REFRESH_AFTER_SSE = true; // SSE 종료 후 전체 새로고침으로 초기화(깜빡임/점프 최소화)
+  const DONE_GRACE_MS = 250;   // onDone 이후 잠깐 대기(지연 단축)
+  const IDLE_GRACE_MS = 12000;  // 마지막 토큰 이후 유예 (과도 대기 축소)
 
   const [input, setInput] = useState(''); // 사용자 입력
-  const [pendingUserMsgs, setPendingUserMsgs] = useState([]); // 스트리밍 중 로컬 에코용
 
   // 챗봇 관련
   const esRef = useRef(null);
@@ -43,20 +41,11 @@ export default function ChatThread() {
     endStream();
     resetStream(); // 청크/streamedText 비우기
     // 로컬 에코 제거(서버 히스토리로 대체)
-    setPendingUserMsgs([]);
+    streamMsgIdRef.current = null; // 스트리밍 렌더 ID 초기화
 
-    if (HARD_REFRESH_AFTER_SSE) {
-      // 전체 새로고침으로 상태 초기화 (레이아웃 점프/깜빡임 최소화)
-      // 브라우저 호출을 안전하게 다음 프레임에 수행
-      requestAnimationFrame(() => {
-        window.location.reload();
-      });
-      return;
-    }
-
-    // 기본 동작: 캐시 무효화로 히스토리 동기화
+    // 캐시 무효화로 히스토리 동기화 -> 하면 안됌!!! 새 메세지 리스트로 추가 메세지 받음!!!
     stickBottomOnceRef.current = true; // 서버 히스토리로 편입되는 갱신도 하단 고정
-    qc.invalidateQueries({ queryKey: ["chatHistory"] });
+    //qc.invalidateQueries({ queryKey: ["chatHistory"] });
   };
 
   // 스트리밍 시 제일 아래로
@@ -71,6 +60,79 @@ export default function ChatThread() {
   const { data, fetchNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 20 });
   const messages = data?.items || [];
 
+  // UI에서만 사용하는 렌더 배열 (append 전용)
+  const [renderItems, setRenderItems] = useState([]);
+  const lastSeenIdRef = useRef(null);   // renderItems의 마지막 id
+  const firstSeenIdRef = useRef(null);  // renderItems의 첫 id
+
+  // messages가 바뀔 때 UI에 새 데이터만 append/prepend
+  useEffect(() => {
+    if (!messages || messages.length === 0) return;
+
+    // 초기 진입: 전체 동기화
+    if (renderItems.length === 0) {
+      setRenderItems(messages);
+      firstSeenIdRef.current = messages[0]?.chatId ?? null;
+      lastSeenIdRef.current = messages[messages.length - 1]?.chatId ?? null;
+      return;
+    }
+
+    const prevFirst = firstSeenIdRef.current;
+    const prevLast = lastSeenIdRef.current;
+
+    // tail append: 마지막 이후로 새 메시지가 붙은 경우
+    const lastIdx = prevLast ? messages.findIndex(m => m.chatId === prevLast) : -1;
+    const tailToAppend = lastIdx >= 0 ? messages.slice(lastIdx + 1) : [];
+
+    // head prepend: 무한 스크롤로 과거가 앞에 붙은 경우
+    const firstIdx = prevFirst ? messages.findIndex(m => m.chatId === prevFirst) : -1;
+    const headToPrepend = firstIdx > 0 ? messages.slice(0, firstIdx) : [];
+
+    if (tailToAppend.length === 0 && headToPrepend.length === 0) return;
+
+    setRenderItems(prev => {
+      let next = prev;
+      if (headToPrepend.length > 0) {
+        next = [...headToPrepend, ...next];
+        firstSeenIdRef.current = messages[0]?.chatId ?? firstSeenIdRef.current;
+      }
+      if (tailToAppend.length > 0) {
+        next = [...next, ...tailToAppend];
+        lastSeenIdRef.current = messages[messages.length - 1]?.chatId ?? lastSeenIdRef.current;
+      }
+      return next;
+    });
+  }, [messages]);
+
+  useEffect(() => {
+    if (!isSSE) return;
+    if (!streamedText) return;
+    const id = streamMsgIdRef.current || (streamMsgIdRef.current = `bot-stream-${Date.now()}`);
+    setRenderItems((prev) => {
+      const idx = prev.findIndex((x) => x.chatId === id);
+      if (idx >= 0) {
+        const next = [...prev];
+        next[idx] = { ...next[idx], message: streamedText };
+        return next;
+      }
+      // 최초 생성 시(첫 토큰 수신)
+      const nowIso = new Date().toISOString();
+      return [
+        ...prev,
+        {
+          chatId: id,
+          speaker: 'BOT',
+          message: streamedText,
+          createdAt: nowIso,
+          showDate: false,
+          dateLabel: '',
+          showTime: false,
+          timeLabel: '',
+        },
+      ];
+    });
+  }, [streamedText, isSSE]);
+
   // 채팅 + 챗봇 응답 시 맨 밑으로 가기위한 ref
   const bottomRef = useRef(null);
 
@@ -81,6 +143,7 @@ export default function ChatThread() {
 
   const appendScrollRefId = useRef(0)
   const stickBottomOnceRef = useRef(false); // 다음 messages 갱신 시 한 번만 하단 고정
+  const streamMsgIdRef = useRef(null); // 현재 스트리밍 BOT 메시지의 렌더 ID
 
   const sentinelRef = useRef(null);      // 상단 감지용 센티넬 (선택한 div)
   const ioRef = useRef(null);            // IO 인스턴스 저장
@@ -165,11 +228,11 @@ export default function ChatThread() {
     const now = new Date();
     const tempId = `local-${now.getTime()}`;
     // 직전 서버 메시지와 비교해 라벨 계산
-    const prevMsg = messages.length > 0 ? messages[messages.length - 1] : null;
-    console.log(prevMsg)
+    const prevMsg = renderItems.length > 0 ? renderItems[renderItems.length - 1] : null;
+
     const labels = computeTimeLabels(now, prevMsg);
 
-    setPendingUserMsgs((prev) => [
+    setRenderItems((prev) => ([
       ...prev,
       {
         chatId: tempId,
@@ -181,7 +244,7 @@ export default function ChatThread() {
         showTime: labels.showTime,
         timeLabel: labels.timeLabel,
       },
-    ]);
+    ]));
     requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
 
     // 서버 전송 (성공 시 히스토리 자동 갱신: invalidateQueries)
@@ -234,52 +297,32 @@ export default function ChatThread() {
       className="w-full flex flex-col gap-4 pb-18 min-h-0"
     >
       <div ref={sentinelRef} />
-      {messages.map((m) => (
-        appendScrollRefId.current == m.chatId ?(
+      {renderItems.map((m) => (
+        appendScrollRefId.current == m.chatId ? (
           <div key={m.chatId} className='w-full px-4' ref={topRef}>
-          {(m.showDate || m.showTime) && (
-            <div className='w-full flex justify-center items-center pt-2 pb-6'>
-              {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
-              {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
-              {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
-            </div>
-          )}
-          <Chat role={m.speaker} message={m.message} />
-        </div>
-        ):(
-          <div key={m.chatId} className='w-full px-4' >
-          {(m.showDate || m.showTime) && (
-            <div className='w-full flex justify-center items-center pt-2 pb-6'>
-              {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
-              {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
-              {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
-            </div>
-          )}
-          <Chat role={m.speaker} message={m.message} />
-        </div>
-
+            {(m.showDate || m.showTime) && (
+              <div className='w-full flex justify-center items-center pt-2 pb-6'>
+                {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
+                {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
+                {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
+              </div>
+            )}
+            <Chat role={m.speaker} message={m.message} />
+          </div>
+        ) : (
+          <div key={m.chatId} className='w-full px-4'>
+            {(m.showDate || m.showTime) && (
+              <div className='w-full flex justify-center items-center pt-2 pb-6'>
+                {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
+                {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
+                {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
+              </div>
+            )}
+            <Chat role={m.speaker} message={m.message} />
+          </div>
         )
       ))}
       
-      {pendingUserMsgs.map((m) => (
-        <div key={m.chatId} className='w-full px-4'>
-          {(m.showDate || m.showTime) && (
-            <div className='w-full flex justify-center items-center pt-2 pb-6'>
-              {m.showDate && <span className='text-body-02-regular text-gray-100'>{m.dateLabel}</span>}
-              {m.showDate && m.showTime && <span className='text-body-02-regular text-gray-100'>&nbsp;</span>}
-              {m.showTime && <span className='text-body-02-regular text-gray-100'>{m.timeLabel}</span>}
-            </div>
-          )}
-          <Chat role={m.speaker} message={m.message} />
-        </div>
-      ))}
-
-      {(isSSE || streamedText) && (
-        <div className='w-full px-4'>
-          <Chat role='BOT' message={streamedText} />
-        </div>
-      )}
-
       <div ref={bottomRef} />
       
       <div className='fixed sm:absolute sm:inset-x-0 bottom-0 z-50 w-full max-w-[768px] py-3 px-4 flex gap-[10px] bg-white '>
