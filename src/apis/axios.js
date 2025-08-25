@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const status = error.response?.status;
-    if (status == 401) {
+    if (status == 401 || status == 403 ) {
       const originalRequest = error.config;
 
       // 무한 루프 방지 이미 재발급 처리를 한 요청 -> 로그아웃
