@@ -10,8 +10,9 @@ export default function ChatThread() {
   // 캐시 무효화를 위한 qc 선언
   const qc = useQueryClient();
 
-  const DONE_GRACE_MS = 150;   // onDone 이후 잠깐 대기
+  const DONE_GRACE_MS = 500;   // onDone 이후 잠깐 대기
   const IDLE_GRACE_MS = 30000;  // 마지막 토큰 이후 유예 유예 시간 이후에는 sse 끊긴 걸로 간주
+  const HARD_REFRESH_AFTER_SSE = true; // SSE 종료 후 전체 새로고침으로 초기화(깜빡임/점프 최소화)
 
   const [input, setInput] = useState(''); // 사용자 입력
   const [pendingUserMsgs, setPendingUserMsgs] = useState([]); // 스트리밍 중 로컬 에코용
@@ -43,7 +44,17 @@ export default function ChatThread() {
     resetStream(); // 청크/streamedText 비우기
     // 로컬 에코 제거(서버 히스토리로 대체)
     setPendingUserMsgs([]);
-    // 히스토리 캐시 무효화 → 최신 메시지를 히스토리로 편입
+
+    if (HARD_REFRESH_AFTER_SSE) {
+      // 전체 새로고침으로 상태 초기화 (레이아웃 점프/깜빡임 최소화)
+      // 브라우저 호출을 안전하게 다음 프레임에 수행
+      requestAnimationFrame(() => {
+        window.location.reload();
+      });
+      return;
+    }
+
+    // 기본 동작: 캐시 무효화로 히스토리 동기화
     stickBottomOnceRef.current = true; // 서버 히스토리로 편입되는 갱신도 하단 고정
     qc.invalidateQueries({ queryKey: ["chatHistory"] });
   };
@@ -83,7 +94,7 @@ export default function ChatThread() {
     // 내 채팅으로 인한 갱신이면 하단 고정 1회 우선
     if (stickBottomOnceRef.current) {
       stickBottomOnceRef.current = false;
-      requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'auto' }));
+      requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
       appendScrollRefId.current = data.nextBeforeId;
       return;
     }
@@ -171,6 +182,8 @@ export default function ChatThread() {
         timeLabel: labels.timeLabel,
       },
     ]);
+    requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
+
     // 서버 전송 (성공 시 히스토리 자동 갱신: invalidateQueries)
     sendMutation.mutate( trimmed , {
       onSuccess: (res) => {
@@ -218,7 +231,7 @@ export default function ChatThread() {
 
   return (
     <div
-      className="w-full flex flex-col gap-4 pb-18 min-h-0 overflow-y-auto"
+      className="w-full flex flex-col gap-4 pb-18 min-h-0"
     >
       <div ref={sentinelRef} />
       {messages.map((m) => (
