@@ -5,7 +5,7 @@ import NoNavLayout from "../../components/layouts/NoNavLayout";
 export default function ChatbotPage() {
   return (
     <NoNavLayout>
-      <div className="min-h-full bg-bg-blue">
+      <div className="min-h-full bg-bg-blue overflow-hidden">
         <Header/>
         <div className="pt-12">
           <ChatThread/>
