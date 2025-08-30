@@ -57,7 +57,7 @@ export default function ChatThread() {
 
   // 채팅 히스토리 관련
   // 무한 쿼리 
-  const { data, fetchNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 20 });
+  const { data, fetchNextPage, isFetchingNextPage } = useChatHistoryInfiniteQuery({ pageSize: 30 });
   const messages = data?.items || [];
 
   // UI에서만 사용하는 렌더 배열 (append 전용)
@@ -87,6 +87,8 @@ export default function ChatThread() {
     // head prepend: 무한 스크롤로 과거가 앞에 붙은 경우
     const firstIdx = prevFirst ? messages.findIndex(m => m.chatId === prevFirst) : -1;
     const headToPrepend = firstIdx > 0 ? messages.slice(0, firstIdx) : [];
+
+    didPrependRef.current = headToPrepend.length > 0;
 
     if (tailToAppend.length === 0 && headToPrepend.length === 0) return;
 
@@ -144,6 +146,7 @@ export default function ChatThread() {
   const appendScrollRefId = useRef(0)
   const stickBottomOnceRef = useRef(false); // 다음 messages 갱신 시 한 번만 하단 고정
   const streamMsgIdRef = useRef(null); // 현재 스트리밍 BOT 메시지의 렌더 ID
+  const didPrependRef = useRef(false);
 
   const sentinelRef = useRef(null);      // 상단 감지용 센티넬 (선택한 div)
   const ioRef = useRef(null);            // IO 인스턴스 저장
@@ -170,9 +173,12 @@ export default function ChatThread() {
       return;
     }
 
-    // 그 외(무한 스크롤 등prepend 상황)는 기존처럼 최상단 앵커로
-    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'auto' }));
-    appendScrollRefId.current = data.nextBeforeId;
+    // 실제로 앞에(prepend) 붙은 경우에만 최상단 앵커로 이동
+    if (didPrependRef.current) {
+      didPrependRef.current = false;
+      requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'auto' }));
+      appendScrollRefId.current = data.nextBeforeId;
+    }
   }, [messages.length]);
 
   // 상단 센티넬이 뷰포트 상단 (0px)까지 내려오면 자동으로 이전 페이지 로드
@@ -224,7 +230,7 @@ export default function ChatThread() {
     if (!trimmed) return;
     stickBottomOnceRef.current = true; // 내 채팅으로 인한 다음 갱신은 하단 고정
     setInput('');
-    // 로컬로 처리(깜박임 떄문): invalidate는 SSE 종료 시점에만 수행
+    // 로컬로 처리(깜박임 떄문): invalidate 실행 x
     const now = new Date();
     const tempId = `local-${now.getTime()}`;
     // 직전 서버 메시지와 비교해 라벨 계산
