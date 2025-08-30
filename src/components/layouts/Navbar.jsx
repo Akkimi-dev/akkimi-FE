@@ -47,31 +47,31 @@ export default function Navbar({ currentPage }) {
         <div className="w-full flex items-end justify-around">
           {/* 좌측 그룹 */}
           <div className="flex flex-1 justify-around pt-1 pb-2">
-            <button onClick={handleHomeClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
+            <button onClick={handleHomeClick} className="group cursor-pointer h-[56px] w-[56px] min-w-0 flex flex-col items-center justify-center gap-1">
               {currentPage === 'home' ? (
                 <>
-                  <HomeHover className="w-6 h-6 block" />
-                  <span className="text-detail-02-semibold text-green-main">홈</span>
+                  <HomeHover className="w-6 h-6 block shrink-0" />
+                  <span className="text-detail-02-semibold text-green-main block w-full truncate text-center leading-none">홈</span>
                 </>
               ) : (
                 <>
-                  <HomeIcon className="w-6 h-6 block group-hover:hidden" />
-                  <HomeHover className="w-6 h-6 hidden group-hover:block" />
-                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">홈</span>
+                  <HomeIcon className="w-6 h-6 block shrink-0 group-hover:hidden" />
+                  <HomeHover className="w-6 h-6 hidden shrink-0 group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 block w-full truncate text-center leading-none">홈</span>
                 </>
               )}
             </button>
-            <button onClick={handleLedgerClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
+            <button onClick={handleLedgerClick} className="group cursor-pointer h-[56px] w-[56px] min-w-0 flex flex-col items-center justify-center gap-1">
               {currentPage === 'ledger' ? (
                 <>
-                  <LedgerHover className="w-6 h-6 block" />
-                  <span className="text-detail-02-semibold text-green-main">가계부</span>
+                  <LedgerHover className="w-6 h-6 block shrink-0" />
+                  <span className="text-detail-02-semibold text-green-main block w-full truncate text-center leading-none">가계부</span>
                 </>
               ) : (
                 <>
-                  <LedgerIcon className="w-6 h-6 block group-hover:hidden" />
-                  <LedgerHover className="w-6 h-6 hidden group-hover:block" />
-                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">가계부</span>
+                  <LedgerIcon className="w-6 h-6 block shrink-0 group-hover:hidden" />
+                  <LedgerHover className="w-6 h-6 hidden shrink-0 group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 block w-full truncate text-center leading-none">가계부</span>
                 </>
               )}
             </button>
@@ -91,31 +91,31 @@ export default function Navbar({ currentPage }) {
 
           {/* 우측 그룹 */}
           <div className="flex flex-1 justify-around pt-1 pb-2">
-            <button onClick={handleSavingClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
+            <button onClick={handleSavingClick} className="group cursor-pointer h-[56px] w-[56px] min-w-0 flex flex-col items-center justify-center gap-1">
               {currentPage === 'saving' ? (
                 <>
-                  <SavingHover className="w-6 h-6 block" />
-                  <span className="text-detail-02-semibold text-green-main">아껴바요</span>
+                  <SavingHover className="w-6 h-6 block shrink-0" />
+                  <span className="text-detail-02-semibold text-green-main block w-full truncate text-center leading-none">아껴바요</span>
                 </>
               ) : (
                 <>
-                  <SavingIcon className="w-6 h-6 block group-hover:hidden" />
-                  <SavingHover className="w-6 h-6 hidden group-hover:block" />
-                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">아껴바요</span>
+                  <SavingIcon className="w-6 h-6 block shrink-0 group-hover:hidden" />
+                  <SavingHover className="w-6 h-6 hidden shrink-0 group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 block w-full truncate text-center leading-none">아껴바요</span>
                 </>
               )}
             </button>
-            <button onClick={handleProfileClick} className="group cursor-pointer h-[56px] w-[56px] flex flex-col items-center justify-center gap-1">
+            <button onClick={handleProfileClick} className="group cursor-pointer h-[56px] w-[56px] min-w-0 flex flex-col items-center justify-center gap-1">
               {currentPage === 'profile' ? (
                 <>
-                  <ProfileHover className="w-6 h-6 block" />
-                  <span className="text-detail-02-semibold text-green-main">프로필</span>
+                  <ProfileHover className="w-6 h-6 block shrink-0" />
+                  <span className="text-detail-02-semibold text-green-main block w-full truncate text-center leading-none">프로필</span>
                 </>
               ) : (
                 <>
-                  <ProfileIcon className="w-6 h-6 block group-hover:hidden" />
-                  <ProfileHover className="w-6 h-6 hidden group-hover:block" />
-                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80">프로필</span>
+                  <ProfileIcon className="w-6 h-6 block shrink-0 group-hover:hidden" />
+                  <ProfileHover className="w-6 h-6 hidden shrink-0 group-hover:block" />
+                  <span className="text-detail-02-semibold text-gray-60 group-hover:text-gray-80 block w-full truncate text-center leading-none">프로필</span>
                 </>
               )}
             </button>
